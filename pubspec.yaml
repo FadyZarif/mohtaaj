@@ -37,12 +37,10 @@ dependencies:
   # State Mangement
   flutter_bloc: ^9.1.1
   # Code Generator (used with cubit & retrofit)
-  freezed: ^3.2.3
   freezed_annotation: ^3.1.0
   # Dependency Injection
   get_it: ^9.0.5
   # Json generate
-  json_serializable: ^6.11.1
   json_annotation: ^4.9.0
   # Networking
   dio: ^5.9.0
@@ -57,10 +55,42 @@ dependencies:
   #flutter_svg: ^2.0.17
   #responsive
   flutter_screenutil: ^5.9.3
+  # 🔐 Secure Storage للـ Tokens
+  flutter_secure_storage: ^9.2.4
+  # 💾 Local Storage للبيانات العامة
+  shared_preferences: ^2.5.3
+  # 🖼️ Image Handling
+  image_picker: ^1.2.1
+  cached_network_image: ^3.4.1
+  # 📍 Location (للـ geolocation features)
+  geolocator: ^14.0.2
+  geocoding: ^4.0.0
+  # 🗺️ Maps (اختياري - إذا هتعرض خريطة)
+  #google_maps_flutter: ^2.14.0
+  # ⭐ Rating Widget
+  flutter_rating_bar: ^4.0.1
+  # 🔄 Pull to Refresh
+  pull_to_refresh: ^2.0.0
+  # 📅 Date & Time
+  intl: ^0.20.2
+  # 🎨 Shimmer Loading
+  skeletonizer: ^2.1.0+1
+  # 🔗 URL Launcher (للروابط الخارجية)
+  url_launcher: ^6.3.2
+  # Country Code Picker
+  country_code_picker: ^3.4.1
+  # Searchable Dropdown
+  dropdown_search: ^6.0.2
+  # Localization
+  flutter_localization: ^0.3.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^2.10.3
+  json_serializable: ^6.11.1
+  freezed: ^3.2.3
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

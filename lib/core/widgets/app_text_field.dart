@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
@@ -14,6 +15,9 @@ class AppTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final int? maxLines;
   final void Function(String)? onChanged;
+  final bool readOnly;
+  final List<TextInputFormatter>? inputFormatters;
+  final Iterable<String>? autofillHints;
 
   const AppTextField({
     super.key,
@@ -26,6 +30,9 @@ class AppTextField extends StatelessWidget {
     this.prefixIcon,
     this.maxLines = 1,
     this.onChanged, this.textDirection,
+    this.readOnly = false,
+    this.inputFormatters,
+    this.autofillHints,
   });
 
   @override
@@ -81,6 +88,9 @@ class AppTextField extends StatelessWidget {
           ),
         ),
       ),
+      readOnly: readOnly,
+      inputFormatters: inputFormatters,
+      autofillHints:  autofillHints,
     );
   }
 }

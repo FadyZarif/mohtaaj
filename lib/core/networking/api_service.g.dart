@@ -49,13 +49,12 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<dynamic> register(Map<String, dynamic> registerRequest) async {
+  Future<RegisterResponse> register(RegisterRequest registerRequest) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(registerRequest);
-    final _options = _setStreamType<dynamic>(
+    final _data = registerRequest;
+    final _options = _setStreamType<RegisterResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -65,19 +64,26 @@ class _ApiService implements ApiService {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late RegisterResponse _value;
+    try {
+      _value = RegisterResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
   @override
-  Future<dynamic> refreshToken(Map<String, dynamic> refreshTokenRequest) async {
+  Future<RefreshTokenResponse> refreshToken(
+    RefreshTokenRequest refreshTokenRequest,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(refreshTokenRequest);
-    final _options = _setStreamType<dynamic>(
+    final _data = refreshTokenRequest;
+    final _options = _setStreamType<RefreshTokenResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -87,8 +93,14 @@ class _ApiService implements ApiService {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late RefreshTokenResponse _value;
+    try {
+      _value = RefreshTokenResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -169,7 +181,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/users/profile',
+            '/api/users/me',
             queryParameters: queryParameters,
             data: _data,
           )

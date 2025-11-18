@@ -22,14 +22,3 @@ _LoginData _$LoginDataFromJson(Map<String, dynamic> json) => _LoginData(
 
 Map<String, dynamic> _$LoginDataToJson(_LoginData instance) =>
     <String, dynamic>{'user': instance.user, 'tokens': instance.tokens};
-
-_TokensModel _$TokensModelFromJson(Map<String, dynamic> json) => _TokensModel(
-  accessToken: json['accessToken'] as String,
-  refreshToken: json['refreshToken'] as String,
-);
-
-Map<String, dynamic> _$TokensModelToJson(_TokensModel instance) =>
-    <String, dynamic>{
-      'accessToken': instance.accessToken,
-      'refreshToken': instance.refreshToken,
-    };

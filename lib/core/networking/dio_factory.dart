@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mohtaaj/core/helpers/cache_helper.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'api_constants.dart';
 
@@ -8,7 +9,6 @@ class DioFactory {
   DioFactory._();
 
   static Dio? dio;
-  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
   static Dio getDio() {
     Duration timeOut = const Duration(seconds: 30);
@@ -54,7 +54,7 @@ class DioFactory {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           // Get token from secure storage
-          final token = await _secureStorage.read(key: 'accessToken');
+          final token = await CacheHelper.getSecureData(key: 'accessToken');
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
@@ -64,7 +64,7 @@ class DioFactory {
           // Handle 401 Unauthorized - Token expired
           if (error.response?.statusCode == 401) {
             // Try to refresh token
-            final refreshToken = await _secureStorage.read(key: 'refreshToken');
+            final refreshToken = await CacheHelper.getSecureData(key: 'refreshToken');
             
             if (refreshToken != null) {
               try {
@@ -79,8 +79,8 @@ class DioFactory {
                   final newAccessToken = response.data['data']['accessToken'];
                   final newRefreshToken = response.data['data']['refreshToken'];
                   
-                  await _secureStorage.write(key: 'accessToken', value: newAccessToken);
-                  await _secureStorage.write(key: 'refreshToken', value: newRefreshToken);
+                  await CacheHelper.saveSecureData(key: 'accessToken', value: newAccessToken);
+                  await CacheHelper.saveSecureData(key: 'refreshToken', value: newRefreshToken);
 
                   // Retry the original request
                   error.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
@@ -100,7 +100,7 @@ class DioFactory {
                 }
               } catch (e) {
                 // Refresh token failed, logout user
-                await _secureStorage.deleteAll();
+                await CacheHelper.clearSecureAllData();
                 // Navigate to login screen
                 // You can use NavigatorKey here
               }

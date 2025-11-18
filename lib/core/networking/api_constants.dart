@@ -17,7 +17,7 @@ class ApiConstants {
   static const String verifyEmail = '$apiPath/auth/verify-email';
   
   // Users
-  static const String myProfile = '$apiPath/users/profile';
+  static const String myProfile = '$apiPath/users/me';
   static const String updateProfile = '$apiPath/users/profile';
   static const String getUserById = '$apiPath/users'; // /{userId}
   static const String getUserItems = '$apiPath/users'; // /{userId}/items

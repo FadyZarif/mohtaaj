@@ -1,0 +1,761 @@
+{
+	"info": {
+		"name": "Mohtaaj API",
+		"description": "API Collection for Mohtaaj Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"محمد أحمد\",\n  \"email\": \"mohamed@example.com\",\n  \"phone\": \"+201234567890\",\n  \"password\": \"password123\",\n  \"country\": \"مصر\",\n  \"city\": \"القاهرة\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"mohamed@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "logout"]
+						}
+					}
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"mohamed@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/forgot-password",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "forgot-password"]
+						}
+					}
+				},
+				{
+					"name": "Verify Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"mohamed@example.com\",\n  \"code\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/verify-email",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "verify-email"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Items",
+			"item": [
+				{
+					"name": "Get All Items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/items?page=1&limit=10&category_id=&city=&search=",
+							"host": ["{{base_url}}"],
+							"path": ["api", "items"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "category_id",
+									"value": ""
+								},
+								{
+									"key": "city",
+									"value": ""
+								},
+								{
+									"key": "search",
+									"value": ""
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Item Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/items/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "items", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"عنوان الإعلان\",\n  \"description\": \"وصف تفصيلي للإعلان\",\n  \"category_id\": 1,\n  \"condition\": \"جديد\",\n  \"images\": [\"image1.jpg\", \"image2.jpg\"],\n  \"location\": {\n    \"country\": \"مصر\",\n    \"city\": \"القاهرة\",\n    \"latitude\": 30.0444,\n    \"longitude\": 31.2357\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/items",
+							"host": ["{{base_url}}"],
+							"path": ["api", "items"]
+						}
+					}
+				},
+				{
+					"name": "Update Item",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"عنوان محدث\",\n  \"description\": \"وصف محدث\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/items/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "items", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Item",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/items/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "items", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get My Items",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/items/my-items",
+							"host": ["{{base_url}}"],
+							"path": ["api", "items", "my-items"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/categories",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories"]
+						}
+					}
+				},
+				{
+					"name": "Get Category Items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/categories/:id/items",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories", ":id", "items"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Get My Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/profile/me",
+							"host": ["{{base_url}}"],
+							"path": ["api", "profile", "me"]
+						}
+					}
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/profile/:user_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "profile", ":user_id"],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"محمد أحمد المحدث\",\n  \"phone\": \"+201234567890\",\n  \"city\": \"الإسكندرية\",\n  \"bio\": \"نبذة عني\",\n  \"avatar\": \"avatar.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/profile/me",
+							"host": ["{{base_url}}"],
+							"path": ["api", "profile", "me"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Favorites",
+			"item": [
+				{
+					"name": "Get My Favorites",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/favorites",
+							"host": ["{{base_url}}"],
+							"path": ["api", "favorites"]
+						}
+					}
+				},
+				{
+					"name": "Add to Favorites",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"item_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/favorites",
+							"host": ["{{base_url}}"],
+							"path": ["api", "favorites"]
+						}
+					}
+				},
+				{
+					"name": "Remove from Favorites",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/favorites/:item_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "favorites", ":item_id"],
+							"variable": [
+								{
+									"key": "item_id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Offers",
+			"item": [
+				{
+					"name": "Get Item Offers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/offers?item_id=1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "offers"],
+							"query": [
+								{
+									"key": "item_id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Offer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"item_id\": 1,\n  \"offered_item_id\": 2,\n  \"message\": \"رسالة مع العرض\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/offers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "offers"]
+						}
+					}
+				},
+				{
+					"name": "Accept Offer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/offers/:id/accept",
+							"host": ["{{base_url}}"],
+							"path": ["api", "offers", ":id", "accept"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Reject Offer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/offers/:id/reject",
+							"host": ["{{base_url}}"],
+							"path": ["api", "offers", ":id", "reject"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Requests",
+			"item": [
+				{
+					"name": "Get All Requests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/requests?page=1&limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "requests"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Request Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/requests/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "requests", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"طلب شيء محدد\",\n  \"description\": \"وصف تفصيلي للطلب\",\n  \"category_id\": 1,\n  \"city\": \"القاهرة\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/requests",
+							"host": ["{{base_url}}"],
+							"path": ["api", "requests"]
+						}
+					}
+				},
+				{
+					"name": "Get My Requests",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/requests/my-requests",
+							"host": ["{{base_url}}"],
+							"path": ["api", "requests", "my-requests"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "Report Item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"item_id\": 1,\n  \"reason\": \"محتوى مخالف\",\n  \"description\": \"تفاصيل البلاغ\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/reports/item",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reports", "item"]
+						}
+					}
+				},
+				{
+					"name": "Report User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": 1,\n  \"reason\": \"سلوك مسيء\",\n  \"description\": \"تفاصيل البلاغ\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/reports/user",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reports", "user"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Badges",
+			"item": [
+				{
+					"name": "Get All Badges",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/badges",
+							"host": ["{{base_url}}"],
+							"path": ["api", "badges"]
+						}
+					}
+				},
+				{
+					"name": "Get My Badges",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/badges/my-badges",
+							"host": ["{{base_url}}"],
+							"path": ["api", "badges", "my-badges"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Search",
+			"item": [
+				{
+					"name": "Search Items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/search?query=كلمة البحث&category_id=&city=&page=1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "search"],
+							"query": [
+								{
+									"key": "query",
+									"value": "كلمة البحث"
+								},
+								{
+									"key": "category_id",
+									"value": ""
+								},
+								{
+									"key": "city",
+									"value": ""
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
+

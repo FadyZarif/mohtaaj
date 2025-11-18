@@ -33,10 +33,10 @@ class AppRouter {
     //   );
 
     // TODO: Add home screen
-    // case Routes.homeScreen:
-    //   return MaterialPageRoute(
-    //     builder: (_) => const HomeScreen(),
-    //   );
+    case Routes.homeScreen:
+      return MaterialPageRoute(
+        builder: (_) => const Scaffold(body: Center(child: Text('Home Screen')),),
+      );
 
       default:
         return null;

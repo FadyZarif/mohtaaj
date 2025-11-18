@@ -10,6 +10,7 @@ class RegisterState with _$RegisterState {
   const factory RegisterState.locationDetected({
     required String city,
     required String country,
+    required String phoneCountryCode, // كود الهاتف (EG, SA, AE, etc)
   }) = LocationDetected;
   const factory RegisterState.locationError(String error) = LocationError;
   const factory RegisterState.success(String message) = Success;

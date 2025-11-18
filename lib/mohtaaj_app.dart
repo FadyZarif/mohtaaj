@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'core/routing/app_router.dart';
 import 'core/theming/colors.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 
 class MohtaajApp extends StatelessWidget {
@@ -27,7 +27,7 @@ class MohtaajApp extends StatelessWidget {
           Locale('ar'), // العربية
           Locale('en'), // الإنجليزية (اختياري)
         ],
-        localizationsDelegates: const [
+        localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

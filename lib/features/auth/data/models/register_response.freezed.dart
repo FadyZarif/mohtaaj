@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'login_response.dart';
+part of 'register_response.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,80 +13,81 @@ part of 'login_response.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$LoginResponse {
+mixin _$RegisterResponse {
 
- bool get success; LoginData get data;
-/// Create a copy of LoginResponse
+ bool get success; RegisterData get data; String get timestamp;
+/// Create a copy of RegisterResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$LoginResponseCopyWith<LoginResponse> get copyWith => _$LoginResponseCopyWithImpl<LoginResponse>(this as LoginResponse, _$identity);
+$RegisterResponseCopyWith<RegisterResponse> get copyWith => _$RegisterResponseCopyWithImpl<RegisterResponse>(this as RegisterResponse, _$identity);
 
-  /// Serializes this LoginResponse to a JSON map.
+  /// Serializes this RegisterResponse to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginResponse&&(identical(other.success, success) || other.success == success)&&(identical(other.data, data) || other.data == data));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RegisterResponse&&(identical(other.success, success) || other.success == success)&&(identical(other.data, data) || other.data == data)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,success,data);
+int get hashCode => Object.hash(runtimeType,success,data,timestamp);
 
 @override
 String toString() {
-  return 'LoginResponse(success: $success, data: $data)';
+  return 'RegisterResponse(success: $success, data: $data, timestamp: $timestamp)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $LoginResponseCopyWith<$Res>  {
-  factory $LoginResponseCopyWith(LoginResponse value, $Res Function(LoginResponse) _then) = _$LoginResponseCopyWithImpl;
+abstract mixin class $RegisterResponseCopyWith<$Res>  {
+  factory $RegisterResponseCopyWith(RegisterResponse value, $Res Function(RegisterResponse) _then) = _$RegisterResponseCopyWithImpl;
 @useResult
 $Res call({
- bool success, LoginData data
+ bool success, RegisterData data, String timestamp
 });
 
 
-$LoginDataCopyWith<$Res> get data;
+$RegisterDataCopyWith<$Res> get data;
 
 }
 /// @nodoc
-class _$LoginResponseCopyWithImpl<$Res>
-    implements $LoginResponseCopyWith<$Res> {
-  _$LoginResponseCopyWithImpl(this._self, this._then);
+class _$RegisterResponseCopyWithImpl<$Res>
+    implements $RegisterResponseCopyWith<$Res> {
+  _$RegisterResponseCopyWithImpl(this._self, this._then);
 
-  final LoginResponse _self;
-  final $Res Function(LoginResponse) _then;
+  final RegisterResponse _self;
+  final $Res Function(RegisterResponse) _then;
 
-/// Create a copy of LoginResponse
+/// Create a copy of RegisterResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? success = null,Object? data = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? success = null,Object? data = null,Object? timestamp = null,}) {
   return _then(_self.copyWith(
 success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
 as bool,data: null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
-as LoginData,
+as RegisterData,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
-/// Create a copy of LoginResponse
+/// Create a copy of RegisterResponse
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$LoginDataCopyWith<$Res> get data {
+$RegisterDataCopyWith<$Res> get data {
   
-  return $LoginDataCopyWith<$Res>(_self.data, (value) {
+  return $RegisterDataCopyWith<$Res>(_self.data, (value) {
     return _then(_self.copyWith(data: value));
   });
 }
 }
 
 
-/// Adds pattern-matching-related methods to [LoginResponse].
-extension LoginResponsePatterns on LoginResponse {
+/// Adds pattern-matching-related methods to [RegisterResponse].
+extension RegisterResponsePatterns on RegisterResponse {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -99,10 +100,10 @@ extension LoginResponsePatterns on LoginResponse {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _LoginResponse value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _RegisterResponse value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _LoginResponse() when $default != null:
+case _RegisterResponse() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -121,10 +122,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _LoginResponse value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _RegisterResponse value)  $default,){
 final _that = this;
 switch (_that) {
-case _LoginResponse():
+case _RegisterResponse():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -142,10 +143,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _LoginResponse value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _RegisterResponse value)?  $default,){
 final _that = this;
 switch (_that) {
-case _LoginResponse() when $default != null:
+case _RegisterResponse() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -163,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool success,  LoginData data)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool success,  RegisterData data,  String timestamp)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _LoginResponse() when $default != null:
-return $default(_that.success,_that.data);case _:
+case _RegisterResponse() when $default != null:
+return $default(_that.success,_that.data,_that.timestamp);case _:
   return orElse();
 
 }
@@ -184,10 +185,10 @@ return $default(_that.success,_that.data);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool success,  LoginData data)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool success,  RegisterData data,  String timestamp)  $default,) {final _that = this;
 switch (_that) {
-case _LoginResponse():
-return $default(_that.success,_that.data);case _:
+case _RegisterResponse():
+return $default(_that.success,_that.data,_that.timestamp);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +205,10 @@ return $default(_that.success,_that.data);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool success,  LoginData data)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool success,  RegisterData data,  String timestamp)?  $default,) {final _that = this;
 switch (_that) {
-case _LoginResponse() when $default != null:
-return $default(_that.success,_that.data);case _:
+case _RegisterResponse() when $default != null:
+return $default(_that.success,_that.data,_that.timestamp);case _:
   return null;
 
 }
@@ -218,78 +219,80 @@ return $default(_that.success,_that.data);case _:
 /// @nodoc
 @JsonSerializable()
 
-class _LoginResponse implements LoginResponse {
-  const _LoginResponse({required this.success, required this.data});
-  factory _LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
+class _RegisterResponse implements RegisterResponse {
+  const _RegisterResponse({required this.success, required this.data, required this.timestamp});
+  factory _RegisterResponse.fromJson(Map<String, dynamic> json) => _$RegisterResponseFromJson(json);
 
 @override final  bool success;
-@override final  LoginData data;
+@override final  RegisterData data;
+@override final  String timestamp;
 
-/// Create a copy of LoginResponse
+/// Create a copy of RegisterResponse
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$LoginResponseCopyWith<_LoginResponse> get copyWith => __$LoginResponseCopyWithImpl<_LoginResponse>(this, _$identity);
+_$RegisterResponseCopyWith<_RegisterResponse> get copyWith => __$RegisterResponseCopyWithImpl<_RegisterResponse>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$LoginResponseToJson(this, );
+  return _$RegisterResponseToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginResponse&&(identical(other.success, success) || other.success == success)&&(identical(other.data, data) || other.data == data));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterResponse&&(identical(other.success, success) || other.success == success)&&(identical(other.data, data) || other.data == data)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,success,data);
+int get hashCode => Object.hash(runtimeType,success,data,timestamp);
 
 @override
 String toString() {
-  return 'LoginResponse(success: $success, data: $data)';
+  return 'RegisterResponse(success: $success, data: $data, timestamp: $timestamp)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$LoginResponseCopyWith<$Res> implements $LoginResponseCopyWith<$Res> {
-  factory _$LoginResponseCopyWith(_LoginResponse value, $Res Function(_LoginResponse) _then) = __$LoginResponseCopyWithImpl;
+abstract mixin class _$RegisterResponseCopyWith<$Res> implements $RegisterResponseCopyWith<$Res> {
+  factory _$RegisterResponseCopyWith(_RegisterResponse value, $Res Function(_RegisterResponse) _then) = __$RegisterResponseCopyWithImpl;
 @override @useResult
 $Res call({
- bool success, LoginData data
+ bool success, RegisterData data, String timestamp
 });
 
 
-@override $LoginDataCopyWith<$Res> get data;
+@override $RegisterDataCopyWith<$Res> get data;
 
 }
 /// @nodoc
-class __$LoginResponseCopyWithImpl<$Res>
-    implements _$LoginResponseCopyWith<$Res> {
-  __$LoginResponseCopyWithImpl(this._self, this._then);
+class __$RegisterResponseCopyWithImpl<$Res>
+    implements _$RegisterResponseCopyWith<$Res> {
+  __$RegisterResponseCopyWithImpl(this._self, this._then);
 
-  final _LoginResponse _self;
-  final $Res Function(_LoginResponse) _then;
+  final _RegisterResponse _self;
+  final $Res Function(_RegisterResponse) _then;
 
-/// Create a copy of LoginResponse
+/// Create a copy of RegisterResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? success = null,Object? data = null,}) {
-  return _then(_LoginResponse(
+@override @pragma('vm:prefer-inline') $Res call({Object? success = null,Object? data = null,Object? timestamp = null,}) {
+  return _then(_RegisterResponse(
 success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
 as bool,data: null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
-as LoginData,
+as RegisterData,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
-/// Create a copy of LoginResponse
+/// Create a copy of RegisterResponse
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$LoginDataCopyWith<$Res> get data {
+$RegisterDataCopyWith<$Res> get data {
   
-  return $LoginDataCopyWith<$Res>(_self.data, (value) {
+  return $RegisterDataCopyWith<$Res>(_self.data, (value) {
     return _then(_self.copyWith(data: value));
   });
 }
@@ -297,22 +300,22 @@ $LoginDataCopyWith<$Res> get data {
 
 
 /// @nodoc
-mixin _$LoginData {
+mixin _$RegisterData {
 
  UserModel get user; TokensModel get tokens;
-/// Create a copy of LoginData
+/// Create a copy of RegisterData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$LoginDataCopyWith<LoginData> get copyWith => _$LoginDataCopyWithImpl<LoginData>(this as LoginData, _$identity);
+$RegisterDataCopyWith<RegisterData> get copyWith => _$RegisterDataCopyWithImpl<RegisterData>(this as RegisterData, _$identity);
 
-  /// Serializes this LoginData to a JSON map.
+  /// Serializes this RegisterData to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginData&&(identical(other.user, user) || other.user == user)&&(identical(other.tokens, tokens) || other.tokens == tokens));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RegisterData&&(identical(other.user, user) || other.user == user)&&(identical(other.tokens, tokens) || other.tokens == tokens));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -321,15 +324,15 @@ int get hashCode => Object.hash(runtimeType,user,tokens);
 
 @override
 String toString() {
-  return 'LoginData(user: $user, tokens: $tokens)';
+  return 'RegisterData(user: $user, tokens: $tokens)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $LoginDataCopyWith<$Res>  {
-  factory $LoginDataCopyWith(LoginData value, $Res Function(LoginData) _then) = _$LoginDataCopyWithImpl;
+abstract mixin class $RegisterDataCopyWith<$Res>  {
+  factory $RegisterDataCopyWith(RegisterData value, $Res Function(RegisterData) _then) = _$RegisterDataCopyWithImpl;
 @useResult
 $Res call({
  UserModel user, TokensModel tokens
@@ -340,14 +343,14 @@ $UserModelCopyWith<$Res> get user;$TokensModelCopyWith<$Res> get tokens;
 
 }
 /// @nodoc
-class _$LoginDataCopyWithImpl<$Res>
-    implements $LoginDataCopyWith<$Res> {
-  _$LoginDataCopyWithImpl(this._self, this._then);
+class _$RegisterDataCopyWithImpl<$Res>
+    implements $RegisterDataCopyWith<$Res> {
+  _$RegisterDataCopyWithImpl(this._self, this._then);
 
-  final LoginData _self;
-  final $Res Function(LoginData) _then;
+  final RegisterData _self;
+  final $Res Function(RegisterData) _then;
 
-/// Create a copy of LoginData
+/// Create a copy of RegisterData
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? user = null,Object? tokens = null,}) {
   return _then(_self.copyWith(
@@ -356,7 +359,7 @@ as UserModel,tokens: null == tokens ? _self.tokens : tokens // ignore: cast_null
 as TokensModel,
   ));
 }
-/// Create a copy of LoginData
+/// Create a copy of RegisterData
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -365,7 +368,7 @@ $UserModelCopyWith<$Res> get user {
   return $UserModelCopyWith<$Res>(_self.user, (value) {
     return _then(_self.copyWith(user: value));
   });
-}/// Create a copy of LoginData
+}/// Create a copy of RegisterData
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -378,8 +381,8 @@ $TokensModelCopyWith<$Res> get tokens {
 }
 
 
-/// Adds pattern-matching-related methods to [LoginData].
-extension LoginDataPatterns on LoginData {
+/// Adds pattern-matching-related methods to [RegisterData].
+extension RegisterDataPatterns on RegisterData {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -392,10 +395,10 @@ extension LoginDataPatterns on LoginData {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _LoginData value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _RegisterData value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _LoginData() when $default != null:
+case _RegisterData() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -414,10 +417,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _LoginData value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _RegisterData value)  $default,){
 final _that = this;
 switch (_that) {
-case _LoginData():
+case _RegisterData():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -435,10 +438,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _LoginData value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _RegisterData value)?  $default,){
 final _that = this;
 switch (_that) {
-case _LoginData() when $default != null:
+case _RegisterData() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -458,7 +461,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserModel user,  TokensModel tokens)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _LoginData() when $default != null:
+case _RegisterData() when $default != null:
 return $default(_that.user,_that.tokens);case _:
   return orElse();
 
@@ -479,7 +482,7 @@ return $default(_that.user,_that.tokens);case _:
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserModel user,  TokensModel tokens)  $default,) {final _that = this;
 switch (_that) {
-case _LoginData():
+case _RegisterData():
 return $default(_that.user,_that.tokens);case _:
   throw StateError('Unexpected subclass');
 
@@ -499,7 +502,7 @@ return $default(_that.user,_that.tokens);case _:
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserModel user,  TokensModel tokens)?  $default,) {final _that = this;
 switch (_that) {
-case _LoginData() when $default != null:
+case _RegisterData() when $default != null:
 return $default(_that.user,_that.tokens);case _:
   return null;
 
@@ -511,27 +514,27 @@ return $default(_that.user,_that.tokens);case _:
 /// @nodoc
 @JsonSerializable()
 
-class _LoginData implements LoginData {
-  const _LoginData({required this.user, required this.tokens});
-  factory _LoginData.fromJson(Map<String, dynamic> json) => _$LoginDataFromJson(json);
+class _RegisterData implements RegisterData {
+  const _RegisterData({required this.user, required this.tokens});
+  factory _RegisterData.fromJson(Map<String, dynamic> json) => _$RegisterDataFromJson(json);
 
 @override final  UserModel user;
 @override final  TokensModel tokens;
 
-/// Create a copy of LoginData
+/// Create a copy of RegisterData
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$LoginDataCopyWith<_LoginData> get copyWith => __$LoginDataCopyWithImpl<_LoginData>(this, _$identity);
+_$RegisterDataCopyWith<_RegisterData> get copyWith => __$RegisterDataCopyWithImpl<_RegisterData>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$LoginDataToJson(this, );
+  return _$RegisterDataToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginData&&(identical(other.user, user) || other.user == user)&&(identical(other.tokens, tokens) || other.tokens == tokens));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterData&&(identical(other.user, user) || other.user == user)&&(identical(other.tokens, tokens) || other.tokens == tokens));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -540,15 +543,15 @@ int get hashCode => Object.hash(runtimeType,user,tokens);
 
 @override
 String toString() {
-  return 'LoginData(user: $user, tokens: $tokens)';
+  return 'RegisterData(user: $user, tokens: $tokens)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$LoginDataCopyWith<$Res> implements $LoginDataCopyWith<$Res> {
-  factory _$LoginDataCopyWith(_LoginData value, $Res Function(_LoginData) _then) = __$LoginDataCopyWithImpl;
+abstract mixin class _$RegisterDataCopyWith<$Res> implements $RegisterDataCopyWith<$Res> {
+  factory _$RegisterDataCopyWith(_RegisterData value, $Res Function(_RegisterData) _then) = __$RegisterDataCopyWithImpl;
 @override @useResult
 $Res call({
  UserModel user, TokensModel tokens
@@ -559,24 +562,24 @@ $Res call({
 
 }
 /// @nodoc
-class __$LoginDataCopyWithImpl<$Res>
-    implements _$LoginDataCopyWith<$Res> {
-  __$LoginDataCopyWithImpl(this._self, this._then);
+class __$RegisterDataCopyWithImpl<$Res>
+    implements _$RegisterDataCopyWith<$Res> {
+  __$RegisterDataCopyWithImpl(this._self, this._then);
 
-  final _LoginData _self;
-  final $Res Function(_LoginData) _then;
+  final _RegisterData _self;
+  final $Res Function(_RegisterData) _then;
 
-/// Create a copy of LoginData
+/// Create a copy of RegisterData
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? user = null,Object? tokens = null,}) {
-  return _then(_LoginData(
+  return _then(_RegisterData(
 user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserModel,tokens: null == tokens ? _self.tokens : tokens // ignore: cast_nullable_to_non_nullable
 as TokensModel,
   ));
 }
 
-/// Create a copy of LoginData
+/// Create a copy of RegisterData
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -585,7 +588,7 @@ $UserModelCopyWith<$Res> get user {
   return $UserModelCopyWith<$Res>(_self.user, (value) {
     return _then(_self.copyWith(user: value));
   });
-}/// Create a copy of LoginData
+}/// Create a copy of RegisterData
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')

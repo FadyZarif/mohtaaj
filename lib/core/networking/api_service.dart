@@ -1,7 +1,11 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:mohtaaj/features/auth/data/models/refresh_token_request.dart';
 import 'package:retrofit/retrofit.dart';
+import '../../features/auth/data/models/refresh_token_response.dart';
+import '../../features/auth/data/models/register_request.dart';
+import '../../features/auth/data/models/register_response.dart';
 import 'api_constants.dart';
 import '../../features/auth/data/models/login_request.dart';
 import '../../features/auth/data/models/login_response.dart';
@@ -20,13 +24,13 @@ abstract class ApiService {
   );
 
   @POST(ApiConstants.register)
-  Future<dynamic> register(
-    @Body() Map<String, dynamic> registerRequest,
+  Future<RegisterResponse> register(
+    @Body() RegisterRequest registerRequest,
   );
 
   @POST(ApiConstants.refreshToken)
-  Future<dynamic> refreshToken(
-    @Body() Map<String, dynamic> refreshTokenRequest,
+  Future<RefreshTokenResponse> refreshToken(
+    @Body() RefreshTokenRequest refreshTokenRequest,
   );
 
   @POST(ApiConstants.logout)

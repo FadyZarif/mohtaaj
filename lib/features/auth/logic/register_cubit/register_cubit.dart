@@ -1,17 +1,24 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:mohtaaj/core/helpers/cache_helper.dart';
+import 'package:mohtaaj/core/services/auth_service.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../../../core/networking/api_error_handler.dart';
+import '../../../../core/helpers/location_data.dart';
+import '../../data/models/register_request.dart';
 import 'register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
   final ApiService _apiService;
+  final AuthService _authService;
 
-  RegisterCubit(this._apiService) : super(const RegisterState.initial());
+  RegisterCubit(this._apiService, this._authService) : super(const RegisterState.initial());
 
   String? detectedCity;
   String? detectedCountry;
+  String? detectedPhoneCode;
 
   /// Detect user location
   Future<void> detectLocation() async {
@@ -40,9 +47,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
       // Get current position
       Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
+        desiredAccuracy: LocationAccuracy.high,
       );
 
       // Get address from coordinates
@@ -52,50 +57,94 @@ class RegisterCubit extends Cubit<RegisterState> {
       );
 
       if (placemarks.isNotEmpty) {
-        detectedCity = placemarks[0].locality ??
-            placemarks[0].subAdministrativeArea ??
-            'القاهرة';
-        detectedCountry = placemarks[0].country ?? 'مصر';
+        final placemark = placemarks[0];
+
+        // Get English names from geocoding
+        final englishCountry = placemark.country ?? 'Egypt';
+        final englishCity = placemark.locality ??
+            placemark.subAdministrativeArea ??
+            placemark.administrativeArea ??
+            'Cairo';
+
+        // Convert to Arabic
+        detectedCountry = LocationData.getArabicCountry(englishCountry);
+
+        // Get cities list for this country
+        final citiesList = LocationData.getCitiesByCountry(detectedCountry!);
+
+        // Try to convert city to Arabic
+        String arabicCity = LocationData.getArabicCity(englishCity, detectedCountry!);
+
+        // Find matching city from our list
+        detectedCity = LocationData.findMatchingCity(arabicCity, citiesList);
+
+        // If no match found, use first city as default
+        if (detectedCity == null && citiesList.isNotEmpty) {
+          detectedCity = citiesList[0];
+        }
+
+        // Get phone country code
+        detectedPhoneCode = LocationData.getPhoneCountryCode(detectedCountry!);
 
         emit(RegisterState.locationDetected(
           city: detectedCity!,
           country: detectedCountry!,
+          phoneCountryCode: detectedPhoneCode!,
         ));
       } else {
-        emit(const RegisterState.locationError('لم نتمكن من تحديد موقعك'));
+        // Default values
+        detectedCity = 'القاهرة';
+        detectedCountry = 'مصر';
+        detectedPhoneCode = 'EG';
+
+        emit(RegisterState.locationDetected(
+          city: detectedCity!,
+          country: detectedCountry!,
+          phoneCountryCode: detectedPhoneCode!,
+        ));
       }
     } catch (error) {
+      // Set defaults on error
+      detectedCity = 'القاهرة';
+      detectedCountry = 'مصر';
+      detectedPhoneCode = 'EG';
+
       final apiError = ApiErrorHandler.handle(error);
-      emit(RegisterState.locationError(apiError.message));
+      emit(RegisterState.locationError(
+        apiError.message ?? 'حدث خطأ في تحديد الموقع',
+      ));
     }
   }
 
   /// Register user
-  Future<void> register({
-    required String name,
-    required String email,
-    required String phone,
-    required String password,
-    required String city,
-    required String country,
-  }) async {
+  Future<void> register(RegisterRequest request) async
+  {
     emit(const RegisterState.loading());
 
     try {
-      await _apiService.register({
-        'name': name,
-        'email': email,
-        'phone': phone,
-        'password': password,
-        'city': city,
-        'country': country,
-      });
+      final response = await _apiService.register(
+        request
+      );
 
-      // Handle successful registration
+      // Save tokens
+      await _authService.saveTokens(
+        accessToken: response.data.tokens.accessToken,
+        refreshToken: response.data.tokens.refreshToken,
+      );
+
+
+      // Save user ID
+      await _authService.saveUserId(response.data.user.id);
+
+      // Save user Data
+      await _authService.saveUserData(response.data.user);
+
       emit(const RegisterState.success('تم التسجيل بنجاح'));
     } catch (error) {
       final apiError = ApiErrorHandler.handle(error);
-      emit(RegisterState.error(apiError.message));
+      emit(RegisterState.error(
+        apiError.message ?? 'حدث خطأ أثناء التسجيل',
+      ));
     }
   }
 }

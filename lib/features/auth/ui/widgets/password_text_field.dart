@@ -25,6 +25,12 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   @override
   Widget build(BuildContext context) {
     return AppTextField(
+      prefixIcon: Icon(
+        Icons.lock,
+        color: ColorsManager.textSecondary,
+        size: 20.sp,
+      ),
+      autofillHints: const [AutofillHints.password],
       textDirection: TextDirection.ltr,
       hintText: widget.hintText,
       controller: widget.controller,

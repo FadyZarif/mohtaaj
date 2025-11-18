@@ -214,7 +214,7 @@ return $default(_that.name,_that.email,_that.phone,_that.password,_that.city,_th
 @JsonSerializable()
 
 class _RegisterRequest implements RegisterRequest {
-   _RegisterRequest({required this.name, required this.email, required this.phone, required this.password, required this.city, required this.country});
+  const _RegisterRequest({required this.name, required this.email, required this.phone, required this.password, required this.city, required this.country});
   factory _RegisterRequest.fromJson(Map<String, dynamic> json) => _$RegisterRequestFromJson(json);
 
 @override final  String name;

@@ -40,6 +40,10 @@ class AppValidators {
     if (!value.contains(RegExp(r'[0-9]'))) {
       return 'كلمة المرور يجب أن تحتوي على رقم واحد على الأقل';
     }
+    // Check for at least one special character
+    if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return 'كلمة المرور يجب أن تحتوي على رمز خاص واحد على الأقل';
+    }
     
     return null;
   }
@@ -61,13 +65,6 @@ class AppValidators {
   static String? validatePhone(String? value) {
     if (value == null || value.isEmpty) {
       return 'رقم الهاتف مطلوب';
-    }
-    
-    // Pakistani phone format: +923001234567
-    final phoneRegex = RegExp(r'^\+92[0-9]{10}$');
-    
-    if (!phoneRegex.hasMatch(value)) {
-      return 'رقم الهاتف غير صحيح (مثال: +923001234567)';
     }
     
     return null;

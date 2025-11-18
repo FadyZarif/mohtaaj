@@ -137,13 +137,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  detectingLocation,TResult Function( String city,  String country)?  locationDetected,TResult Function( String error)?  locationError,TResult Function( String message)?  success,TResult Function( String error)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  detectingLocation,TResult Function( String city,  String country,  String phoneCountryCode)?  locationDetected,TResult Function( String error)?  locationError,TResult Function( String message)?  success,TResult Function( String error)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case Loading() when loading != null:
 return loading();case DetectingLocation() when detectingLocation != null:
 return detectingLocation();case LocationDetected() when locationDetected != null:
-return locationDetected(_that.city,_that.country);case LocationError() when locationError != null:
+return locationDetected(_that.city,_that.country,_that.phoneCountryCode);case LocationError() when locationError != null:
 return locationError(_that.error);case Success() when success != null:
 return success(_that.message);case Error() when error != null:
 return error(_that.error);case _:
@@ -164,13 +164,13 @@ return error(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  detectingLocation,required TResult Function( String city,  String country)  locationDetected,required TResult Function( String error)  locationError,required TResult Function( String message)  success,required TResult Function( String error)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  detectingLocation,required TResult Function( String city,  String country,  String phoneCountryCode)  locationDetected,required TResult Function( String error)  locationError,required TResult Function( String message)  success,required TResult Function( String error)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case Loading():
 return loading();case DetectingLocation():
 return detectingLocation();case LocationDetected():
-return locationDetected(_that.city,_that.country);case LocationError():
+return locationDetected(_that.city,_that.country,_that.phoneCountryCode);case LocationError():
 return locationError(_that.error);case Success():
 return success(_that.message);case Error():
 return error(_that.error);case _:
@@ -190,13 +190,13 @@ return error(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  detectingLocation,TResult? Function( String city,  String country)?  locationDetected,TResult? Function( String error)?  locationError,TResult? Function( String message)?  success,TResult? Function( String error)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  detectingLocation,TResult? Function( String city,  String country,  String phoneCountryCode)?  locationDetected,TResult? Function( String error)?  locationError,TResult? Function( String message)?  success,TResult? Function( String error)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case Loading() when loading != null:
 return loading();case DetectingLocation() when detectingLocation != null:
 return detectingLocation();case LocationDetected() when locationDetected != null:
-return locationDetected(_that.city,_that.country);case LocationError() when locationError != null:
+return locationDetected(_that.city,_that.country,_that.phoneCountryCode);case LocationError() when locationError != null:
 return locationError(_that.error);case Success() when success != null:
 return success(_that.message);case Error() when error != null:
 return error(_that.error);case _:
@@ -307,11 +307,12 @@ String toString() {
 
 
 class LocationDetected implements RegisterState {
-  const LocationDetected({required this.city, required this.country});
+  const LocationDetected({required this.city, required this.country, required this.phoneCountryCode});
   
 
  final  String city;
  final  String country;
+ final  String phoneCountryCode;
 
 /// Create a copy of RegisterState
 /// with the given fields replaced by the non-null parameter values.
@@ -323,16 +324,16 @@ $LocationDetectedCopyWith<LocationDetected> get copyWith => _$LocationDetectedCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LocationDetected&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LocationDetected&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.phoneCountryCode, phoneCountryCode) || other.phoneCountryCode == phoneCountryCode));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,city,country);
+int get hashCode => Object.hash(runtimeType,city,country,phoneCountryCode);
 
 @override
 String toString() {
-  return 'RegisterState.locationDetected(city: $city, country: $country)';
+  return 'RegisterState.locationDetected(city: $city, country: $country, phoneCountryCode: $phoneCountryCode)';
 }
 
 
@@ -343,7 +344,7 @@ abstract mixin class $LocationDetectedCopyWith<$Res> implements $RegisterStateCo
   factory $LocationDetectedCopyWith(LocationDetected value, $Res Function(LocationDetected) _then) = _$LocationDetectedCopyWithImpl;
 @useResult
 $Res call({
- String city, String country
+ String city, String country, String phoneCountryCode
 });
 
 
@@ -360,10 +361,11 @@ class _$LocationDetectedCopyWithImpl<$Res>
 
 /// Create a copy of RegisterState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? city = null,Object? country = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? city = null,Object? country = null,Object? phoneCountryCode = null,}) {
   return _then(LocationDetected(
 city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,country: null == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
+as String,phoneCountryCode: null == phoneCountryCode ? _self.phoneCountryCode : phoneCountryCode // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

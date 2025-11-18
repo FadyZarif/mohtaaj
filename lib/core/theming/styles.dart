@@ -234,6 +234,20 @@ class TextStyles {
     height: 1.5,
   );
 
+  static TextStyle font14WhiteSemiBold = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeightHelper.semiBold,
+    color: ColorsManager.textOnPrimary,
+    height: 1.5,
+  );
+
+  static TextStyle font20WhiteBold = TextStyle(
+    fontSize: 20.sp,
+    fontWeight: FontWeightHelper.bold,
+    color: ColorsManager.textOnPrimary,
+    height: 1.4,
+  );
+
   // ==================== Caption - 12sp ====================
 
   static TextStyle font12BlackBold = TextStyle(

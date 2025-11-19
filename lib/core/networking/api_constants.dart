@@ -26,10 +26,12 @@ class ApiConstants {
   
   // Items
   static const String items = '$apiPath/items';
-  static const String myItems = '$apiPath/items/my';
-  static const String searchItems = '$apiPath/items/search';
-  static const String nearbyItems = '$apiPath/items/nearby';
-  
+  static const String featuredItems = '$items/featured';
+  static const String itemsByCategory = '$items/category';
+  static const String itemsByUser = '$items/user';
+  static const String myItems = '$items/my';
+
+
   // Categories
   static const String categories = '$apiPath/categories';
   static const String categoriesSlug = '$categories/slug';

@@ -32,6 +32,9 @@ class ApiConstants {
   
   // Categories
   static const String categories = '$apiPath/categories';
+  static const String categoriesSlug = '$categories/slug';
+  static const String categoriesTree = '$categories/tree';
+  static const String popularCategories = '$categories/popular';
   
   // Favorites
   static const String favorites = '$apiPath/favorites';

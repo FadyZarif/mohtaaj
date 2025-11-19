@@ -48,10 +48,7 @@ class _MainLayoutBodyState extends State<_MainLayoutBody> {
     return BlocBuilder<MainLayoutCubit, MainLayoutState>(
       builder: (context, state) {
         return Scaffold(
-          body: IndexedStack(
-            index: state.currentIndex,
-            children: _screens,
-          ),
+          body: _screens[state.currentIndex],
           bottomNavigationBar: CustomBottomNav(
             currentIndex: state.currentIndex,
             unreadChatsCount: state.unreadChatsCount,

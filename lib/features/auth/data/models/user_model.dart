@@ -3,6 +3,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
+
+enum Role {
+  admin,
+  user,
+}
 @freezed
 abstract class UserModel with _$UserModel {
   const factory UserModel({
@@ -17,9 +22,9 @@ abstract class UserModel with _$UserModel {
     @Default(0.0) double ratingAvg,
     @Default(0.0) double reputationScore,
     @Default(false) bool isVerified,
-    @Default('user') String role,
+    @Default(Role.user) Role role,
     DateTime? createdAt,
-    DateTime? updatedAt,
+    DateTime? lastActive,
 
    /* String? bio,
     String? website,

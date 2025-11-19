@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../features/main_layout/ui/screens/main_layout_screen.dart';
 import 'routes.dart';
 import '../../features/onboarding/ui/screens/onboarding_screen.dart';
 import '../../features/auth/ui/login_screen.dart';
@@ -32,11 +33,19 @@ class AppRouter {
     //     builder: (_) => const ForgotPasswordScreen(),
     //   );
 
-    // TODO: Add home screen
-    case Routes.homeScreen:
-      return MaterialPageRoute(
-        builder: (_) => const Scaffold(body: Center(child: Text('Home Screen')),),
-      );
+
+    // ========================== Main Layout ==========================
+
+      case Routes.mainLayout:
+        return MaterialPageRoute(
+          builder: (_) => const MainLayoutScreen(),
+        );
+
+    // Legacy route - redirect to main layout
+      case Routes.homeScreen:
+        return MaterialPageRoute(
+          builder: (_) => const MainLayoutScreen(),
+        );
 
       default:
         return null;

@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$UserModel {
 
  String get id; String get name; String get email; String get phone; String get city; String get country; String? get avatarUrl;// @Default(0) int ratingCount,
- double get ratingAvg; double get reputationScore; bool get isVerified; String get role; DateTime? get createdAt; DateTime? get updatedAt;
+ double get ratingAvg; double get reputationScore; bool get isVerified; Role get role; DateTime? get createdAt; DateTime? get lastActive;
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $UserModelCopyWith<UserModel> get copyWith => _$UserModelCopyWithImpl<UserModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.role, role) || other.role == role)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.role, role) || other.role == role)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastActive, lastActive) || other.lastActive == lastActive));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,email,phone,city,country,avatarUrl,ratingAvg,reputationScore,isVerified,role,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,name,email,phone,city,country,avatarUrl,ratingAvg,reputationScore,isVerified,role,createdAt,lastActive);
 
 @override
 String toString() {
-  return 'UserModel(id: $id, name: $name, email: $email, phone: $phone, city: $city, country: $country, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore, isVerified: $isVerified, role: $role, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'UserModel(id: $id, name: $name, email: $email, phone: $phone, city: $city, country: $country, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore, isVerified: $isVerified, role: $role, createdAt: $createdAt, lastActive: $lastActive)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $UserModelCopyWith<$Res>  {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) _then) = _$UserModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String email, String phone, String city, String country, String? avatarUrl, double ratingAvg, double reputationScore, bool isVerified, String role, DateTime? createdAt, DateTime? updatedAt
+ String id, String name, String email, String phone, String city, String country, String? avatarUrl, double ratingAvg, double reputationScore, bool isVerified, Role role, DateTime? createdAt, DateTime? lastActive
 });
 
 
@@ -66,7 +66,7 @@ class _$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? email = null,Object? phone = null,Object? city = null,Object? country = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,Object? isVerified = null,Object? role = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? email = null,Object? phone = null,Object? city = null,Object? country = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,Object? isVerified = null,Object? role = null,Object? createdAt = freezed,Object? lastActive = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -79,8 +79,8 @@ as String?,ratingAvg: null == ratingAvg ? _self.ratingAvg : ratingAvg // ignore:
 as double,reputationScore: null == reputationScore ? _self.reputationScore : reputationScore // ignore: cast_nullable_to_non_nullable
 as double,isVerified: null == isVerified ? _self.isVerified : isVerified // ignore: cast_nullable_to_non_nullable
 as bool,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
-as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as Role,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,lastActive: freezed == lastActive ? _self.lastActive : lastActive // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
@@ -166,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String email,  String phone,  String city,  String country,  String? avatarUrl,  double ratingAvg,  double reputationScore,  bool isVerified,  String role,  DateTime? createdAt,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String email,  String phone,  String city,  String country,  String? avatarUrl,  double ratingAvg,  double reputationScore,  bool isVerified,  Role role,  DateTime? createdAt,  DateTime? lastActive)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserModel() when $default != null:
-return $default(_that.id,_that.name,_that.email,_that.phone,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.role,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.email,_that.phone,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.role,_that.createdAt,_that.lastActive);case _:
   return orElse();
 
 }
@@ -187,10 +187,10 @@ return $default(_that.id,_that.name,_that.email,_that.phone,_that.city,_that.cou
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String email,  String phone,  String city,  String country,  String? avatarUrl,  double ratingAvg,  double reputationScore,  bool isVerified,  String role,  DateTime? createdAt,  DateTime? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String email,  String phone,  String city,  String country,  String? avatarUrl,  double ratingAvg,  double reputationScore,  bool isVerified,  Role role,  DateTime? createdAt,  DateTime? lastActive)  $default,) {final _that = this;
 switch (_that) {
 case _UserModel():
-return $default(_that.id,_that.name,_that.email,_that.phone,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.role,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.email,_that.phone,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.role,_that.createdAt,_that.lastActive);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +207,10 @@ return $default(_that.id,_that.name,_that.email,_that.phone,_that.city,_that.cou
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String email,  String phone,  String city,  String country,  String? avatarUrl,  double ratingAvg,  double reputationScore,  bool isVerified,  String role,  DateTime? createdAt,  DateTime? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String email,  String phone,  String city,  String country,  String? avatarUrl,  double ratingAvg,  double reputationScore,  bool isVerified,  Role role,  DateTime? createdAt,  DateTime? lastActive)?  $default,) {final _that = this;
 switch (_that) {
 case _UserModel() when $default != null:
-return $default(_that.id,_that.name,_that.email,_that.phone,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.role,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.email,_that.phone,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.role,_that.createdAt,_that.lastActive);case _:
   return null;
 
 }
@@ -222,7 +222,7 @@ return $default(_that.id,_that.name,_that.email,_that.phone,_that.city,_that.cou
 @JsonSerializable()
 
 class _UserModel implements UserModel {
-  const _UserModel({required this.id, required this.name, required this.email, required this.phone, required this.city, required this.country, this.avatarUrl, this.ratingAvg = 0.0, this.reputationScore = 0.0, this.isVerified = false, this.role = 'user', this.createdAt, this.updatedAt});
+  const _UserModel({required this.id, required this.name, required this.email, required this.phone, required this.city, required this.country, this.avatarUrl, this.ratingAvg = 0.0, this.reputationScore = 0.0, this.isVerified = false, this.role = Role.user, this.createdAt, this.lastActive});
   factory _UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
 @override final  String id;
@@ -236,9 +236,9 @@ class _UserModel implements UserModel {
 @override@JsonKey() final  double ratingAvg;
 @override@JsonKey() final  double reputationScore;
 @override@JsonKey() final  bool isVerified;
-@override@JsonKey() final  String role;
+@override@JsonKey() final  Role role;
 @override final  DateTime? createdAt;
-@override final  DateTime? updatedAt;
+@override final  DateTime? lastActive;
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.role, role) || other.role == role)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.role, role) || other.role == role)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastActive, lastActive) || other.lastActive == lastActive));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,email,phone,city,country,avatarUrl,ratingAvg,reputationScore,isVerified,role,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,name,email,phone,city,country,avatarUrl,ratingAvg,reputationScore,isVerified,role,createdAt,lastActive);
 
 @override
 String toString() {
-  return 'UserModel(id: $id, name: $name, email: $email, phone: $phone, city: $city, country: $country, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore, isVerified: $isVerified, role: $role, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'UserModel(id: $id, name: $name, email: $email, phone: $phone, city: $city, country: $country, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore, isVerified: $isVerified, role: $role, createdAt: $createdAt, lastActive: $lastActive)';
 }
 
 
@@ -273,7 +273,7 @@ abstract mixin class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Re
   factory _$UserModelCopyWith(_UserModel value, $Res Function(_UserModel) _then) = __$UserModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String email, String phone, String city, String country, String? avatarUrl, double ratingAvg, double reputationScore, bool isVerified, String role, DateTime? createdAt, DateTime? updatedAt
+ String id, String name, String email, String phone, String city, String country, String? avatarUrl, double ratingAvg, double reputationScore, bool isVerified, Role role, DateTime? createdAt, DateTime? lastActive
 });
 
 
@@ -290,7 +290,7 @@ class __$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? email = null,Object? phone = null,Object? city = null,Object? country = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,Object? isVerified = null,Object? role = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? email = null,Object? phone = null,Object? city = null,Object? country = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,Object? isVerified = null,Object? role = null,Object? createdAt = freezed,Object? lastActive = freezed,}) {
   return _then(_UserModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -303,8 +303,8 @@ as String?,ratingAvg: null == ratingAvg ? _self.ratingAvg : ratingAvg // ignore:
 as double,reputationScore: null == reputationScore ? _self.reputationScore : reputationScore // ignore: cast_nullable_to_non_nullable
 as double,isVerified: null == isVerified ? _self.isVerified : isVerified // ignore: cast_nullable_to_non_nullable
 as bool,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
-as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as Role,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,lastActive: freezed == lastActive ? _self.lastActive : lastActive // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }

@@ -7,21 +7,26 @@ class Routes {
   static const String registerScreen = '/register';
   static const String forgotPasswordScreen = '/forgotPassword';
   static const String verifyEmailScreen = '/verifyEmail';
-  
-  // Main Routes
+
+  // Main Layout (with Bottom Navigation)
+  static const String mainLayout = '/main';
+
+  // Home
   static const String homeScreen = '/home';
-  
+
+  // Categories
+  static const String categoriesScreen = '/categories';
+  static const String categoryItemsScreen = '/categoryItems';
+
+
   // Items Routes
   static const String itemsListScreen = '/items';
   static const String itemDetailsScreen = '/itemDetails';
   static const String createItemScreen = '/createItem';
   static const String editItemScreen = '/editItem';
   static const String myItemsScreen = '/myItems';
-  
-  // Categories Routes
-  static const String categoriesScreen = '/categories';
-  static const String categoryItemsScreen = '/categoryItems';
-  
+
+
   // Profile Routes
   static const String myProfileScreen = '/myProfile';
   static const String userProfileScreen = '/userProfile';

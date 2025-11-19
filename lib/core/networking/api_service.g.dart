@@ -248,11 +248,10 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<ItemsResponse> getItems(Map<String, dynamic>? queries) async {
+  Future<ItemsResponse> getItems(ItemsQueries queries) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(queries ?? <String, dynamic>{});
-    queryParameters.removeWhere((k, v) => v == null);
+    queryParameters.addAll(queries.toJson());
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ItemsResponse>(

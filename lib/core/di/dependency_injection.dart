@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import '../../features/categories/logic/categories_cubit/categories_cubit.dart';
 import '../../features/main_layout/logic/main_layout_cubit/main_layout_cubit.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
+import '../../features/categories/logic/categories_cubit/categories_cubit.dart';
+import '../../features/home/logic/home_cubit/home_cubit.dart';
 import '../networking/api_service.dart';
 import '../networking/dio_factory.dart';
 import '../../features/auth/logic/login_cubit/login_cubit.dart';
@@ -53,5 +54,11 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<CategoriesCubit>(
         () => CategoriesCubit(getIt<ApiService>()),
+  );
+
+  // ========================== Home ==========================
+
+  getIt.registerFactory<HomeCubit>(
+        () => HomeCubit(getIt<ApiService>()),
   );
 }

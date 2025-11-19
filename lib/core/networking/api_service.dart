@@ -7,6 +7,7 @@ import '../../features/auth/data/models/refresh_token_response.dart';
 import '../../features/auth/data/models/register_request.dart';
 import '../../features/auth/data/models/register_response.dart';
 import '../../features/categories/data/models/categories_response.dart';
+import '../../features/items/data/models/items_queries.dart';
 import '../../features/items/data/models/items_response.dart';
 import '../../features/profile/data/models/profile_response.dart';
 import '../../features/profile/data/models/update_profile_request.dart';
@@ -75,7 +76,7 @@ abstract class ApiService {
   // Get All Items with filters
   @GET(ApiConstants.items)
   Future<ItemsResponse> getItems(
-      @Queries() Map<String, dynamic>? queries,
+      @Queries() ItemsQueries queries,
       );
 
   // Get Single Item

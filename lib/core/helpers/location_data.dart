@@ -28,7 +28,7 @@ class LocationData {
   };
 
   /// Map Arabic country names to country codes (for phone)
-  static const Map<String, String> countryToPhoneCode = {
+  static const Map<String, String> countryArToCode = {
     'مصر': 'EG',
     'السعودية': 'SA',
     'الإمارات': 'AE',
@@ -51,6 +51,32 @@ class LocationData {
     'جيبوتي': 'DJ',
     'موريتانيا': 'MR',
     'جزر القمر': 'KM',
+  };
+
+  /// Map  country code to dial code
+  static const Map<String, String> codeToDial = {
+    'EG': '+20',
+    'SA': '+966',
+    'AE': '+971',
+    'KW': '+965',
+    'QA': '+974',
+    'BH': '+973',
+    'OM': '+968',
+    'JO': '+962',
+    'LB': '+961',
+    'SY': '+963',
+    'IQ': '+964',
+    'PS': '+970',
+    'YE': '+967',
+    'LY': '+218',
+    'TN': '+216',
+    'DZ': '+213',
+    'MA': '+212',
+    'SD': '+249',
+    'SO': '+252',
+    'DJ': '+253',
+    'MR': '+222',
+    'KM': '+269',
   };
 
   // ===================== City Mappings =====================
@@ -265,8 +291,13 @@ class LocationData {
   }
 
   /// Get phone country code from Arabic country name
-  static String getPhoneCountryCode(String arabicCountry) {
-    return countryToPhoneCode[arabicCountry] ?? 'EG';
+  static String getCodeByCountry(String arabicCountry) {
+    return countryArToCode[arabicCountry] ?? 'EG';
+  }
+
+  /// get dial code from Arabic country name
+  static String getDialByCode(String countryCode) {
+    return codeToDial[countryCode] ?? '+20';
   }
 
   /// Get cities based on country

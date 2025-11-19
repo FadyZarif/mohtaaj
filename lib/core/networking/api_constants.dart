@@ -18,7 +18,7 @@ class ApiConstants {
   
   // Users
   static const String myProfile = '$apiPath/users/me';
-  static const String updateProfile = '$apiPath/users/profile';
+  // static const String updateProfile = '$apiPath/users/profile';
   static const String getUserById = '$apiPath/users'; // /{userId}
   static const String getUserItems = '$apiPath/users'; // /{userId}/items
   static const String getUserRatings = '$apiPath/users'; // /{userId}/ratings

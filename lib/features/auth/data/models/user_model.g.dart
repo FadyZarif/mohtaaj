@@ -14,7 +14,7 @@ _UserModel _$UserModelFromJson(Map<String, dynamic> json) => _UserModel(
   city: json['city'] as String,
   country: json['country'] as String,
   avatarUrl: json['avatarUrl'] as String?,
-  ratingAvg: (json['ratingAvg'] as num?)?.toDouble() ?? 0.0,
+  ratingAvg: json['ratingAvg'] == null ? 0.0 : _toDouble(json['ratingAvg']),
   reputationScore: (json['reputationScore'] as num?)?.toDouble() ?? 0.0,
   isVerified: json['isVerified'] as bool? ?? false,
   role: $enumDecodeNullable(_$RoleEnumMap, json['role']) ?? Role.user,
@@ -24,6 +24,8 @@ _UserModel _$UserModelFromJson(Map<String, dynamic> json) => _UserModel(
   lastActive: json['lastActive'] == null
       ? null
       : DateTime.parse(json['lastActive'] as String),
+  itemsCount: (json['itemsCount'] as num?)?.toInt() ?? 0,
+  ratingsCount: (json['ratingsCount'] as num?)?.toInt() ?? 0,
 );
 
 Map<String, dynamic> _$UserModelToJson(_UserModel instance) =>
@@ -41,6 +43,8 @@ Map<String, dynamic> _$UserModelToJson(_UserModel instance) =>
       'role': _$RoleEnumMap[instance.role]!,
       'createdAt': instance.createdAt?.toIso8601String(),
       'lastActive': instance.lastActive?.toIso8601String(),
+      'itemsCount': instance.itemsCount,
+      'ratingsCount': instance.ratingsCount,
     };
 
 const _$RoleEnumMap = {Role.admin: 'admin', Role.user: 'user'};

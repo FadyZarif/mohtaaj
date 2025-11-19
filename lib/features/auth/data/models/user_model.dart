@@ -19,13 +19,15 @@ abstract class UserModel with _$UserModel {
     required String country,
     String? avatarUrl,
     // @Default(0) int ratingCount,
+    @JsonKey(fromJson: _toDouble)
     @Default(0.0) double ratingAvg,
     @Default(0.0) double reputationScore,
     @Default(false) bool isVerified,
     @Default(Role.user) Role role,
     DateTime? createdAt,
     DateTime? lastActive,
-
+    @Default(0) int itemsCount,
+    @Default(0) int ratingsCount,
    /* String? bio,
     String? website,
     @Default([]) List<SocialLink> socialLinks,
@@ -36,6 +38,13 @@ abstract class UserModel with _$UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
+}
+
+double _toDouble(dynamic value) {
+  if (value == null) return 0.0;
+  if (value is num) return value.toDouble();
+  if (value is String) return double.tryParse(value) ?? 0.0;
+  return 0.0;
 }
 
 /*@freezed

@@ -84,7 +84,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         }
 
         // Get phone country code
-        detectedPhoneCode = LocationData.getPhoneCountryCode(detectedCountry!);
+        detectedPhoneCode = LocationData.getCodeByCountry(detectedCountry!);
 
         emit(RegisterState.locationDetected(
           city: detectedCity!,

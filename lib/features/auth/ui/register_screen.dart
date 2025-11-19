@@ -51,8 +51,8 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
 
   String? _selectedCountry;
   String? _selectedCity;
-  String _countryCode = '+20';
-  String _phoneInitialSelection = 'EG'; // Initial country code for phone picker
+  String _dial = '+20';
+  String _initialCode = 'EG'; // Initial country code for phone picker
 
   @override
   void initState() {
@@ -109,7 +109,7 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
                   setState(() {
                     _selectedCity = city;
                     _selectedCountry = country;
-                    _phoneInitialSelection = phoneCountryCode;
+                    _initialCode = phoneCountryCode;
                   });
 
                   // Update phone field country code
@@ -128,7 +128,7 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
                   setState(() {
                     _selectedCity = 'القاهرة';
                     _selectedCountry = 'مصر';
-                    _phoneInitialSelection = 'EG';
+                    _initialCode = 'EG';
                   });
                 },
                 success: (message) {
@@ -211,10 +211,10 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
                       PhoneTextField(
                         key: _phoneFieldKey,
                         controller: _phoneController,
-                        initialSelection: _phoneInitialSelection,
+                        initialCode: _initialCode,
                         validator: AppValidators.validatePhone,
                         onCountryChanged: (code) {
-                          _countryCode = code;
+                          _dial = code;
                         },
                       ),
 
@@ -269,8 +269,8 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
 
                             // Update phone country code when country changes
                             if (value != null) {
-                              final newPhoneCode = LocationData.getPhoneCountryCode(value);
-                              _phoneFieldKey.currentState?.updateCountryCode(newPhoneCode);
+                              final newCode = LocationData.getCodeByCountry(value);
+                              _phoneFieldKey.currentState?.updateCountryCode(newCode);
                             }
                           });
                         },
@@ -312,7 +312,7 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
                             final request = RegisterRequest(
                               name: _nameController.text.trim(),
                               email: _emailController.text.trim(),
-                              phone: '$_countryCode${_phoneController.text}',
+                              phone: '$_dial${_phoneController.text}',
                               password: _passwordController.text,
                               city: _selectedCity!,
                               country: _selectedCountry!,

@@ -336,6 +336,14 @@ class TextStyles {
     height: 1.5,
   );
 
+  static TextStyle font12GreenMedium = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeightHelper.medium,
+    color: ColorsManager.success,
+    height: 1.5,
+  );
+
+
   // ==================== Price Styles ====================
 
   static TextStyle priceStyleLarge = TextStyle(
@@ -424,4 +432,5 @@ class TextStyles {
     decoration: TextDecoration.underline,
     height: 1.5,
   );
+
 }

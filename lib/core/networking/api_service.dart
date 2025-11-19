@@ -6,6 +6,8 @@ import 'package:retrofit/retrofit.dart';
 import '../../features/auth/data/models/refresh_token_response.dart';
 import '../../features/auth/data/models/register_request.dart';
 import '../../features/auth/data/models/register_response.dart';
+import '../../features/profile/data/models/profile_response.dart';
+import '../../features/profile/data/models/update_profile_request.dart';
 import 'api_constants.dart';
 import '../../features/auth/data/models/login_request.dart';
 import '../../features/auth/data/models/login_response.dart';
@@ -33,29 +35,35 @@ abstract class ApiService {
     @Body() RefreshTokenRequest refreshTokenRequest,
   );
 
+  /// TODO
   @POST(ApiConstants.logout)
-  Future<dynamic> logout();
+  Future<void> logout(@Body() Map<String, dynamic> body);
 
+  /// TODO
   @POST(ApiConstants.forgotPassword)
   Future<dynamic> forgotPassword(
     @Body() Map<String, dynamic> forgotPasswordRequest,
   );
 
+  /// TODO
   @POST(ApiConstants.verifyEmail)
   Future<dynamic> verifyEmail(
     @Body() Map<String, dynamic> verifyEmailRequest,
   );
 
   // ========================== Users ==========================
-  
-  @GET(ApiConstants.myProfile)
-  Future<dynamic> getMyProfile();
 
-  @PUT(ApiConstants.updateProfile)
-  Future<dynamic> updateProfile(
-    @Body() Map<String, dynamic> updateProfileRequest,
+  // Get user profile
+  @GET(ApiConstants.myProfile)
+  Future<ProfileResponse> getMyProfile();
+
+  // Update user profile
+  @PATCH(ApiConstants.myProfile)
+  Future<ProfileResponse> updateProfile(
+    @Body() UpdateProfileRequest updateProfileRequest,
   );
 
+  ///TODO
   @GET('${ApiConstants.getUserById}/{userId}')
   Future<dynamic> getUserById(
     @Path('userId') String userId,

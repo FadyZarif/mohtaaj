@@ -22,8 +22,7 @@ extension NavigationExtension on BuildContext {
     );
   }
 
-  void pop() => Navigator.of(this).pop();
-
+  void pop([Object? result]) => Navigator.of(this).pop(result);
   // Theme
   ThemeData get theme => Theme.of(this);
   TextTheme get textTheme => Theme.of(this).textTheme;

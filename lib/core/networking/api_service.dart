@@ -6,6 +6,7 @@ import 'package:retrofit/retrofit.dart';
 import '../../features/auth/data/models/refresh_token_response.dart';
 import '../../features/auth/data/models/register_request.dart';
 import '../../features/auth/data/models/register_response.dart';
+import '../../features/categories/data/models/categories_response.dart';
 import '../../features/profile/data/models/profile_response.dart';
 import '../../features/profile/data/models/update_profile_request.dart';
 import 'api_constants.dart';
@@ -35,7 +36,6 @@ abstract class ApiService {
     @Body() RefreshTokenRequest refreshTokenRequest,
   );
 
-  /// TODO
   @POST(ApiConstants.logout)
   Future<void> logout(@Body() Map<String, dynamic> body);
 
@@ -111,14 +111,27 @@ abstract class ApiService {
   );
 
   // ========================== Categories ==========================
-  
-  @GET(ApiConstants.categories)
-  Future<dynamic> getCategories();
 
-  @GET('${ApiConstants.categories}/{slug}')
-  Future<dynamic> getCategoryBySlug(
-    @Path('slug') String slug,
-  );
+  @GET(ApiConstants.categories)
+  Future<CategoriesResponse> getCategories();
+
+  @GET('${ApiConstants.categories}/{categoryId}')
+  Future<CategoryDetailsResponse> getCategoryById(
+      @Path('categoryId') String categoryId,
+      );
+
+  @GET('${ApiConstants.categoriesSlug}/{slug}')
+  Future<CategoryDetailsResponse> getCategoryBySlug(
+      @Path('slug') String slug,
+      );
+
+  @GET(ApiConstants.categoriesTree)
+  Future<CategoryListResponse> getCategoryTree();
+
+  @GET(ApiConstants.popularCategories)
+  Future<CategoryListResponse> getPopularCategories(
+      @Query('limit') int? limit,
+      );
 
   // ========================== Favorites ==========================
   

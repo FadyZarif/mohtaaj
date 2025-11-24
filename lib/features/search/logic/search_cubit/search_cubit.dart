@@ -1,5 +1,6 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mohtaaj/features/items/data/models/item_model.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../../items/data/models/items_queries.dart';
@@ -26,7 +27,7 @@ class SearchCubit extends Cubit<SearchState> {
     emit(state.copyWith(minPrice: minPrice, maxPrice: maxPrice));
   }
 
-  void updateCondition(String? condition) {
+  void updateCondition(ItemCondition? condition) {
     emit(state.copyWith(condition: condition));
   }
 
@@ -34,7 +35,7 @@ class SearchCubit extends Cubit<SearchState> {
     emit(state.copyWith(isFreeOnly: !state.isFreeOnly));
   }
 
-  void updateSort(String sortBy, String sortOrder) {
+  void updateSort(SortBy sortBy, SortOrder sortOrder) {
     emit(state.copyWith(sortBy: sortBy, sortOrder: sortOrder));
   }
 
@@ -61,7 +62,7 @@ class SearchCubit extends Cubit<SearchState> {
         ItemsQueries(
           page: page,
           limit: 20,
-          status: 'active',
+          status: ItemStatus.active,
           search: state.searchQuery.isNotEmpty ? state.searchQuery : null,
           categoryId: state.selectedCategory,
           city: state.selectedCity,
@@ -70,7 +71,7 @@ class SearchCubit extends Cubit<SearchState> {
           condition: state.condition,
           isFree: state.isFreeOnly ? true : null,
           sortBy: state.sortBy,
-          sortOrder: state.sortOrder == 'desc' ? SortOrder.desc : SortOrder.asc,
+          sortOrder: state.sortOrder,
         ),
       );
 

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 mixin _$SearchState {
 
  String get searchQuery; List<ItemModel> get items; bool get isLoading; String? get error; int get currentPage; bool get hasMoreItems;// Filters
- String? get selectedCategory; String? get selectedCity; String? get minPrice; String? get maxPrice; String? get condition; bool get isFreeOnly; String get sortBy; String get sortOrder;
+ String? get selectedCategory; String? get selectedCity; String? get minPrice; String? get maxPrice; ItemCondition? get condition; bool get isFreeOnly; SortBy get sortBy; SortOrder get sortOrder;
 /// Create a copy of SearchState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $SearchStateCopyWith<$Res>  {
   factory $SearchStateCopyWith(SearchState value, $Res Function(SearchState) _then) = _$SearchStateCopyWithImpl;
 @useResult
 $Res call({
- String searchQuery, List<ItemModel> items, bool isLoading, String? error, int currentPage, bool hasMoreItems, String? selectedCategory, String? selectedCity, String? minPrice, String? maxPrice, String? condition, bool isFreeOnly, String sortBy, String sortOrder
+ String searchQuery, List<ItemModel> items, bool isLoading, String? error, int currentPage, bool hasMoreItems, String? selectedCategory, String? selectedCity, String? minPrice, String? maxPrice, ItemCondition? condition, bool isFreeOnly, SortBy sortBy, SortOrder sortOrder
 });
 
 
@@ -76,10 +76,10 @@ as String?,selectedCity: freezed == selectedCity ? _self.selectedCity : selected
 as String?,minPrice: freezed == minPrice ? _self.minPrice : minPrice // ignore: cast_nullable_to_non_nullable
 as String?,maxPrice: freezed == maxPrice ? _self.maxPrice : maxPrice // ignore: cast_nullable_to_non_nullable
 as String?,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
-as String?,isFreeOnly: null == isFreeOnly ? _self.isFreeOnly : isFreeOnly // ignore: cast_nullable_to_non_nullable
+as ItemCondition?,isFreeOnly: null == isFreeOnly ? _self.isFreeOnly : isFreeOnly // ignore: cast_nullable_to_non_nullable
 as bool,sortBy: null == sortBy ? _self.sortBy : sortBy // ignore: cast_nullable_to_non_nullable
-as String,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
-as String,
+as SortBy,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
+as SortOrder,
   ));
 }
 
@@ -164,7 +164,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  String? error,  int currentPage,  bool hasMoreItems,  String? selectedCategory,  String? selectedCity,  String? minPrice,  String? maxPrice,  String? condition,  bool isFreeOnly,  String sortBy,  String sortOrder)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  String? error,  int currentPage,  bool hasMoreItems,  String? selectedCategory,  String? selectedCity,  String? minPrice,  String? maxPrice,  ItemCondition? condition,  bool isFreeOnly,  SortBy sortBy,  SortOrder sortOrder)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SearchState() when $default != null:
 return $default(_that.searchQuery,_that.items,_that.isLoading,_that.error,_that.currentPage,_that.hasMoreItems,_that.selectedCategory,_that.selectedCity,_that.minPrice,_that.maxPrice,_that.condition,_that.isFreeOnly,_that.sortBy,_that.sortOrder);case _:
@@ -185,7 +185,7 @@ return $default(_that.searchQuery,_that.items,_that.isLoading,_that.error,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  String? error,  int currentPage,  bool hasMoreItems,  String? selectedCategory,  String? selectedCity,  String? minPrice,  String? maxPrice,  String? condition,  bool isFreeOnly,  String sortBy,  String sortOrder)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  String? error,  int currentPage,  bool hasMoreItems,  String? selectedCategory,  String? selectedCity,  String? minPrice,  String? maxPrice,  ItemCondition? condition,  bool isFreeOnly,  SortBy sortBy,  SortOrder sortOrder)  $default,) {final _that = this;
 switch (_that) {
 case _SearchState():
 return $default(_that.searchQuery,_that.items,_that.isLoading,_that.error,_that.currentPage,_that.hasMoreItems,_that.selectedCategory,_that.selectedCity,_that.minPrice,_that.maxPrice,_that.condition,_that.isFreeOnly,_that.sortBy,_that.sortOrder);case _:
@@ -205,7 +205,7 @@ return $default(_that.searchQuery,_that.items,_that.isLoading,_that.error,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  String? error,  int currentPage,  bool hasMoreItems,  String? selectedCategory,  String? selectedCity,  String? minPrice,  String? maxPrice,  String? condition,  bool isFreeOnly,  String sortBy,  String sortOrder)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  String? error,  int currentPage,  bool hasMoreItems,  String? selectedCategory,  String? selectedCity,  String? minPrice,  String? maxPrice,  ItemCondition? condition,  bool isFreeOnly,  SortBy sortBy,  SortOrder sortOrder)?  $default,) {final _that = this;
 switch (_that) {
 case _SearchState() when $default != null:
 return $default(_that.searchQuery,_that.items,_that.isLoading,_that.error,_that.currentPage,_that.hasMoreItems,_that.selectedCategory,_that.selectedCity,_that.minPrice,_that.maxPrice,_that.condition,_that.isFreeOnly,_that.sortBy,_that.sortOrder);case _:
@@ -220,7 +220,7 @@ return $default(_that.searchQuery,_that.items,_that.isLoading,_that.error,_that.
 
 
 class _SearchState implements SearchState {
-  const _SearchState({this.searchQuery = '', final  List<ItemModel> items = const [], this.isLoading = false, this.error, this.currentPage = 1, this.hasMoreItems = false, this.selectedCategory, this.selectedCity, this.minPrice, this.maxPrice, this.condition, this.isFreeOnly = false, this.sortBy = 'createdAt', this.sortOrder = 'desc'}): _items = items;
+  const _SearchState({this.searchQuery = '', final  List<ItemModel> items = const [], this.isLoading = false, this.error, this.currentPage = 1, this.hasMoreItems = false, this.selectedCategory, this.selectedCity, this.minPrice, this.maxPrice, this.condition, this.isFreeOnly = false, this.sortBy = SortBy.createdAt, this.sortOrder = SortOrder.desc}): _items = items;
   
 
 @override@JsonKey() final  String searchQuery;
@@ -240,10 +240,10 @@ class _SearchState implements SearchState {
 @override final  String? selectedCity;
 @override final  String? minPrice;
 @override final  String? maxPrice;
-@override final  String? condition;
+@override final  ItemCondition? condition;
 @override@JsonKey() final  bool isFreeOnly;
-@override@JsonKey() final  String sortBy;
-@override@JsonKey() final  String sortOrder;
+@override@JsonKey() final  SortBy sortBy;
+@override@JsonKey() final  SortOrder sortOrder;
 
 /// Create a copy of SearchState
 /// with the given fields replaced by the non-null parameter values.
@@ -275,7 +275,7 @@ abstract mixin class _$SearchStateCopyWith<$Res> implements $SearchStateCopyWith
   factory _$SearchStateCopyWith(_SearchState value, $Res Function(_SearchState) _then) = __$SearchStateCopyWithImpl;
 @override @useResult
 $Res call({
- String searchQuery, List<ItemModel> items, bool isLoading, String? error, int currentPage, bool hasMoreItems, String? selectedCategory, String? selectedCity, String? minPrice, String? maxPrice, String? condition, bool isFreeOnly, String sortBy, String sortOrder
+ String searchQuery, List<ItemModel> items, bool isLoading, String? error, int currentPage, bool hasMoreItems, String? selectedCategory, String? selectedCity, String? minPrice, String? maxPrice, ItemCondition? condition, bool isFreeOnly, SortBy sortBy, SortOrder sortOrder
 });
 
 
@@ -305,10 +305,10 @@ as String?,selectedCity: freezed == selectedCity ? _self.selectedCity : selected
 as String?,minPrice: freezed == minPrice ? _self.minPrice : minPrice // ignore: cast_nullable_to_non_nullable
 as String?,maxPrice: freezed == maxPrice ? _self.maxPrice : maxPrice // ignore: cast_nullable_to_non_nullable
 as String?,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
-as String?,isFreeOnly: null == isFreeOnly ? _self.isFreeOnly : isFreeOnly // ignore: cast_nullable_to_non_nullable
+as ItemCondition?,isFreeOnly: null == isFreeOnly ? _self.isFreeOnly : isFreeOnly // ignore: cast_nullable_to_non_nullable
 as bool,sortBy: null == sortBy ? _self.sortBy : sortBy // ignore: cast_nullable_to_non_nullable
-as String,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
-as String,
+as SortBy,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
+as SortOrder,
   ));
 }
 

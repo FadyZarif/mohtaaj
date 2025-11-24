@@ -4,6 +4,77 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'item_model.freezed.dart';
 part 'item_model.g.dart';
 
+
+enum ItemCondition {
+  @JsonValue("new")
+  newItem,
+
+  @JsonValue("like_new")
+  likeNew,
+
+  @JsonValue("good")
+  good,
+
+  @JsonValue("fair")
+  fair,
+
+  @JsonValue("poor")
+  poor,
+}
+
+extension ItemConditionX on ItemCondition {
+  String get displayName {
+    switch (this) {
+      case ItemCondition.newItem:
+        return 'جديد';
+      case ItemCondition.likeNew:
+        return 'شبه جديد';
+      case ItemCondition.good:
+        return 'جيد';
+      case ItemCondition.fair:
+        return 'مقبول';
+      case ItemCondition.poor:
+        return 'سيء';
+    }
+  }
+}
+
+enum ItemStatus {
+
+  @JsonValue("pending")
+  pending,
+
+  @JsonValue("active")
+  active,
+
+  @JsonValue("closed")
+  closed,
+
+  @JsonValue("reported")
+  reported,
+}
+/*extension ItemModelX on ItemModel {
+  String get conditionText {
+    switch (condition) {
+      case ItemCondition.newItem:
+        return 'جديد';
+      case ItemCondition.likeNew:
+        return 'شبه جديد';
+      case ItemCondition.good:
+        return 'جيد';
+      case ItemCondition.fair:
+        return 'مقبول';
+      case ItemCondition.poor:
+        return 'سيء';
+      default:
+        return 'غير محدد';
+    }
+  }
+
+}*/
+
+
+
 @freezed
 abstract class ItemModel with _$ItemModel {
   const factory ItemModel({
@@ -13,7 +84,7 @@ abstract class ItemModel with _$ItemModel {
     required String description,
     required String categoryId,
     required ItemCategory category,
-    String? condition,
+    ItemCondition? condition,
     required List<String> images,
     required String city,
     String? geoLat,
@@ -21,7 +92,7 @@ abstract class ItemModel with _$ItemModel {
     String? price,
     required bool isFree,
     required bool isFeatured,
-    required String status,
+    required ItemStatus status,
     required int views,
     required int favoritesCount,
     required DateTime createdAt,

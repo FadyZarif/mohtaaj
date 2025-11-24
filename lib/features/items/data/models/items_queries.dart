@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'item_model.dart';
+
 part 'items_queries.freezed.dart';
 
 part 'items_queries.g.dart';
@@ -9,6 +11,12 @@ enum SortOrder {
   asc,
   desc,
 }
+enum SortBy {
+  createdAt,
+  favoritesCount,
+  views,
+  price,
+}
 @freezed
 abstract class ItemsQueries with _$ItemsQueries {
   @JsonSerializable(includeIfNull: false) // 👈 المهم
@@ -16,13 +24,13 @@ abstract class ItemsQueries with _$ItemsQueries {
     int? page,
     int? limit,
     String? categoryId,
-    String? condition,
-    String? status,
+    ItemCondition? condition,
+    ItemStatus? status,
     String? city,
     bool? isFree,
     bool? isFeatured,
     String? search,
-    String? sortBy,
+    SortBy? sortBy,
     SortOrder? sortOrder,
     double? minLat,
     double? maxLat,

@@ -1,5 +1,6 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mohtaaj/features/items/data/models/items_queries.dart';
 import '../../../items/data/models/item_model.dart';
 
 part 'search_state.freezed.dart';
@@ -18,9 +19,9 @@ abstract class SearchState with _$SearchState {
     String? selectedCity,
     String? minPrice,
     String? maxPrice,
-    String? condition,
+    ItemCondition? condition,
     @Default(false) bool isFreeOnly,
-    @Default('createdAt') String sortBy,
-    @Default('desc') String sortOrder,
+    @Default(SortBy.createdAt) SortBy sortBy,
+    @Default(SortOrder.desc) SortOrder sortOrder,
   }) = _SearchState;
 }

@@ -2,9 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mohtaaj/features/items/data/models/item_model.dart';
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
+import '../../../items/data/models/items_queries.dart';
 import '../../logic/search_cubit/search_cubit.dart';
 import '../../logic/search_cubit/search_state.dart';
 
@@ -245,13 +247,6 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
   }
 
   Widget _buildConditionSelector() {
-    final conditions = {
-      'new': 'جديد',
-      'like_new': 'شبه جديد',
-      'good': 'جيد',
-      'fair': 'مقبول',
-      'poor': 'سيء',
-    };
 
     return BlocBuilder<SearchCubit, SearchState>(
       buildWhen: (previous, current) => previous.condition != current.condition,
@@ -259,12 +254,12 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         return Wrap(
           spacing: 8.w,
           runSpacing: 8.h,
-          children: conditions.entries.map((entry) {
-            final isSelected = state.condition == entry.key;
+          children: ItemCondition.values.map((entry) {
+            final isSelected = state.condition == entry;
             return GestureDetector(
               onTap: () {
                 context.read<SearchCubit>().updateCondition(
-                  isSelected ? null : entry.key,
+                  isSelected ? null : entry,
                 );
               },
               child: Container(
@@ -277,7 +272,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                   ),
                 ),
                 child: Text(
-                  entry.value,
+                  entry.displayName,
                   style: TextStyles.font14BlackMedium.copyWith(
                     color: isSelected ? Colors.white : ColorsManager.textPrimary,
                   ),
@@ -329,17 +324,19 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
 
   Widget _buildSortSelector() {
     final sortOptions = {
-      'createdAt-desc': 'الأحدث',
-      'createdAt-asc': 'الأقدم',
-      'views-desc': 'الأكثر مشاهدة',
-      'favoritesCount-desc': 'الأكثر تفضيلاً',
+      '${SortBy.createdAt.name}-${SortOrder.desc.name}': 'الأحدث',
+      '${SortBy.createdAt.name}-${SortOrder.asc.name}': 'الأقدم',
+      '${SortBy.views.name}-${SortOrder.desc.name}': 'الأكثر مشاهدة',
+      '${SortBy.favoritesCount.name}-${SortOrder.desc.name}': 'الأكثر تفضيلاً',
+      '${SortBy.price.name}-${SortOrder.asc.name}': 'الأقل سعرًا',
+      '${SortBy.price.name}-${SortOrder.desc.name}': 'الأعلى سعرًا',
     };
 
     return BlocBuilder<SearchCubit, SearchState>(
       buildWhen: (previous, current) =>
       previous.sortBy != current.sortBy || previous.sortOrder != current.sortOrder,
       builder: (context, state) {
-        final currentSort = '${state.sortBy}-${state.sortOrder}';
+        final currentSort = '${state.sortBy.name}-${state.sortOrder.name}';
 
         return Wrap(
           spacing: 8.w,
@@ -349,7 +346,10 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
             return GestureDetector(
               onTap: () {
                 final parts = entry.key.split('-');
-                context.read<SearchCubit>().updateSort(parts[0], parts[1]);
+                final sortBy = SortBy.values.firstWhere((e) => e.name == parts[0]);
+                final sortOrder = SortOrder.values.firstWhere((e) => e.name == parts[1]);
+
+                context.read<SearchCubit>().updateSort(sortBy, sortOrder);
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),

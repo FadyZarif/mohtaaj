@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ItemModel {
 
- String get id; String get ownerId; String get title; String get description; String get categoryId; ItemCategory get category; String? get condition; List<String> get images; String get city; String? get geoLat; String? get geoLng; String? get price; bool get isFree; bool get isFeatured; String get status; int get views; int get favoritesCount; DateTime get createdAt; DateTime? get closedAt; ItemOwner get owner;@JsonKey(name: '_count') ItemCount? get count; FavoriteInfo? get favoriteInfo;
+ String get id; String get ownerId; String get title; String get description; String get categoryId; ItemCategory get category; ItemCondition? get condition; List<String> get images; String get city; String? get geoLat; String? get geoLng; String? get price; bool get isFree; bool get isFeatured; ItemStatus get status; int get views; int get favoritesCount; DateTime get createdAt; DateTime? get closedAt; ItemOwner get owner;@JsonKey(name: '_count') ItemCount? get count; FavoriteInfo? get favoriteInfo;
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ItemModelCopyWith<$Res>  {
   factory $ItemModelCopyWith(ItemModel value, $Res Function(ItemModel) _then) = _$ItemModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String ownerId, String title, String description, String categoryId, ItemCategory category, String? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, String status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
+ String id, String ownerId, String title, String description, String categoryId, ItemCategory category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
 });
 
 
@@ -74,7 +74,7 @@ as String,description: null == description ? _self.description : description // 
 as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as String,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as ItemCategory,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
-as String?,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
+as ItemCondition?,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
 as String?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable
@@ -82,7 +82,7 @@ as String?,price: freezed == price ? _self.price : price // ignore: cast_nullabl
 as String?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
 as bool,isFeatured: null == isFeatured ? _self.isFeatured : isFeatured // ignore: cast_nullable_to_non_nullable
 as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,views: null == views ? _self.views : views // ignore: cast_nullable_to_non_nullable
+as ItemStatus,views: null == views ? _self.views : views // ignore: cast_nullable_to_non_nullable
 as int,favoritesCount: null == favoritesCount ? _self.favoritesCount : favoritesCount // ignore: cast_nullable_to_non_nullable
 as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,closedAt: freezed == closedAt ? _self.closedAt : closedAt // ignore: cast_nullable_to_non_nullable
@@ -216,7 +216,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ItemModel() when $default != null:
 return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
@@ -237,7 +237,7 @@ return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)  $default,) {final _that = this;
 switch (_that) {
 case _ItemModel():
 return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
@@ -257,7 +257,7 @@ return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,) {final _that = this;
 switch (_that) {
 case _ItemModel() when $default != null:
 return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
@@ -281,7 +281,7 @@ class _ItemModel implements ItemModel {
 @override final  String description;
 @override final  String categoryId;
 @override final  ItemCategory category;
-@override final  String? condition;
+@override final  ItemCondition? condition;
  final  List<String> _images;
 @override List<String> get images {
   if (_images is EqualUnmodifiableListView) return _images;
@@ -295,7 +295,7 @@ class _ItemModel implements ItemModel {
 @override final  String? price;
 @override final  bool isFree;
 @override final  bool isFeatured;
-@override final  String status;
+@override final  ItemStatus status;
 @override final  int views;
 @override final  int favoritesCount;
 @override final  DateTime createdAt;
@@ -337,7 +337,7 @@ abstract mixin class _$ItemModelCopyWith<$Res> implements $ItemModelCopyWith<$Re
   factory _$ItemModelCopyWith(_ItemModel value, $Res Function(_ItemModel) _then) = __$ItemModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String ownerId, String title, String description, String categoryId, ItemCategory category, String? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, String status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
+ String id, String ownerId, String title, String description, String categoryId, ItemCategory category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
 });
 
 
@@ -363,7 +363,7 @@ as String,description: null == description ? _self.description : description // 
 as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as String,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as ItemCategory,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
-as String?,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
+as ItemCondition?,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
 as String?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable
@@ -371,7 +371,7 @@ as String?,price: freezed == price ? _self.price : price // ignore: cast_nullabl
 as String?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
 as bool,isFeatured: null == isFeatured ? _self.isFeatured : isFeatured // ignore: cast_nullable_to_non_nullable
 as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,views: null == views ? _self.views : views // ignore: cast_nullable_to_non_nullable
+as ItemStatus,views: null == views ? _self.views : views // ignore: cast_nullable_to_non_nullable
 as int,favoritesCount: null == favoritesCount ? _self.favoritesCount : favoritesCount // ignore: cast_nullable_to_non_nullable
 as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,closedAt: freezed == closedAt ? _self.closedAt : closedAt // ignore: cast_nullable_to_non_nullable

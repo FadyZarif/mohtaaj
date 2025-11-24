@@ -80,7 +80,7 @@ class ItemInfoSection extends StatelessWidget {
               verticalSpace(8),
               _buildInfoChip(
                 icon: Icons.info_outline,
-                label: _getConditionText(item.condition??'غير محدد'),
+                label: item.condition?.displayName??'غير محدد',
               ),
             ],
           ),
@@ -164,7 +164,7 @@ class ItemInfoSection extends StatelessWidget {
     );
   }
 
-  String _getConditionText(String condition) {
+/*  String _getConditionText(String condition) {
     switch (condition) {
       case 'new':
         return 'جديد';
@@ -179,5 +179,5 @@ class ItemInfoSection extends StatelessWidget {
       default:
         return condition;
     }
-  }
+  }*/
 }

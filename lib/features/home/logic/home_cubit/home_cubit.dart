@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mohtaaj/features/items/data/models/item_model.dart';
 import 'package:mohtaaj/features/items/data/models/items_queries.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
@@ -72,8 +73,8 @@ class HomeCubit extends Cubit<HomeState> {
         ItemsQueries(
           page: page,
           limit: 20,
-          status: 'active',
-          sortBy: 'createdAt',
+          status: ItemStatus.active,
+          sortBy: SortBy.createdAt,
           sortOrder: SortOrder.desc,
       ));
 

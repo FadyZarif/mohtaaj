@@ -13,7 +13,7 @@ _ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => _ItemModel(
   description: json['description'] as String,
   categoryId: json['categoryId'] as String,
   category: ItemCategory.fromJson(json['category'] as Map<String, dynamic>),
-  condition: json['condition'] as String?,
+  condition: $enumDecodeNullable(_$ItemConditionEnumMap, json['condition']),
   images: (json['images'] as List<dynamic>).map((e) => e as String).toList(),
   city: json['city'] as String,
   geoLat: json['geoLat'] as String?,
@@ -21,7 +21,7 @@ _ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => _ItemModel(
   price: json['price'] as String?,
   isFree: json['isFree'] as bool,
   isFeatured: json['isFeatured'] as bool,
-  status: json['status'] as String,
+  status: $enumDecode(_$ItemStatusEnumMap, json['status']),
   views: (json['views'] as num).toInt(),
   favoritesCount: (json['favoritesCount'] as num).toInt(),
   createdAt: DateTime.parse(json['createdAt'] as String),
@@ -45,7 +45,7 @@ Map<String, dynamic> _$ItemModelToJson(_ItemModel instance) =>
       'description': instance.description,
       'categoryId': instance.categoryId,
       'category': instance.category,
-      'condition': instance.condition,
+      'condition': _$ItemConditionEnumMap[instance.condition],
       'images': instance.images,
       'city': instance.city,
       'geoLat': instance.geoLat,
@@ -53,7 +53,7 @@ Map<String, dynamic> _$ItemModelToJson(_ItemModel instance) =>
       'price': instance.price,
       'isFree': instance.isFree,
       'isFeatured': instance.isFeatured,
-      'status': instance.status,
+      'status': _$ItemStatusEnumMap[instance.status]!,
       'views': instance.views,
       'favoritesCount': instance.favoritesCount,
       'createdAt': instance.createdAt.toIso8601String(),
@@ -62,6 +62,21 @@ Map<String, dynamic> _$ItemModelToJson(_ItemModel instance) =>
       '_count': instance.count,
       'favoriteInfo': instance.favoriteInfo,
     };
+
+const _$ItemConditionEnumMap = {
+  ItemCondition.newItem: 'new',
+  ItemCondition.likeNew: 'like_new',
+  ItemCondition.good: 'good',
+  ItemCondition.fair: 'fair',
+  ItemCondition.poor: 'poor',
+};
+
+const _$ItemStatusEnumMap = {
+  ItemStatus.pending: 'pending',
+  ItemStatus.active: 'active',
+  ItemStatus.closed: 'closed',
+  ItemStatus.reported: 'reported',
+};
 
 _ItemCategory _$ItemCategoryFromJson(Map<String, dynamic> json) =>
     _ItemCategory(

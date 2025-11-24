@@ -271,6 +271,14 @@ class TextStyles {
     height: 1.5,
   );
 
+  static TextStyle font11BlackMedium = TextStyle(
+    fontSize: 11.sp,
+    fontWeight: FontWeightHelper.medium,
+    color: ColorsManager.textPrimary,
+    height: 1.5,
+  );
+
+
   static TextStyle font12BlackRegular = TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeightHelper.regular,
@@ -432,5 +440,7 @@ class TextStyles {
     decoration: TextDecoration.underline,
     height: 1.5,
   );
+
+
 
 }

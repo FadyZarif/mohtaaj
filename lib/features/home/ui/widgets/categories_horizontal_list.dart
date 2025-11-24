@@ -91,10 +91,10 @@ class _CategoryItem extends StatelessWidget {
           SizedBox(height: 8.h),
           // Name
           SizedBox(
-            width: 70.w,
+            width: 80.w,
             child: Text(
               category.name,
-              style: TextStyles.font12BlackMedium,
+              style: TextStyles.font11BlackMedium,
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

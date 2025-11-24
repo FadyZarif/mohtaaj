@@ -72,7 +72,7 @@ class ItemCard extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
           child: AspectRatio(
-            aspectRatio: 1.2,
+            aspectRatio: 1.35,
             child: item.images.isNotEmpty
                 ? Image.network(
                     item.images.first,

@@ -12,7 +12,7 @@ abstract class ItemModel with _$ItemModel {
     required String description,
     required String categoryId,
     required ItemCategory category,
-    required String condition,
+    String? condition,
     required List<String> images,
     required String city,
     String? geoLat,

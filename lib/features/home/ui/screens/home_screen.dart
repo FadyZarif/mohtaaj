@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/di/dependency_injection.dart';
+import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
+import '../../../../core/routing/routes.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../logic/home_cubit/home_cubit.dart';
@@ -66,6 +68,7 @@ class _HomeScreenBody extends StatelessWidget {
               verticalSpace(12),
               BlocBuilder<HomeCubit, HomeState>(
                 buildWhen: (previous, current) =>
+
                     previous.categories != current.categories ||
                     previous.isCategoriesLoading != current.isCategoriesLoading,
                 builder: (context, state) {
@@ -116,7 +119,10 @@ class _HomeScreenBody extends StatelessWidget {
                               child: ItemCard(
                                 item: state.featuredItems[index],
                                 onTap: () {
-                                  // TODO: Navigate to item details
+                                  context.pushNamed(
+                                    Routes.itemDetailsScreen,
+                                    arguments: state.featuredItems[index].id,
+                                  );
                                 },
                               ),
                             );
@@ -158,7 +164,10 @@ class _HomeScreenBody extends StatelessWidget {
                         return ItemCard(
                           item: state.items[index],
                           onTap: () {
-                            // TODO: Navigate to item details
+                            context.pushNamed(
+                              Routes.itemDetailsScreen,
+                              arguments: state.items[index].id,
+                            );
                           },
                         );
                       },

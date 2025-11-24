@@ -13,7 +13,7 @@ _ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => _ItemModel(
   description: json['description'] as String,
   categoryId: json['categoryId'] as String,
   category: ItemCategory.fromJson(json['category'] as Map<String, dynamic>),
-  condition: json['condition'] as String,
+  condition: json['condition'] as String?,
   images: (json['images'] as List<dynamic>).map((e) => e as String).toList(),
   city: json['city'] as String,
   geoLat: json['geoLat'] as String?,

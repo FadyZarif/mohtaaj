@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mohtaaj/core/helpers/app_dialogs.dart';
+import 'package:mohtaaj/core/services/auth_service.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
@@ -18,9 +20,24 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<ProfileCubit>()..getProfile(),
-      child: const _ProfileScreenBody(),
+
+    return FutureBuilder(
+      future: getIt<AuthService>().isLoggedIn(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (snapshot.data == false) {
+          return const SizedBox.shrink();
+        } else {
+          return BlocProvider(
+            create: (context) => getIt<ProfileCubit>()..getProfile(),
+            child: const _ProfileScreenBody(),
+          );
+        }
+      },
     );
   }
 }
@@ -212,7 +229,7 @@ class _ProfileScreenBody extends StatelessWidget {
               iconColor: ColorsManager.error,
               textColor: ColorsManager.error,
               showArrow: false,
-              onTap: () => _showLogoutDialog(context),
+              onTap: () => AppDialogs.showLogoutDialog(context),
             ),
           ),
 
@@ -256,49 +273,6 @@ class _ProfileScreenBody extends StatelessWidget {
     );
   }
 
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.r),
-        ),
-        title: Text(
-          'تسجيل الخروج',
-          style: TextStyles.font18BlackBold,
-        ),
-        content: Text(
-          'هل أنت متأكد من تسجيل الخروج؟',
-          style: TextStyles.font14GreyRegular,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text(
-              'إلغاء',
-              style: TextStyles.font14GreyMedium,
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              context.read<ProfileCubit>().logout();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ColorsManager.error,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-            ),
-            child: Text(
-              'تسجيل الخروج',
-              style: TextStyles.font14WhiteMedium,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   String _formatDate(DateTime? date) {
     if (date == null) return 'غير محدد';

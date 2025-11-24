@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ItemModel {
 
- String get id; String get ownerId; String get title; String get description; String get categoryId; ItemCategory get category; String get condition; List<String> get images; String get city; String? get geoLat; String? get geoLng; String? get price; bool get isFree; bool get isFeatured; String get status; int get views; int get favoritesCount; DateTime get createdAt; DateTime? get closedAt; ItemOwner get owner;@JsonKey(name: '_count') ItemCount get count;
+ String get id; String get ownerId; String get title; String get description; String get categoryId; ItemCategory get category; String? get condition; List<String> get images; String get city; String? get geoLat; String? get geoLng; String? get price; bool get isFree; bool get isFeatured; String get status; int get views; int get favoritesCount; DateTime get createdAt; DateTime? get closedAt; ItemOwner get owner;@JsonKey(name: '_count') ItemCount get count;
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ItemModelCopyWith<$Res>  {
   factory $ItemModelCopyWith(ItemModel value, $Res Function(ItemModel) _then) = _$ItemModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String ownerId, String title, String description, String categoryId, ItemCategory category, String condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, String status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount count
+ String id, String ownerId, String title, String description, String categoryId, ItemCategory category, String? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, String status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount count
 });
 
 
@@ -65,7 +65,7 @@ class _$ItemModelCopyWithImpl<$Res>
 
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? ownerId = null,Object? title = null,Object? description = null,Object? categoryId = null,Object? category = null,Object? condition = null,Object? images = null,Object? city = null,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isFeatured = null,Object? status = null,Object? views = null,Object? favoritesCount = null,Object? createdAt = null,Object? closedAt = freezed,Object? owner = null,Object? count = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? ownerId = null,Object? title = null,Object? description = null,Object? categoryId = null,Object? category = null,Object? condition = freezed,Object? images = null,Object? city = null,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isFeatured = null,Object? status = null,Object? views = null,Object? favoritesCount = null,Object? createdAt = null,Object? closedAt = freezed,Object? owner = null,Object? count = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,ownerId: null == ownerId ? _self.ownerId : ownerId // ignore: cast_nullable_to_non_nullable
@@ -73,8 +73,8 @@ as String,title: null == title ? _self.title : title // ignore: cast_nullable_to
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as String,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
-as ItemCategory,condition: null == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
-as String,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
+as ItemCategory,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
+as String?,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
 as String?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable
@@ -200,7 +200,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount count)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount count)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ItemModel() when $default != null:
 return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count);case _:
@@ -221,7 +221,7 @@ return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount count)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount count)  $default,) {final _that = this;
 switch (_that) {
 case _ItemModel():
 return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count);case _:
@@ -241,7 +241,7 @@ return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount count)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount count)?  $default,) {final _that = this;
 switch (_that) {
 case _ItemModel() when $default != null:
 return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count);case _:
@@ -256,7 +256,7 @@ return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categ
 @JsonSerializable()
 
 class _ItemModel implements ItemModel {
-  const _ItemModel({required this.id, required this.ownerId, required this.title, required this.description, required this.categoryId, required this.category, required this.condition, required final  List<String> images, required this.city, this.geoLat, this.geoLng, this.price, required this.isFree, required this.isFeatured, required this.status, required this.views, required this.favoritesCount, required this.createdAt, this.closedAt, required this.owner, @JsonKey(name: '_count') required this.count}): _images = images;
+  const _ItemModel({required this.id, required this.ownerId, required this.title, required this.description, required this.categoryId, required this.category, this.condition, required final  List<String> images, required this.city, this.geoLat, this.geoLng, this.price, required this.isFree, required this.isFeatured, required this.status, required this.views, required this.favoritesCount, required this.createdAt, this.closedAt, required this.owner, @JsonKey(name: '_count') required this.count}): _images = images;
   factory _ItemModel.fromJson(Map<String, dynamic> json) => _$ItemModelFromJson(json);
 
 @override final  String id;
@@ -265,7 +265,7 @@ class _ItemModel implements ItemModel {
 @override final  String description;
 @override final  String categoryId;
 @override final  ItemCategory category;
-@override final  String condition;
+@override final  String? condition;
  final  List<String> _images;
 @override List<String> get images {
   if (_images is EqualUnmodifiableListView) return _images;
@@ -320,7 +320,7 @@ abstract mixin class _$ItemModelCopyWith<$Res> implements $ItemModelCopyWith<$Re
   factory _$ItemModelCopyWith(_ItemModel value, $Res Function(_ItemModel) _then) = __$ItemModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String ownerId, String title, String description, String categoryId, ItemCategory category, String condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, String status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount count
+ String id, String ownerId, String title, String description, String categoryId, ItemCategory category, String? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, String status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount count
 });
 
 
@@ -337,7 +337,7 @@ class __$ItemModelCopyWithImpl<$Res>
 
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? ownerId = null,Object? title = null,Object? description = null,Object? categoryId = null,Object? category = null,Object? condition = null,Object? images = null,Object? city = null,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isFeatured = null,Object? status = null,Object? views = null,Object? favoritesCount = null,Object? createdAt = null,Object? closedAt = freezed,Object? owner = null,Object? count = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? ownerId = null,Object? title = null,Object? description = null,Object? categoryId = null,Object? category = null,Object? condition = freezed,Object? images = null,Object? city = null,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isFeatured = null,Object? status = null,Object? views = null,Object? favoritesCount = null,Object? createdAt = null,Object? closedAt = freezed,Object? owner = null,Object? count = null,}) {
   return _then(_ItemModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,ownerId: null == ownerId ? _self.ownerId : ownerId // ignore: cast_nullable_to_non_nullable
@@ -345,8 +345,8 @@ as String,title: null == title ? _self.title : title // ignore: cast_nullable_to
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as String,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
-as ItemCategory,condition: null == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
-as String,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
+as ItemCategory,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
+as String?,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
 as String?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable

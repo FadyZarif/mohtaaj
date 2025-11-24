@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ItemModel {
 
- String get id; String get ownerId; String get title; String get description; String get categoryId; ItemCategory get category; String? get condition; List<String> get images; String get city; String? get geoLat; String? get geoLng; String? get price; bool get isFree; bool get isFeatured; String get status; int get views; int get favoritesCount; DateTime get createdAt; DateTime? get closedAt; ItemOwner get owner;@JsonKey(name: '_count') ItemCount get count;
+ String get id; String get ownerId; String get title; String get description; String get categoryId; ItemCategory get category; String? get condition; List<String> get images; String get city; String? get geoLat; String? get geoLng; String? get price; bool get isFree; bool get isFeatured; String get status; int get views; int get favoritesCount; DateTime get createdAt; DateTime? get closedAt; ItemOwner get owner;@JsonKey(name: '_count') ItemCount? get count; FavoriteInfo? get favoriteInfo;
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ItemModelCopyWith<ItemModel> get copyWith => _$ItemModelCopyWithImpl<ItemModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.ownerId, ownerId) || other.ownerId == ownerId)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.category, category) || other.category == category)&&(identical(other.condition, condition) || other.condition == condition)&&const DeepCollectionEquality().equals(other.images, images)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree)&&(identical(other.isFeatured, isFeatured) || other.isFeatured == isFeatured)&&(identical(other.status, status) || other.status == status)&&(identical(other.views, views) || other.views == views)&&(identical(other.favoritesCount, favoritesCount) || other.favoritesCount == favoritesCount)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.closedAt, closedAt) || other.closedAt == closedAt)&&(identical(other.owner, owner) || other.owner == owner)&&(identical(other.count, count) || other.count == count));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.ownerId, ownerId) || other.ownerId == ownerId)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.category, category) || other.category == category)&&(identical(other.condition, condition) || other.condition == condition)&&const DeepCollectionEquality().equals(other.images, images)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree)&&(identical(other.isFeatured, isFeatured) || other.isFeatured == isFeatured)&&(identical(other.status, status) || other.status == status)&&(identical(other.views, views) || other.views == views)&&(identical(other.favoritesCount, favoritesCount) || other.favoritesCount == favoritesCount)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.closedAt, closedAt) || other.closedAt == closedAt)&&(identical(other.owner, owner) || other.owner == owner)&&(identical(other.count, count) || other.count == count)&&(identical(other.favoriteInfo, favoriteInfo) || other.favoriteInfo == favoriteInfo));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,ownerId,title,description,categoryId,category,condition,const DeepCollectionEquality().hash(images),city,geoLat,geoLng,price,isFree,isFeatured,status,views,favoritesCount,createdAt,closedAt,owner,count]);
+int get hashCode => Object.hashAll([runtimeType,id,ownerId,title,description,categoryId,category,condition,const DeepCollectionEquality().hash(images),city,geoLat,geoLng,price,isFree,isFeatured,status,views,favoritesCount,createdAt,closedAt,owner,count,favoriteInfo]);
 
 @override
 String toString() {
-  return 'ItemModel(id: $id, ownerId: $ownerId, title: $title, description: $description, categoryId: $categoryId, category: $category, condition: $condition, images: $images, city: $city, geoLat: $geoLat, geoLng: $geoLng, price: $price, isFree: $isFree, isFeatured: $isFeatured, status: $status, views: $views, favoritesCount: $favoritesCount, createdAt: $createdAt, closedAt: $closedAt, owner: $owner, count: $count)';
+  return 'ItemModel(id: $id, ownerId: $ownerId, title: $title, description: $description, categoryId: $categoryId, category: $category, condition: $condition, images: $images, city: $city, geoLat: $geoLat, geoLng: $geoLng, price: $price, isFree: $isFree, isFeatured: $isFeatured, status: $status, views: $views, favoritesCount: $favoritesCount, createdAt: $createdAt, closedAt: $closedAt, owner: $owner, count: $count, favoriteInfo: $favoriteInfo)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $ItemModelCopyWith<$Res>  {
   factory $ItemModelCopyWith(ItemModel value, $Res Function(ItemModel) _then) = _$ItemModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String ownerId, String title, String description, String categoryId, ItemCategory category, String? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, String status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount count
+ String id, String ownerId, String title, String description, String categoryId, ItemCategory category, String? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, String status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
 });
 
 
-$ItemCategoryCopyWith<$Res> get category;$ItemOwnerCopyWith<$Res> get owner;$ItemCountCopyWith<$Res> get count;
+$ItemCategoryCopyWith<$Res> get category;$ItemOwnerCopyWith<$Res> get owner;$ItemCountCopyWith<$Res>? get count;$FavoriteInfoCopyWith<$Res>? get favoriteInfo;
 
 }
 /// @nodoc
@@ -65,7 +65,7 @@ class _$ItemModelCopyWithImpl<$Res>
 
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? ownerId = null,Object? title = null,Object? description = null,Object? categoryId = null,Object? category = null,Object? condition = freezed,Object? images = null,Object? city = null,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isFeatured = null,Object? status = null,Object? views = null,Object? favoritesCount = null,Object? createdAt = null,Object? closedAt = freezed,Object? owner = null,Object? count = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? ownerId = null,Object? title = null,Object? description = null,Object? categoryId = null,Object? category = null,Object? condition = freezed,Object? images = null,Object? city = null,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isFeatured = null,Object? status = null,Object? views = null,Object? favoritesCount = null,Object? createdAt = null,Object? closedAt = freezed,Object? owner = null,Object? count = freezed,Object? favoriteInfo = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,ownerId: null == ownerId ? _self.ownerId : ownerId // ignore: cast_nullable_to_non_nullable
@@ -87,8 +87,9 @@ as int,favoritesCount: null == favoritesCount ? _self.favoritesCount : favorites
 as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,closedAt: freezed == closedAt ? _self.closedAt : closedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,owner: null == owner ? _self.owner : owner // ignore: cast_nullable_to_non_nullable
-as ItemOwner,count: null == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
-as ItemCount,
+as ItemOwner,count: freezed == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
+as ItemCount?,favoriteInfo: freezed == favoriteInfo ? _self.favoriteInfo : favoriteInfo // ignore: cast_nullable_to_non_nullable
+as FavoriteInfo?,
   ));
 }
 /// Create a copy of ItemModel
@@ -113,10 +114,25 @@ $ItemOwnerCopyWith<$Res> get owner {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ItemCountCopyWith<$Res> get count {
-  
-  return $ItemCountCopyWith<$Res>(_self.count, (value) {
+$ItemCountCopyWith<$Res>? get count {
+    if (_self.count == null) {
+    return null;
+  }
+
+  return $ItemCountCopyWith<$Res>(_self.count!, (value) {
     return _then(_self.copyWith(count: value));
+  });
+}/// Create a copy of ItemModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FavoriteInfoCopyWith<$Res>? get favoriteInfo {
+    if (_self.favoriteInfo == null) {
+    return null;
+  }
+
+  return $FavoriteInfoCopyWith<$Res>(_self.favoriteInfo!, (value) {
+    return _then(_self.copyWith(favoriteInfo: value));
   });
 }
 }
@@ -200,10 +216,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount count)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ItemModel() when $default != null:
-return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count);case _:
+return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
   return orElse();
 
 }
@@ -221,10 +237,10 @@ return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount count)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)  $default,) {final _that = this;
 switch (_that) {
 case _ItemModel():
-return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count);case _:
+return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -241,10 +257,10 @@ return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount count)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String ownerId,  String title,  String description,  String categoryId,  ItemCategory category,  String? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  String status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,) {final _that = this;
 switch (_that) {
 case _ItemModel() when $default != null:
-return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count);case _:
+return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
   return null;
 
 }
@@ -256,7 +272,7 @@ return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categ
 @JsonSerializable()
 
 class _ItemModel implements ItemModel {
-  const _ItemModel({required this.id, required this.ownerId, required this.title, required this.description, required this.categoryId, required this.category, this.condition, required final  List<String> images, required this.city, this.geoLat, this.geoLng, this.price, required this.isFree, required this.isFeatured, required this.status, required this.views, required this.favoritesCount, required this.createdAt, this.closedAt, required this.owner, @JsonKey(name: '_count') required this.count}): _images = images;
+  const _ItemModel({required this.id, required this.ownerId, required this.title, required this.description, required this.categoryId, required this.category, this.condition, required final  List<String> images, required this.city, this.geoLat, this.geoLng, this.price, required this.isFree, required this.isFeatured, required this.status, required this.views, required this.favoritesCount, required this.createdAt, this.closedAt, required this.owner, @JsonKey(name: '_count') this.count, this.favoriteInfo}): _images = images;
   factory _ItemModel.fromJson(Map<String, dynamic> json) => _$ItemModelFromJson(json);
 
 @override final  String id;
@@ -285,7 +301,8 @@ class _ItemModel implements ItemModel {
 @override final  DateTime createdAt;
 @override final  DateTime? closedAt;
 @override final  ItemOwner owner;
-@override@JsonKey(name: '_count') final  ItemCount count;
+@override@JsonKey(name: '_count') final  ItemCount? count;
+@override final  FavoriteInfo? favoriteInfo;
 
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
@@ -300,16 +317,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.ownerId, ownerId) || other.ownerId == ownerId)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.category, category) || other.category == category)&&(identical(other.condition, condition) || other.condition == condition)&&const DeepCollectionEquality().equals(other._images, _images)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree)&&(identical(other.isFeatured, isFeatured) || other.isFeatured == isFeatured)&&(identical(other.status, status) || other.status == status)&&(identical(other.views, views) || other.views == views)&&(identical(other.favoritesCount, favoritesCount) || other.favoritesCount == favoritesCount)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.closedAt, closedAt) || other.closedAt == closedAt)&&(identical(other.owner, owner) || other.owner == owner)&&(identical(other.count, count) || other.count == count));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.ownerId, ownerId) || other.ownerId == ownerId)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.category, category) || other.category == category)&&(identical(other.condition, condition) || other.condition == condition)&&const DeepCollectionEquality().equals(other._images, _images)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree)&&(identical(other.isFeatured, isFeatured) || other.isFeatured == isFeatured)&&(identical(other.status, status) || other.status == status)&&(identical(other.views, views) || other.views == views)&&(identical(other.favoritesCount, favoritesCount) || other.favoritesCount == favoritesCount)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.closedAt, closedAt) || other.closedAt == closedAt)&&(identical(other.owner, owner) || other.owner == owner)&&(identical(other.count, count) || other.count == count)&&(identical(other.favoriteInfo, favoriteInfo) || other.favoriteInfo == favoriteInfo));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,ownerId,title,description,categoryId,category,condition,const DeepCollectionEquality().hash(_images),city,geoLat,geoLng,price,isFree,isFeatured,status,views,favoritesCount,createdAt,closedAt,owner,count]);
+int get hashCode => Object.hashAll([runtimeType,id,ownerId,title,description,categoryId,category,condition,const DeepCollectionEquality().hash(_images),city,geoLat,geoLng,price,isFree,isFeatured,status,views,favoritesCount,createdAt,closedAt,owner,count,favoriteInfo]);
 
 @override
 String toString() {
-  return 'ItemModel(id: $id, ownerId: $ownerId, title: $title, description: $description, categoryId: $categoryId, category: $category, condition: $condition, images: $images, city: $city, geoLat: $geoLat, geoLng: $geoLng, price: $price, isFree: $isFree, isFeatured: $isFeatured, status: $status, views: $views, favoritesCount: $favoritesCount, createdAt: $createdAt, closedAt: $closedAt, owner: $owner, count: $count)';
+  return 'ItemModel(id: $id, ownerId: $ownerId, title: $title, description: $description, categoryId: $categoryId, category: $category, condition: $condition, images: $images, city: $city, geoLat: $geoLat, geoLng: $geoLng, price: $price, isFree: $isFree, isFeatured: $isFeatured, status: $status, views: $views, favoritesCount: $favoritesCount, createdAt: $createdAt, closedAt: $closedAt, owner: $owner, count: $count, favoriteInfo: $favoriteInfo)';
 }
 
 
@@ -320,11 +337,11 @@ abstract mixin class _$ItemModelCopyWith<$Res> implements $ItemModelCopyWith<$Re
   factory _$ItemModelCopyWith(_ItemModel value, $Res Function(_ItemModel) _then) = __$ItemModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String ownerId, String title, String description, String categoryId, ItemCategory category, String? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, String status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount count
+ String id, String ownerId, String title, String description, String categoryId, ItemCategory category, String? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, String status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
 });
 
 
-@override $ItemCategoryCopyWith<$Res> get category;@override $ItemOwnerCopyWith<$Res> get owner;@override $ItemCountCopyWith<$Res> get count;
+@override $ItemCategoryCopyWith<$Res> get category;@override $ItemOwnerCopyWith<$Res> get owner;@override $ItemCountCopyWith<$Res>? get count;@override $FavoriteInfoCopyWith<$Res>? get favoriteInfo;
 
 }
 /// @nodoc
@@ -337,7 +354,7 @@ class __$ItemModelCopyWithImpl<$Res>
 
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? ownerId = null,Object? title = null,Object? description = null,Object? categoryId = null,Object? category = null,Object? condition = freezed,Object? images = null,Object? city = null,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isFeatured = null,Object? status = null,Object? views = null,Object? favoritesCount = null,Object? createdAt = null,Object? closedAt = freezed,Object? owner = null,Object? count = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? ownerId = null,Object? title = null,Object? description = null,Object? categoryId = null,Object? category = null,Object? condition = freezed,Object? images = null,Object? city = null,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isFeatured = null,Object? status = null,Object? views = null,Object? favoritesCount = null,Object? createdAt = null,Object? closedAt = freezed,Object? owner = null,Object? count = freezed,Object? favoriteInfo = freezed,}) {
   return _then(_ItemModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,ownerId: null == ownerId ? _self.ownerId : ownerId // ignore: cast_nullable_to_non_nullable
@@ -359,8 +376,9 @@ as int,favoritesCount: null == favoritesCount ? _self.favoritesCount : favorites
 as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,closedAt: freezed == closedAt ? _self.closedAt : closedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,owner: null == owner ? _self.owner : owner // ignore: cast_nullable_to_non_nullable
-as ItemOwner,count: null == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
-as ItemCount,
+as ItemOwner,count: freezed == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
+as ItemCount?,favoriteInfo: freezed == favoriteInfo ? _self.favoriteInfo : favoriteInfo // ignore: cast_nullable_to_non_nullable
+as FavoriteInfo?,
   ));
 }
 
@@ -386,10 +404,25 @@ $ItemOwnerCopyWith<$Res> get owner {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ItemCountCopyWith<$Res> get count {
-  
-  return $ItemCountCopyWith<$Res>(_self.count, (value) {
+$ItemCountCopyWith<$Res>? get count {
+    if (_self.count == null) {
+    return null;
+  }
+
+  return $ItemCountCopyWith<$Res>(_self.count!, (value) {
     return _then(_self.copyWith(count: value));
+  });
+}/// Create a copy of ItemModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FavoriteInfoCopyWith<$Res>? get favoriteInfo {
+    if (_self.favoriteInfo == null) {
+    return null;
+  }
+
+  return $FavoriteInfoCopyWith<$Res>(_self.favoriteInfo!, (value) {
+    return _then(_self.copyWith(favoriteInfo: value));
   });
 }
 }
@@ -1204,6 +1237,269 @@ chats: null == chats ? _self.chats : chats // ignore: cast_nullable_to_non_nulla
 as int,offers: null == offers ? _self.offers : offers // ignore: cast_nullable_to_non_nullable
 as int,favorites: null == favorites ? _self.favorites : favorites // ignore: cast_nullable_to_non_nullable
 as int,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$FavoriteInfo {
+
+ DateTime get favoritedAt;
+/// Create a copy of FavoriteInfo
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$FavoriteInfoCopyWith<FavoriteInfo> get copyWith => _$FavoriteInfoCopyWithImpl<FavoriteInfo>(this as FavoriteInfo, _$identity);
+
+  /// Serializes this FavoriteInfo to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoriteInfo&&(identical(other.favoritedAt, favoritedAt) || other.favoritedAt == favoritedAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,favoritedAt);
+
+@override
+String toString() {
+  return 'FavoriteInfo(favoritedAt: $favoritedAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $FavoriteInfoCopyWith<$Res>  {
+  factory $FavoriteInfoCopyWith(FavoriteInfo value, $Res Function(FavoriteInfo) _then) = _$FavoriteInfoCopyWithImpl;
+@useResult
+$Res call({
+ DateTime favoritedAt
+});
+
+
+
+
+}
+/// @nodoc
+class _$FavoriteInfoCopyWithImpl<$Res>
+    implements $FavoriteInfoCopyWith<$Res> {
+  _$FavoriteInfoCopyWithImpl(this._self, this._then);
+
+  final FavoriteInfo _self;
+  final $Res Function(FavoriteInfo) _then;
+
+/// Create a copy of FavoriteInfo
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? favoritedAt = null,}) {
+  return _then(_self.copyWith(
+favoritedAt: null == favoritedAt ? _self.favoritedAt : favoritedAt // ignore: cast_nullable_to_non_nullable
+as DateTime,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [FavoriteInfo].
+extension FavoriteInfoPatterns on FavoriteInfo {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FavoriteInfo value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _FavoriteInfo() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FavoriteInfo value)  $default,){
+final _that = this;
+switch (_that) {
+case _FavoriteInfo():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FavoriteInfo value)?  $default,){
+final _that = this;
+switch (_that) {
+case _FavoriteInfo() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime favoritedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _FavoriteInfo() when $default != null:
+return $default(_that.favoritedAt);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime favoritedAt)  $default,) {final _that = this;
+switch (_that) {
+case _FavoriteInfo():
+return $default(_that.favoritedAt);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime favoritedAt)?  $default,) {final _that = this;
+switch (_that) {
+case _FavoriteInfo() when $default != null:
+return $default(_that.favoritedAt);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _FavoriteInfo implements FavoriteInfo {
+  const _FavoriteInfo({required this.favoritedAt});
+  factory _FavoriteInfo.fromJson(Map<String, dynamic> json) => _$FavoriteInfoFromJson(json);
+
+@override final  DateTime favoritedAt;
+
+/// Create a copy of FavoriteInfo
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$FavoriteInfoCopyWith<_FavoriteInfo> get copyWith => __$FavoriteInfoCopyWithImpl<_FavoriteInfo>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$FavoriteInfoToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FavoriteInfo&&(identical(other.favoritedAt, favoritedAt) || other.favoritedAt == favoritedAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,favoritedAt);
+
+@override
+String toString() {
+  return 'FavoriteInfo(favoritedAt: $favoritedAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$FavoriteInfoCopyWith<$Res> implements $FavoriteInfoCopyWith<$Res> {
+  factory _$FavoriteInfoCopyWith(_FavoriteInfo value, $Res Function(_FavoriteInfo) _then) = __$FavoriteInfoCopyWithImpl;
+@override @useResult
+$Res call({
+ DateTime favoritedAt
+});
+
+
+
+
+}
+/// @nodoc
+class __$FavoriteInfoCopyWithImpl<$Res>
+    implements _$FavoriteInfoCopyWith<$Res> {
+  __$FavoriteInfoCopyWithImpl(this._self, this._then);
+
+  final _FavoriteInfo _self;
+  final $Res Function(_FavoriteInfo) _then;
+
+/// Create a copy of FavoriteInfo
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? favoritedAt = null,}) {
+  return _then(_FavoriteInfo(
+favoritedAt: null == favoritedAt ? _self.favoritedAt : favoritedAt // ignore: cast_nullable_to_non_nullable
+as DateTime,
   ));
 }
 

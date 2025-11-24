@@ -1,3 +1,4 @@
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'item_model.freezed.dart';
@@ -26,7 +27,8 @@ abstract class ItemModel with _$ItemModel {
     required DateTime createdAt,
     DateTime? closedAt,
     required ItemOwner owner,
-    @JsonKey(name: '_count') required ItemCount count,
+    @JsonKey(name: '_count') ItemCount? count,
+    FavoriteInfo? favoriteInfo, // 👈 إضافة للـ favorites
   }) = _ItemModel;
 
   factory ItemModel.fromJson(Map<String, dynamic> json) =>
@@ -70,4 +72,14 @@ abstract class ItemCount with _$ItemCount {
 
   factory ItemCount.fromJson(Map<String, dynamic> json) =>
       _$ItemCountFromJson(json);
+}
+
+@freezed
+abstract class FavoriteInfo with _$FavoriteInfo {
+  const factory FavoriteInfo({
+    required DateTime favoritedAt,
+  }) = _FavoriteInfo;
+
+  factory FavoriteInfo.fromJson(Map<String, dynamic> json) =>
+      _$FavoriteInfoFromJson(json);
 }

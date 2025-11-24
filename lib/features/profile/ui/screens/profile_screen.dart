@@ -178,7 +178,7 @@ class _ProfileScreenBody extends StatelessWidget {
                   icon: Icons.favorite_border,
                   title: 'المفضلة',
                   onTap: () {
-                    // TODO: Navigate to Favorites
+                    context.pushNamed(Routes.favoritesScreen);
                   },
                 ),
                 Divider(

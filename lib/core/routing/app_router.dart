@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../features/auth/data/models/user_model.dart';
+import '../../features/favorites/ui/screens/favorites_screen.dart';
 import '../../features/items/ui/screens/item_details_screen.dart';
 import '../../features/main_layout/ui/screens/main_layout_screen.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
@@ -64,6 +65,12 @@ class AppRouter {
       case Routes.searchScreen:
         return MaterialPageRoute(
           builder: (_) => const SearchScreen(),
+        );
+
+      // Favorites Screen
+      case Routes.favoritesScreen:
+        return MaterialPageRoute(
+          builder: (_) => const FavoritesScreen(),
         );
 
       default:

@@ -33,7 +33,7 @@ class Routes {
   static const String editProfileScreen = '/editProfile';
   
   // Favorites Routes
-  static const String favoritesScreen = '/favorites';
+  static const String favoritesScreen = '/favoritesScreen';
   
   // Offers Routes
   static const String offersScreen = '/offers';

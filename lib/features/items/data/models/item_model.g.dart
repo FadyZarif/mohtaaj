@@ -29,7 +29,12 @@ _ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => _ItemModel(
       ? null
       : DateTime.parse(json['closedAt'] as String),
   owner: ItemOwner.fromJson(json['owner'] as Map<String, dynamic>),
-  count: ItemCount.fromJson(json['_count'] as Map<String, dynamic>),
+  count: json['_count'] == null
+      ? null
+      : ItemCount.fromJson(json['_count'] as Map<String, dynamic>),
+  favoriteInfo: json['favoriteInfo'] == null
+      ? null
+      : FavoriteInfo.fromJson(json['favoriteInfo'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$ItemModelToJson(_ItemModel instance) =>
@@ -55,6 +60,7 @@ Map<String, dynamic> _$ItemModelToJson(_ItemModel instance) =>
       'closedAt': instance.closedAt?.toIso8601String(),
       'owner': instance.owner,
       '_count': instance.count,
+      'favoriteInfo': instance.favoriteInfo,
     };
 
 _ItemCategory _$ItemCategoryFromJson(Map<String, dynamic> json) =>
@@ -102,3 +108,9 @@ Map<String, dynamic> _$ItemCountToJson(_ItemCount instance) =>
       'offers': instance.offers,
       'favorites': instance.favorites,
     };
+
+_FavoriteInfo _$FavoriteInfoFromJson(Map<String, dynamic> json) =>
+    _FavoriteInfo(favoritedAt: DateTime.parse(json['favoritedAt'] as String));
+
+Map<String, dynamic> _$FavoriteInfoToJson(_FavoriteInfo instance) =>
+    <String, dynamic>{'favoritedAt': instance.favoritedAt.toIso8601String()};

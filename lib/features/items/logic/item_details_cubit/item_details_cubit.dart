@@ -1,4 +1,3 @@
-// features/items/logic/item_details_cubit/item_details_cubit.dart
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/networking/api_error_handler.dart';
@@ -19,16 +18,29 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
       final itemResponse = await _apiService.getItemById(itemId);
       final item = itemResponse.data;
 
+      // Check if favorited
+      bool isFavorited = false;
+      try {
+        final checkResponse = await _apiService.checkIfFavorited(itemId);
+        isFavorited = checkResponse.data.isFavorited;
+      } catch (_) {
+        // If not authenticated, isFavorited stays false
+      }
+
       // Get similar items
       try {
         final similarResponse = await _apiService.getSimilarItems(itemId, 4);
         emit(ItemDetailsState.success(
           item: item,
           similarItems: similarResponse.data,
+          isFavorite: isFavorited,
         ));
       } catch (_) {
         // If similar items fail, still show the item
-        emit(ItemDetailsState.success(item: item));
+        emit(ItemDetailsState.success(
+          item: item,
+          isFavorite: isFavorited,
+        ));
       }
     } catch (error) {
       final errorMessage = ApiErrorHandler.handle(error).message;
@@ -50,9 +62,11 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
           if (isFavorite) {
             await _apiService.removeFromFavorites(itemId);
           } else {
-            await _apiService.addToFavorites(itemId);
+            await _apiService.addToFavorites(itemId,{});
           }
-        } catch (error) {
+        } catch (error,s) {
+          print(error);
+          print(s);
           // Revert on error
           emit(ItemDetailsState.success(
             item: item,

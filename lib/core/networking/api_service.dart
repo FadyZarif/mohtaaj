@@ -7,6 +7,11 @@ import '../../features/auth/data/models/refresh_token_response.dart';
 import '../../features/auth/data/models/register_request.dart';
 import '../../features/auth/data/models/register_response.dart';
 import '../../features/categories/data/models/categories_response.dart';
+import '../../features/favorites/data/models/add_favorite_response.dart';
+import '../../features/favorites/data/models/check_favorite_response.dart';
+import '../../features/favorites/data/models/favorite_count_response.dart';
+import '../../features/favorites/data/models/favorites_response.dart';
+import '../../features/favorites/data/models/remove_favorite_response.dart';
 import '../../features/items/data/models/items_queries.dart';
 import '../../features/items/data/models/items_response.dart';
 import '../../features/profile/data/models/profile_response.dart';
@@ -22,16 +27,12 @@ abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
   // ========================== Authentication ==========================
-  
+
   @POST(ApiConstants.login)
-  Future<LoginResponse> login(
-    @Body() LoginRequest loginRequest,
-  );
+  Future<LoginResponse> login(@Body() LoginRequest loginRequest);
 
   @POST(ApiConstants.register)
-  Future<RegisterResponse> register(
-    @Body() RegisterRequest registerRequest,
-  );
+  Future<RegisterResponse> register(@Body() RegisterRequest registerRequest);
 
   @POST(ApiConstants.refreshToken)
   Future<RefreshTokenResponse> refreshToken(
@@ -49,9 +50,7 @@ abstract class ApiService {
 
   /// TODO
   @POST(ApiConstants.verifyEmail)
-  Future<dynamic> verifyEmail(
-    @Body() Map<String, dynamic> verifyEmailRequest,
-  );
+  Future<dynamic> verifyEmail(@Body() Map<String, dynamic> verifyEmailRequest);
 
   // ========================== Users ==========================
 
@@ -67,81 +66,67 @@ abstract class ApiService {
 
   ///TODO
   @GET('${ApiConstants.getUserById}/{userId}')
-  Future<dynamic> getUserById(
-    @Path('userId') String userId,
-  );
+  Future<dynamic> getUserById(@Path('userId') String userId);
 
   // ========================== Items ==========================
 
   // Get All Items with filters
   @GET(ApiConstants.items)
-  Future<ItemsResponse> getItems(
-      @Queries() ItemsQueries queries,
-      );
+  Future<ItemsResponse> getItems(@Queries() ItemsQueries queries);
 
   // Get Single Item
   @GET('${ApiConstants.items}/{itemId}')
-  Future<ItemDetailsResponse> getItemById(
-      @Path('itemId') String itemId,
-      );
+  Future<ItemDetailsResponse> getItemById(@Path('itemId') String itemId);
 
   // Get Featured Items
   @GET(ApiConstants.featuredItems)
-  Future<ItemListResponse> getFeaturedItems(
-      @Query('limit') int? limit,
-      );
+  Future<ItemListResponse> getFeaturedItems(@Query('limit') int? limit);
 
   // Get Items by Category
   @GET('${ApiConstants.itemsByCategory}/{category}')
   Future<ItemsResponse> getItemsByCategory(
-      @Path('category') String category,
-      @Queries() Map<String, dynamic>? queries,
-      );
+    @Path('category') String category,
+    @Queries() Map<String, dynamic>? queries,
+  );
 
   // Get Similar Items
   @GET('${ApiConstants.items}/{itemId}/similar')
   Future<ItemListResponse> getSimilarItems(
-      @Path('itemId') String itemId,
-      @Query('limit') int? limit,
-      );
+    @Path('itemId') String itemId,
+    @Query('limit') int? limit,
+  );
 
   // Get User Items
   @GET('${ApiConstants.itemsByUser}/{userId}')
   Future<ItemsResponse> getUserItems(
-      @Path('userId') String userId,
-      @Queries() Map<String, dynamic>? queries,
-      );
+    @Path('userId') String userId,
+    @Queries() Map<String, dynamic>? queries,
+  );
 
   // Get My Items
   @GET(ApiConstants.myItems)
-  Future<ItemsResponse> getMyItems(
-      @Queries() Map<String, dynamic>? queries,
-      );
+  Future<ItemsResponse> getMyItems(@Queries() Map<String, dynamic>? queries);
 
   // Create Item
   @POST(ApiConstants.items)
   Future<ItemDetailsResponse> createItem(
-      @Body() Map<String, dynamic> createItemRequest,
-      );
+    @Body() Map<String, dynamic> createItemRequest,
+  );
 
   // Update Item
   @PATCH('${ApiConstants.items}/{itemId}')
   Future<ItemDetailsResponse> updateItem(
-      @Path('itemId') String itemId,
-      @Body() Map<String, dynamic> updateItemRequest,
-      );
+    @Path('itemId') String itemId,
+    @Body() Map<String, dynamic> updateItemRequest,
+  );
 
   // Delete Item
   @DELETE('${ApiConstants.items}/{itemId}')
-  Future<void> deleteItem(
-      @Path('itemId') String itemId,
-      );
+  Future<void> deleteItem(@Path('itemId') String itemId);
 
   // Close Item
   @POST('${ApiConstants.items}/{itemId}/close')
-  Future<ItemDetailsResponse> closeItem(
-      @Path('itemId') String itemId,
-      );
+  Future<ItemDetailsResponse> closeItem(@Path('itemId') String itemId);
 
   // ========================== Categories ==========================
 
@@ -150,97 +135,82 @@ abstract class ApiService {
 
   @GET('${ApiConstants.categories}/{categoryId}')
   Future<CategoryDetailsResponse> getCategoryById(
-      @Path('categoryId') String categoryId,
-      );
+    @Path('categoryId') String categoryId,
+  );
 
   @GET('${ApiConstants.categoriesSlug}/{slug}')
-  Future<CategoryDetailsResponse> getCategoryBySlug(
-      @Path('slug') String slug,
-      );
+  Future<CategoryDetailsResponse> getCategoryBySlug(@Path('slug') String slug);
 
   @GET(ApiConstants.categoriesTree)
   Future<CategoryListResponse> getCategoryTree();
 
   @GET(ApiConstants.popularCategories)
-  Future<CategoryListResponse> getPopularCategories(
-      @Query('limit') int? limit,
-      );
+  Future<CategoryListResponse> getPopularCategories(@Query('limit') int? limit);
 
   // ========================== Favorites ==========================
-  
+
   @POST('${ApiConstants.favorites}/{itemId}')
-  Future<dynamic> addToFavorites(
-    @Path('itemId') String itemId,
-  );
+  Future<AddFavoriteResponse> addToFavorites(
+      @Path('itemId') String itemId,
+      @Body() Map<String, dynamic> body,
+      );
 
   @DELETE('${ApiConstants.favorites}/{itemId}')
-  Future<dynamic> removeFromFavorites(
+  Future<RemoveFavoriteResponse> removeFromFavorites(
     @Path('itemId') String itemId,
   );
 
-  @GET(ApiConstants.myFavorites)
-  Future<dynamic> getMyFavorites(
-    @Queries() Map<String, dynamic> queries,
-  );
+  @GET('${ApiConstants.favorites}/{itemId}/check')
+  Future<CheckFavoriteResponse> checkIfFavorited(@Path('itemId') String itemId);
+
+  @GET('${ApiConstants.favorites}/{itemId}/count')
+  Future<FavoriteCountResponse> getFavoriteCount(@Path('itemId') String itemId);
+
+  @GET(ApiConstants.favorites)
+  Future<FavoritesResponse> getMyFavorites(@Queries() ItemsQueries queries);
 
   // ========================== Offers ==========================
-  
+
   @POST(ApiConstants.offers)
-  Future<dynamic> createOffer(
-    @Body() Map<String, dynamic> createOfferRequest,
-  );
+  Future<dynamic> createOffer(@Body() Map<String, dynamic> createOfferRequest);
 
   @GET(ApiConstants.receivedOffers)
-  Future<dynamic> getReceivedOffers(
-    @Queries() Map<String, dynamic> queries,
-  );
+  Future<dynamic> getReceivedOffers(@Queries() Map<String, dynamic> queries);
 
   @GET(ApiConstants.sentOffers)
-  Future<dynamic> getSentOffers(
-    @Queries() Map<String, dynamic> queries,
-  );
+  Future<dynamic> getSentOffers(@Queries() Map<String, dynamic> queries);
 
   @POST('${ApiConstants.offers}/{offerId}/accept')
-  Future<dynamic> acceptOffer(
-    @Path('offerId') String offerId,
-  );
+  Future<dynamic> acceptOffer(@Path('offerId') String offerId);
 
   @POST('${ApiConstants.offers}/{offerId}/reject')
-  Future<dynamic> rejectOffer(
-    @Path('offerId') String offerId,
-  );
+  Future<dynamic> rejectOffer(@Path('offerId') String offerId);
 
   // ========================== Requests ==========================
-  
+
   @POST(ApiConstants.requests)
   Future<dynamic> createRequest(
     @Body() Map<String, dynamic> createRequestRequest,
   );
 
   @GET(ApiConstants.requests)
-  Future<dynamic> getRequests(
-    @Queries() Map<String, dynamic> queries,
-  );
+  Future<dynamic> getRequests(@Queries() Map<String, dynamic> queries);
 
   @GET(ApiConstants.myRequests)
   Future<dynamic> getMyRequests();
 
   // ========================== Upload ==========================
-  
+
   @POST(ApiConstants.uploadSingle)
   @MultiPart()
-  Future<dynamic> uploadSingleImage(
-    @Part(name: 'image') File image,
-  );
+  Future<dynamic> uploadSingleImage(@Part(name: 'image') File image);
 
   @POST(ApiConstants.uploadMultiple)
   @MultiPart()
-  Future<dynamic> uploadMultipleImages(
-    @Part(name: 'images') List<File> images,
-  );
+  Future<dynamic> uploadMultipleImages(@Part(name: 'images') List<File> images);
 
   // ========================== Badges ==========================
-  
+
   @GET(ApiConstants.badges)
   Future<dynamic> getBadges();
 

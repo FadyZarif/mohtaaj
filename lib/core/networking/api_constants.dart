@@ -40,8 +40,7 @@ class ApiConstants {
   
   // Favorites
   static const String favorites = '$apiPath/favorites';
-  static const String myFavorites = '$apiPath/favorites/my';
-  
+
   // Offers
   static const String offers = '$apiPath/offers';
   static const String receivedOffers = '$apiPath/offers/received';

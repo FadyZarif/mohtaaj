@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import '../../features/favorites/logic/favorites_cubit/favorites_cubit.dart';
 import '../../features/items/logic/item_details_cubit/item_details_cubit.dart';
 import '../../features/main_layout/logic/main_layout_cubit/main_layout_cubit.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
@@ -75,5 +76,11 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<SearchCubit>(
         () => SearchCubit(getIt<ApiService>()),
+  );
+
+  // ========================== Favorites ==========================
+
+  getIt.registerFactory<FavoritesCubit>(
+        () => FavoritesCubit(getIt<ApiService>()),
   );
 }

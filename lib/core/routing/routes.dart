@@ -54,5 +54,5 @@ class Routes {
   static const String myBadgesScreen = '/myBadges';
   
   // Search Routes
-  static const String searchScreen = '/search';
+  static const String searchScreen = '/searchScreen';
 }

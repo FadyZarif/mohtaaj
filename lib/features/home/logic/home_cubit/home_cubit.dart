@@ -68,12 +68,13 @@ class HomeCubit extends Cubit<HomeState> {
 
 
     try {
-      final response = await _apiService.getItems(ItemsQueries(
-        page: page,
-        limit: 20,
-        status: 'active',
-        sortBy: 'createdAt',
-        sortOrder: SortOrder.desc,
+      final response = await _apiService.getItems(
+        ItemsQueries(
+          page: page,
+          limit: 20,
+          status: 'active',
+          sortBy: 'createdAt',
+          sortOrder: SortOrder.desc,
       ));
 
       final newItems = response.data.items;

@@ -5,6 +5,7 @@ import '../../features/main_layout/logic/main_layout_cubit/main_layout_cubit.dar
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/categories/logic/categories_cubit/categories_cubit.dart';
 import '../../features/home/logic/home_cubit/home_cubit.dart';
+import '../../features/search/logic/search_cubit/search_cubit.dart';
 import '../networking/api_service.dart';
 import '../networking/dio_factory.dart';
 import '../../features/auth/logic/login_cubit/login_cubit.dart';
@@ -68,5 +69,11 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactoryParam<ItemDetailsCubit, String, void>(
         (itemId, _) => ItemDetailsCubit(getIt<ApiService>(), itemId),
+  );
+
+  // ========================== Search ==========================
+
+  getIt.registerFactory<SearchCubit>(
+        () => SearchCubit(getIt<ApiService>()),
   );
 }

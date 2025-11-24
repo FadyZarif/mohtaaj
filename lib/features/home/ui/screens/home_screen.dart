@@ -58,7 +58,7 @@ class _HomeScreenBody extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: SearchBarWidget(
                   onTap: () {
-                    // TODO: Navigate to search screen
+                    context.pushNamed(Routes.searchScreen);
                   },
                 ),
               ),

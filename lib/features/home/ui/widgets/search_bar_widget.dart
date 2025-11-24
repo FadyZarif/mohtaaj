@@ -20,7 +20,7 @@ class SearchBarWidget extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         decoration: BoxDecoration(
-          color: ColorsManager.inputBackground,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
             color: ColorsManager.borderColor,

@@ -4,6 +4,7 @@ import '../../features/items/ui/screens/item_details_screen.dart';
 import '../../features/main_layout/ui/screens/main_layout_screen.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/profile/ui/screens/edit_profile_screen.dart';
+import '../../features/search/ui/screens/search_screen.dart';
 import 'routes.dart';
 import '../../features/onboarding/ui/screens/onboarding_screen.dart';
 import '../../features/auth/ui/login_screen.dart';
@@ -57,6 +58,12 @@ class AppRouter {
         final itemId = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => ItemDetailsScreen(itemId: itemId),
+        );
+
+      // Search Screen
+      case Routes.searchScreen:
+        return MaterialPageRoute(
+          builder: (_) => const SearchScreen(),
         );
 
       default:

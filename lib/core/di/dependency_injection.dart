@@ -6,6 +6,7 @@ import '../../features/main_layout/logic/main_layout_cubit/main_layout_cubit.dar
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/categories/logic/categories_cubit/categories_cubit.dart';
 import '../../features/home/logic/home_cubit/home_cubit.dart';
+import '../../features/profile/logic/user_profile_cubit/user_profile_cubit.dart';
 import '../../features/search/logic/search_cubit/search_cubit.dart';
 import '../networking/api_service.dart';
 import '../networking/dio_factory.dart';
@@ -52,6 +53,10 @@ Future<void> setupGetIt() async {
         getIt<ApiService>(),
         getIt<AuthService>(),
       ));
+
+  getIt.registerFactoryParam<UserProfileCubit, String, void>(
+        (userId, _) => UserProfileCubit(getIt<ApiService>(), userId),
+  );
 
   // ========================== Categories ==========================
 

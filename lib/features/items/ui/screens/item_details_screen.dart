@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/di/dependency_injection.dart';
+import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
+import '../../../../core/routing/routes.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../logic/item_details_cubit/item_details_cubit.dart';
@@ -60,9 +62,12 @@ class _ItemDetailsBody extends StatelessWidget {
                         verticalSpace(8),
                         // Owner Section
                         OwnerSection(
-                          owner: item.owner,
+                          owner: item.owner!,
                           onTap: () {
-                            // TODO: Navigate to user profile
+                            context.pushNamed(
+                              Routes.userProfileScreen,
+                              arguments: item.owner!.id,
+                            );
                           },
                         ),
                         verticalSpace(80), // Space for bottom buttons
@@ -74,7 +79,7 @@ class _ItemDetailsBody extends StatelessWidget {
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    child: _buildActionButtons(context, item.owner.id, isFavorite),
+                    child: _buildActionButtons(context, item.owner!.id, isFavorite),
                   ),
                 ],
               );

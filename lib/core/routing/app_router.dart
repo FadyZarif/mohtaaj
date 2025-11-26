@@ -5,6 +5,7 @@ import '../../features/items/ui/screens/item_details_screen.dart';
 import '../../features/main_layout/ui/screens/main_layout_screen.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/profile/ui/screens/edit_profile_screen.dart';
+import '../../features/profile/ui/screens/user_profile_screen.dart';
 import '../../features/search/ui/screens/search_screen.dart';
 import 'routes.dart';
 import '../../features/onboarding/ui/screens/onboarding_screen.dart';
@@ -71,6 +72,13 @@ class AppRouter {
       case Routes.favoritesScreen:
         return MaterialPageRoute(
           builder: (_) => const FavoritesScreen(),
+        );
+
+      // User Profile Screen
+      case Routes.userProfileScreen:
+        final userId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => UserProfileScreen(userId: userId),
         );
 
       default:

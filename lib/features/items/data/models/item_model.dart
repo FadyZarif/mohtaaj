@@ -53,25 +53,6 @@ enum ItemStatus {
   @JsonValue("reported")
   reported,
 }
-/*extension ItemModelX on ItemModel {
-  String get conditionText {
-    switch (condition) {
-      case ItemCondition.newItem:
-        return 'جديد';
-      case ItemCondition.likeNew:
-        return 'شبه جديد';
-      case ItemCondition.good:
-        return 'جيد';
-      case ItemCondition.fair:
-        return 'مقبول';
-      case ItemCondition.poor:
-        return 'سيء';
-      default:
-        return 'غير محدد';
-    }
-  }
-
-}*/
 
 
 
@@ -79,10 +60,10 @@ enum ItemStatus {
 abstract class ItemModel with _$ItemModel {
   const factory ItemModel({
     required String id,
-    required String ownerId,
+    String? ownerId,  // 👈 خليه optional
     required String title,
     required String description,
-    required String categoryId,
+    String? categoryId,  // 👈 خليه optional
     required ItemCategory category,
     ItemCondition? condition,
     required List<String> images,
@@ -97,9 +78,9 @@ abstract class ItemModel with _$ItemModel {
     required int favoritesCount,
     required DateTime createdAt,
     DateTime? closedAt,
-    required ItemOwner owner,
+    ItemOwner? owner,  // 👈 خليه optional
     @JsonKey(name: '_count') ItemCount? count,
-    FavoriteInfo? favoriteInfo, // 👈 إضافة للـ favorites
+    FavoriteInfo? favoriteInfo,
   }) = _ItemModel;
 
   factory ItemModel.fromJson(Map<String, dynamic> json) =>
@@ -113,6 +94,12 @@ abstract class ItemCategory with _$ItemCategory {
     required String name,
     required String slug,
     String? iconUrl,
+    String? description,  // 👈 إضافة
+    String? parentId,  // 👈 إضافة
+    bool? isActive,  // 👈 إضافة
+    int? sortOrder,  // 👈 إضافة
+    DateTime? createdAt,  // 👈 إضافة
+    DateTime? updatedAt,  // 👈 إضافة
   }) = _ItemCategory;
 
   factory ItemCategory.fromJson(Map<String, dynamic> json) =>

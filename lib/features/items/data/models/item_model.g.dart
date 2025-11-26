@@ -8,10 +8,10 @@ part of 'item_model.dart';
 
 _ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => _ItemModel(
   id: json['id'] as String,
-  ownerId: json['ownerId'] as String,
+  ownerId: json['ownerId'] as String?,
   title: json['title'] as String,
   description: json['description'] as String,
-  categoryId: json['categoryId'] as String,
+  categoryId: json['categoryId'] as String?,
   category: ItemCategory.fromJson(json['category'] as Map<String, dynamic>),
   condition: $enumDecodeNullable(_$ItemConditionEnumMap, json['condition']),
   images: (json['images'] as List<dynamic>).map((e) => e as String).toList(),
@@ -28,7 +28,9 @@ _ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => _ItemModel(
   closedAt: json['closedAt'] == null
       ? null
       : DateTime.parse(json['closedAt'] as String),
-  owner: ItemOwner.fromJson(json['owner'] as Map<String, dynamic>),
+  owner: json['owner'] == null
+      ? null
+      : ItemOwner.fromJson(json['owner'] as Map<String, dynamic>),
   count: json['_count'] == null
       ? null
       : ItemCount.fromJson(json['_count'] as Map<String, dynamic>),
@@ -84,6 +86,16 @@ _ItemCategory _$ItemCategoryFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       slug: json['slug'] as String,
       iconUrl: json['iconUrl'] as String?,
+      description: json['description'] as String?,
+      parentId: json['parentId'] as String?,
+      isActive: json['isActive'] as bool?,
+      sortOrder: (json['sortOrder'] as num?)?.toInt(),
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
     );
 
 Map<String, dynamic> _$ItemCategoryToJson(_ItemCategory instance) =>
@@ -92,6 +104,12 @@ Map<String, dynamic> _$ItemCategoryToJson(_ItemCategory instance) =>
       'name': instance.name,
       'slug': instance.slug,
       'iconUrl': instance.iconUrl,
+      'description': instance.description,
+      'parentId': instance.parentId,
+      'isActive': instance.isActive,
+      'sortOrder': instance.sortOrder,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
     };
 
 _ItemOwner _$ItemOwnerFromJson(Map<String, dynamic> json) => _ItemOwner(

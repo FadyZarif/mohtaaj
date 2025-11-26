@@ -15,7 +15,11 @@ import '../../features/favorites/data/models/remove_favorite_response.dart';
 import '../../features/items/data/models/items_queries.dart';
 import '../../features/items/data/models/items_response.dart';
 import '../../features/profile/data/models/profile_response.dart';
+import '../../features/profile/data/models/rate_user_request.dart';
+import '../../features/profile/data/models/rate_user_response.dart';
 import '../../features/profile/data/models/update_profile_request.dart';
+import '../../features/profile/data/models/user_ratings_response.dart';
+import '../../features/profile/data/models/user_response.dart';
 import 'api_constants.dart';
 import '../../features/auth/data/models/login_request.dart';
 import '../../features/auth/data/models/login_response.dart';
@@ -64,9 +68,31 @@ abstract class ApiService {
     @Body() UpdateProfileRequest updateProfileRequest,
   );
 
-  ///TODO
-  @GET('${ApiConstants.getUserById}/{userId}')
-  Future<dynamic> getUserById(@Path('userId') String userId);
+  //Get user by ID
+  @GET('${ApiConstants.users}/{userId}')
+  Future<UserResponse> getUserById(@Path('userId') String userId);
+
+  // Get user items
+  @GET('${ApiConstants.users}/{userId}/items')
+  Future<ItemsResponse> getUserItems(
+      @Path('userId') String userId,
+      @Queries() ItemsQueries? queries,
+      );
+
+  // Get user ratings
+  @GET('${ApiConstants.users}/{userId}/ratings')
+  Future<UserRatingsResponse> getUserRatings(
+      @Path('userId') String userId,
+      @Query('page') int? page,
+      @Query('limit') int? limit,
+      );
+
+  // Rate user
+  @POST('${ApiConstants.users}/{userId}/rate')
+  Future<RateUserResponse> rateUser(
+      @Path('userId') String userId,
+      @Body() RateUserRequest request,
+      );
 
   // ========================== Items ==========================
 
@@ -98,7 +124,7 @@ abstract class ApiService {
 
   // Get User Items
   @GET('${ApiConstants.itemsByUser}/{userId}')
-  Future<ItemsResponse> getUserItems(
+  Future<ItemsResponse> getItemsByUser(
     @Path('userId') String userId,
     @Queries() Map<String, dynamic>? queries,
   );

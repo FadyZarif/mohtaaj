@@ -19,12 +19,8 @@ class ApiConstants {
   // Users
   static const String myProfile = '$apiPath/users/me';
   // static const String updateProfile = '$apiPath/users/profile';
-  static const String getUserById = '$apiPath/users'; // /{userId}
-  static const String getUserItems = '$apiPath/users'; // /{userId}/items
-  static const String getUserRatings = '$apiPath/users'; // /{userId}/ratings
-  static const String rateUser = '$apiPath/users'; // /{userId}/rate
-  
-  // Items
+  static const String users = '$apiPath/users'; // /{userId}
+
   static const String items = '$apiPath/items';
   static const String featuredItems = '$items/featured';
   static const String itemsByCategory = '$items/category';

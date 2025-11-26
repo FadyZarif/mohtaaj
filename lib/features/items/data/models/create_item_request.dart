@@ -1,0 +1,28 @@
+// features/items/data/models/create_item_request.dart
+
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'create_item_request.freezed.dart';
+part 'create_item_request.g.dart';
+
+// في create_item_request.dart
+
+@freezed
+abstract class CreateItemRequest with _$CreateItemRequest {
+  @JsonSerializable(includeIfNull: false)
+  const factory CreateItemRequest({
+    required String title,
+    required String description,
+    required String categoryId,
+    String? condition,
+    required List<String> images,
+    required String city,
+    double? geoLat,  // 👈 غير من String لـ double
+    double? geoLng,  // 👈 غير من String لـ double
+    String? price,
+    required bool isFree,
+  }) = _CreateItemRequest;
+
+  factory CreateItemRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreateItemRequestFromJson(json);
+}

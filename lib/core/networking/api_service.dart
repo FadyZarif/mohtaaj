@@ -12,8 +12,11 @@ import '../../features/favorites/data/models/check_favorite_response.dart';
 import '../../features/favorites/data/models/favorite_count_response.dart';
 import '../../features/favorites/data/models/favorites_response.dart';
 import '../../features/favorites/data/models/remove_favorite_response.dart';
+import '../../features/items/data/models/create_item_request.dart';
 import '../../features/items/data/models/items_queries.dart';
 import '../../features/items/data/models/items_response.dart';
+import '../../features/items/data/models/update_item_request.dart';
+import '../../features/items/data/models/upload_image_response.dart';
 import '../../features/profile/data/models/profile_response.dart';
 import '../../features/profile/data/models/rate_user_request.dart';
 import '../../features/profile/data/models/rate_user_response.dart';
@@ -136,23 +139,27 @@ abstract class ApiService {
   // Create Item
   @POST(ApiConstants.items)
   Future<ItemDetailsResponse> createItem(
-    @Body() Map<String, dynamic> createItemRequest,
+      @Body() CreateItemRequest request,
   );
 
   // Update Item
   @PATCH('${ApiConstants.items}/{itemId}')
   Future<ItemDetailsResponse> updateItem(
-    @Path('itemId') String itemId,
-    @Body() Map<String, dynamic> updateItemRequest,
+      @Path('itemId') String itemId,
+      @Body() UpdateItemRequest request,
   );
 
   // Delete Item
   @DELETE('${ApiConstants.items}/{itemId}')
-  Future<void> deleteItem(@Path('itemId') String itemId);
+  Future<void> deleteItem(
+  @Path('itemId') String itemId,
+  );
 
   // Close Item
   @POST('${ApiConstants.items}/{itemId}/close')
-  Future<ItemDetailsResponse> closeItem(@Path('itemId') String itemId);
+  Future<ItemDetailsResponse> closeItem(
+  @Path('itemId') String itemId,
+  );
 
   // ========================== Categories ==========================
 
@@ -227,13 +234,21 @@ abstract class ApiService {
 
   // ========================== Upload ==========================
 
-  @POST(ApiConstants.uploadSingle)
+  // Upload Single Image
+  @POST(ApiConstants.uploadImage)
   @MultiPart()
-  Future<dynamic> uploadSingleImage(@Part(name: 'image') File image);
+  Future<UploadImageResponse> uploadImage(
+  @Part(name: 'image') File image,
+  @Part(name: 'folder') String? folder,
+  );
 
-  @POST(ApiConstants.uploadMultiple)
+// Upload Multiple Images
+  @POST(ApiConstants.uploadImages)
   @MultiPart()
-  Future<dynamic> uploadMultipleImages(@Part(name: 'images') List<File> images);
+  Future<UploadImagesResponse> uploadImages(
+  @Part(name: 'images') List<File> images,
+  @Part(name: 'folder') String? folder,
+  );
 
   // ========================== Badges ==========================
 

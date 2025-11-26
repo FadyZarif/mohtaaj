@@ -552,14 +552,11 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<ItemDetailsResponse> createItem(
-    Map<String, dynamic> createItemRequest,
-  ) async {
+  Future<ItemDetailsResponse> createItem(CreateItemRequest request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(createItemRequest);
+    final _data = request;
     final _options = _setStreamType<ItemDetailsResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -584,13 +581,12 @@ class _ApiService implements ApiService {
   @override
   Future<ItemDetailsResponse> updateItem(
     String itemId,
-    Map<String, dynamic> updateItemRequest,
+    UpdateItemRequest request,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(updateItemRequest);
+    final _data = request;
     final _options = _setStreamType<ItemDetailsResponse>(
       Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
@@ -1110,9 +1106,10 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<dynamic> uploadSingleImage(File image) async {
+  Future<UploadImageResponse> uploadImage(File image, String? folder) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.files.add(
@@ -1124,7 +1121,10 @@ class _ApiService implements ApiService {
         ),
       ),
     );
-    final _options = _setStreamType<dynamic>(
+    if (folder != null) {
+      _data.fields.add(MapEntry('folder', folder));
+    }
+    final _options = _setStreamType<UploadImageResponse>(
       Options(
             method: 'POST',
             headers: _headers,
@@ -1133,21 +1133,31 @@ class _ApiService implements ApiService {
           )
           .compose(
             _dio.options,
-            '/api/upload/single',
+            '/api/upload/image',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late UploadImageResponse _value;
+    try {
+      _value = UploadImageResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
   @override
-  Future<dynamic> uploadMultipleImages(List<File> images) async {
+  Future<UploadImagesResponse> uploadImages(
+    List<File> images,
+    String? folder,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.files.addAll(
@@ -1161,7 +1171,10 @@ class _ApiService implements ApiService {
         ),
       ),
     );
-    final _options = _setStreamType<dynamic>(
+    if (folder != null) {
+      _data.fields.add(MapEntry('folder', folder));
+    }
+    final _options = _setStreamType<UploadImagesResponse>(
       Options(
             method: 'POST',
             headers: _headers,
@@ -1170,14 +1183,20 @@ class _ApiService implements ApiService {
           )
           .compose(
             _dio.options,
-            '/api/upload/multiple',
+            '/api/upload/images',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late UploadImagesResponse _value;
+    try {
+      _value = UploadImagesResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 

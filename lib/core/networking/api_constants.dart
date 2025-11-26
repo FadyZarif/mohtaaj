@@ -53,8 +53,8 @@ class ApiConstants {
   static const String myReports = '$apiPath/reports/my';
   
   // Upload
-  static const String uploadSingle = '$apiPath/upload/single';
-  static const String uploadMultiple = '$apiPath/upload/multiple';
+  static const String uploadImage = '$apiPath/upload/image';
+  static const String uploadImages = '$apiPath/upload/images';
   
   // Badges
   static const String badges = '$apiPath/badges';

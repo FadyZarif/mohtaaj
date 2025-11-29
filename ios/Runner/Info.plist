@@ -5,6 +5,9 @@
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>نحتاج الموقع لعرض السلع القريبة منك</string>
 
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>نحتاج موقعك لتحديد مكان الإعلان بدقة</string>
+
     <key>NSCameraUsageDescription</key>
     <string>نحتاج الكاميرا لرفع صور السلع</string>
 

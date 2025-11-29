@@ -18,6 +18,7 @@ class AppTextField extends StatelessWidget {
   final bool readOnly;
   final List<TextInputFormatter>? inputFormatters;
   final Iterable<String>? autofillHints;
+  final Color? fillColor;
 
   const AppTextField({
     super.key,
@@ -33,6 +34,7 @@ class AppTextField extends StatelessWidget {
     this.readOnly = false,
     this.inputFormatters,
     this.autofillHints,
+    this.fillColor,
   });
 
   @override
@@ -51,7 +53,7 @@ class AppTextField extends StatelessWidget {
 
         hintStyle: TextStyles.font14GreyRegular,
         filled: true,
-        fillColor: ColorsManager.inputBackground,
+        fillColor:fillColor?? ColorsManager.inputBackground,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         contentPadding: EdgeInsets.symmetric(

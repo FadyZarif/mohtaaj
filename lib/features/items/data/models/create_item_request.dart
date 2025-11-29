@@ -1,6 +1,7 @@
 // features/items/data/models/create_item_request.dart
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mohtaaj/features/items/data/models/item_model.dart';
 
 part 'create_item_request.freezed.dart';
 part 'create_item_request.g.dart';
@@ -14,12 +15,12 @@ abstract class CreateItemRequest with _$CreateItemRequest {
     required String title,
     required String description,
     required String categoryId,
-    String? condition,
+    ItemCondition? condition,
     required List<String> images,
     required String city,
     double? geoLat,  // 👈 غير من String لـ double
     double? geoLng,  // 👈 غير من String لـ double
-    String? price,
+    double? price,
     required bool isFree,
   }) = _CreateItemRequest;
 

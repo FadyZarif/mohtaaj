@@ -6,28 +6,23 @@ import '../../data/models/item_model.dart';
 
 part 'create_item_state.freezed.dart';
 
-// في create_item_state.dart
-
 @freezed
 abstract class CreateItemState with _$CreateItemState {
   const factory CreateItemState({
-    // Images
     @Default([]) List<File> selectedImages,
     @Default([]) List<String> uploadedImageUrls,
     @Default(false) bool isUploadingImages,
 
-    // Form Data
     String? title,
     String? description,
     String? categoryId,
     ItemCondition? condition,
     String? city,
-    double? geoLat,  // 👈 غير من String لـ double
-    double? geoLng,  // 👈 غير من String لـ double
-    String? price,
+    double? geoLat,
+    double? geoLng,
+    double? price,  // ← غير من String لـ double
     @Default(false) bool isFree,
 
-    // State
     @Default(false) bool isSubmitting,
     String? error,
     ItemModel? createdItem,

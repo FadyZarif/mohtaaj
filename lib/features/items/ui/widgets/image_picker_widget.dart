@@ -60,7 +60,7 @@ class ImagePickerWidget extends StatelessWidget {
         width: 120.w,
         height: 120.h,
         decoration: BoxDecoration(
-          color: ColorsManager.inputBackground,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
             color: ColorsManager.borderColor,

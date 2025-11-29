@@ -15,9 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CreateItemRequest {
 
- String get title; String get description; String get categoryId; String? get condition; List<String> get images; String get city; double? get geoLat;// 👈 غير من String لـ double
+ String get title; String get description; String get categoryId; ItemCondition? get condition; List<String> get images; String get city; double? get geoLat;// 👈 غير من String لـ double
  double? get geoLng;// 👈 غير من String لـ double
- String? get price; bool get isFree;
+ double? get price; bool get isFree;
 /// Create a copy of CreateItemRequest
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -50,7 +50,7 @@ abstract mixin class $CreateItemRequestCopyWith<$Res>  {
   factory $CreateItemRequestCopyWith(CreateItemRequest value, $Res Function(CreateItemRequest) _then) = _$CreateItemRequestCopyWithImpl;
 @useResult
 $Res call({
- String title, String description, String categoryId, String? condition, List<String> images, String city, double? geoLat, double? geoLng, String? price, bool isFree
+ String title, String description, String categoryId, ItemCondition? condition, List<String> images, String city, double? geoLat, double? geoLng, double? price, bool isFree
 });
 
 
@@ -73,12 +73,12 @@ title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nulla
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as String,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
-as String?,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
+as ItemCondition?,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
 as double?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable
 as double?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as String?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
+as double?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -164,7 +164,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  String description,  String categoryId,  String? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng,  String? price,  bool isFree)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  String description,  String categoryId,  ItemCondition? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng,  double? price,  bool isFree)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateItemRequest() when $default != null:
 return $default(_that.title,_that.description,_that.categoryId,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree);case _:
@@ -185,7 +185,7 @@ return $default(_that.title,_that.description,_that.categoryId,_that.condition,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  String description,  String categoryId,  String? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng,  String? price,  bool isFree)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  String description,  String categoryId,  ItemCondition? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng,  double? price,  bool isFree)  $default,) {final _that = this;
 switch (_that) {
 case _CreateItemRequest():
 return $default(_that.title,_that.description,_that.categoryId,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree);case _:
@@ -205,7 +205,7 @@ return $default(_that.title,_that.description,_that.categoryId,_that.condition,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  String description,  String categoryId,  String? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng,  String? price,  bool isFree)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  String description,  String categoryId,  ItemCondition? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng,  double? price,  bool isFree)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateItemRequest() when $default != null:
 return $default(_that.title,_that.description,_that.categoryId,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree);case _:
@@ -226,7 +226,7 @@ class _CreateItemRequest implements CreateItemRequest {
 @override final  String title;
 @override final  String description;
 @override final  String categoryId;
-@override final  String? condition;
+@override final  ItemCondition? condition;
  final  List<String> _images;
 @override List<String> get images {
   if (_images is EqualUnmodifiableListView) return _images;
@@ -239,7 +239,7 @@ class _CreateItemRequest implements CreateItemRequest {
 // 👈 غير من String لـ double
 @override final  double? geoLng;
 // 👈 غير من String لـ double
-@override final  String? price;
+@override final  double? price;
 @override final  bool isFree;
 
 /// Create a copy of CreateItemRequest
@@ -275,7 +275,7 @@ abstract mixin class _$CreateItemRequestCopyWith<$Res> implements $CreateItemReq
   factory _$CreateItemRequestCopyWith(_CreateItemRequest value, $Res Function(_CreateItemRequest) _then) = __$CreateItemRequestCopyWithImpl;
 @override @useResult
 $Res call({
- String title, String description, String categoryId, String? condition, List<String> images, String city, double? geoLat, double? geoLng, String? price, bool isFree
+ String title, String description, String categoryId, ItemCondition? condition, List<String> images, String city, double? geoLat, double? geoLng, double? price, bool isFree
 });
 
 
@@ -298,12 +298,12 @@ title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nulla
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as String,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
-as String?,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
+as ItemCondition?,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
 as double?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable
 as double?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as String?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
+as double?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

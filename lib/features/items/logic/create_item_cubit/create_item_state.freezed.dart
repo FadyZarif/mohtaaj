@@ -14,12 +14,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CreateItemState {
 
-// Images
- List<File> get selectedImages; List<String> get uploadedImageUrls; bool get isUploadingImages;// Form Data
- String? get title; String? get description; String? get categoryId; ItemCondition? get condition; String? get city; double? get geoLat;// 👈 غير من String لـ double
- double? get geoLng;// 👈 غير من String لـ double
- String? get price; bool get isFree;// State
- bool get isSubmitting; String? get error; ItemModel? get createdItem;
+ List<File> get selectedImages; List<String> get uploadedImageUrls; bool get isUploadingImages; String? get title; String? get description; String? get categoryId; ItemCondition? get condition; String? get city; double? get geoLat; double? get geoLng; double? get price;// ← غير من String لـ double
+ bool get isFree; bool get isSubmitting; String? get error; ItemModel? get createdItem;
 /// Create a copy of CreateItemState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -50,7 +46,7 @@ abstract mixin class $CreateItemStateCopyWith<$Res>  {
   factory $CreateItemStateCopyWith(CreateItemState value, $Res Function(CreateItemState) _then) = _$CreateItemStateCopyWithImpl;
 @useResult
 $Res call({
- List<File> selectedImages, List<String> uploadedImageUrls, bool isUploadingImages, String? title, String? description, String? categoryId, ItemCondition? condition, String? city, double? geoLat, double? geoLng, String? price, bool isFree, bool isSubmitting, String? error, ItemModel? createdItem
+ List<File> selectedImages, List<String> uploadedImageUrls, bool isUploadingImages, String? title, String? description, String? categoryId, ItemCondition? condition, String? city, double? geoLat, double? geoLng, double? price, bool isFree, bool isSubmitting, String? error, ItemModel? createdItem
 });
 
 
@@ -80,7 +76,7 @@ as ItemCondition?,city: freezed == city ? _self.city : city // ignore: cast_null
 as String?,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
 as double?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable
 as double?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as String?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
+as double?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
 as bool,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,createdItem: freezed == createdItem ? _self.createdItem : createdItem // ignore: cast_nullable_to_non_nullable
@@ -181,7 +177,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  String? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  double? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateItemState() when $default != null:
 return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingImages,_that.title,_that.description,_that.categoryId,_that.condition,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isSubmitting,_that.error,_that.createdItem);case _:
@@ -202,7 +198,7 @@ return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingIm
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  String? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  double? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem)  $default,) {final _that = this;
 switch (_that) {
 case _CreateItemState():
 return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingImages,_that.title,_that.description,_that.categoryId,_that.condition,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isSubmitting,_that.error,_that.createdItem);case _:
@@ -222,7 +218,7 @@ return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingIm
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  String? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  double? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateItemState() when $default != null:
 return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingImages,_that.title,_that.description,_that.categoryId,_that.condition,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isSubmitting,_that.error,_that.createdItem);case _:
@@ -240,9 +236,7 @@ class _CreateItemState implements CreateItemState {
   const _CreateItemState({final  List<File> selectedImages = const [], final  List<String> uploadedImageUrls = const [], this.isUploadingImages = false, this.title, this.description, this.categoryId, this.condition, this.city, this.geoLat, this.geoLng, this.price, this.isFree = false, this.isSubmitting = false, this.error, this.createdItem}): _selectedImages = selectedImages,_uploadedImageUrls = uploadedImageUrls;
   
 
-// Images
  final  List<File> _selectedImages;
-// Images
 @override@JsonKey() List<File> get selectedImages {
   if (_selectedImages is EqualUnmodifiableListView) return _selectedImages;
   // ignore: implicit_dynamic_type
@@ -257,19 +251,16 @@ class _CreateItemState implements CreateItemState {
 }
 
 @override@JsonKey() final  bool isUploadingImages;
-// Form Data
 @override final  String? title;
 @override final  String? description;
 @override final  String? categoryId;
 @override final  ItemCondition? condition;
 @override final  String? city;
 @override final  double? geoLat;
-// 👈 غير من String لـ double
 @override final  double? geoLng;
-// 👈 غير من String لـ double
-@override final  String? price;
+@override final  double? price;
+// ← غير من String لـ double
 @override@JsonKey() final  bool isFree;
-// State
 @override@JsonKey() final  bool isSubmitting;
 @override final  String? error;
 @override final  ItemModel? createdItem;
@@ -304,7 +295,7 @@ abstract mixin class _$CreateItemStateCopyWith<$Res> implements $CreateItemState
   factory _$CreateItemStateCopyWith(_CreateItemState value, $Res Function(_CreateItemState) _then) = __$CreateItemStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<File> selectedImages, List<String> uploadedImageUrls, bool isUploadingImages, String? title, String? description, String? categoryId, ItemCondition? condition, String? city, double? geoLat, double? geoLng, String? price, bool isFree, bool isSubmitting, String? error, ItemModel? createdItem
+ List<File> selectedImages, List<String> uploadedImageUrls, bool isUploadingImages, String? title, String? description, String? categoryId, ItemCondition? condition, String? city, double? geoLat, double? geoLng, double? price, bool isFree, bool isSubmitting, String? error, ItemModel? createdItem
 });
 
 
@@ -334,7 +325,7 @@ as ItemCondition?,city: freezed == city ? _self.city : city // ignore: cast_null
 as String?,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
 as double?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable
 as double?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as String?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
+as double?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
 as bool,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,createdItem: freezed == createdItem ? _self.createdItem : createdItem // ignore: cast_nullable_to_non_nullable

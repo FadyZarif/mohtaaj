@@ -5,15 +5,41 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
+import '../../../../core/services/location_service.dart';
 import '../../data/models/create_item_request.dart';
 import '../../data/models/item_model.dart';
 import 'create_item_state.dart';
 
 class CreateItemCubit extends Cubit<CreateItemState> {
   final ApiService _apiService;
+  final LocationService _locationService;
   final ImagePicker _imagePicker = ImagePicker();
 
-  CreateItemCubit(this._apiService) : super(const CreateItemState());
+  CreateItemCubit(this._apiService, this._locationService)
+      : super(const CreateItemState());
+  // Get current location
+  Future<void> getCurrentLocation() async {
+    emit(state.copyWith(error: null));
+
+    try {
+      final coordinates = await _locationService.getLocationCoordinates();
+
+      if (coordinates != null) {
+        emit(state.copyWith(
+          geoLat: coordinates['lat'],
+          geoLng: coordinates['lng'],
+        ));
+      } else {
+        emit(state.copyWith(
+          error: 'لم نتمكن من الحصول على موقعك. تأكد من تفعيل خدمة الموقع',
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        error: 'حدث خطأ في الحصول على الموقع',
+      ));
+    }
+  }
 
   // Pick Images
   Future<void> pickImages() async {
@@ -85,8 +111,16 @@ class CreateItemCubit extends Cubit<CreateItemState> {
     emit(state.copyWith(geoLat: lat, geoLng: lng, error: null));
   }
 
-  void updatePrice(String price) {
-    emit(state.copyWith(price: price, isFree: false, error: null));
+  void updatePrice(String priceText) {
+    if (priceText.isEmpty) {
+      emit(state.copyWith(price: null, error: null));
+      return;
+    }
+
+    final price = double.tryParse(priceText);
+    if (price != null) {
+      emit(state.copyWith(price: price, isFree: false, error: null));
+    }
   }
 
   void toggleIsFree(bool isFree) {
@@ -124,14 +158,13 @@ class CreateItemCubit extends Cubit<CreateItemState> {
       return false;
     }
 
-    if (!state.isFree && (state.price == null || state.price!.trim().isEmpty)) {
+    if (!state.isFree && state.price == null) {  // ← غير الشرط
       emit(state.copyWith(error: 'يجب إدخال السعر أو اختيار مجاني'));
       return false;
     }
 
     return true;
   }
-
   // Upload Images (Mock - replace with actual upload)
   Future<List<String>> _uploadImages(List<File> images) async {
     try {
@@ -153,7 +186,6 @@ class CreateItemCubit extends Cubit<CreateItemState> {
     emit(state.copyWith(isSubmitting: true, error: null));
 
     try {
-      // Upload images first
       emit(state.copyWith(isUploadingImages: true));
       final imageUrls = await _uploadImages(state.selectedImages);
       emit(state.copyWith(
@@ -161,12 +193,11 @@ class CreateItemCubit extends Cubit<CreateItemState> {
         isUploadingImages: false,
       ));
 
-      // Create item
       final request = CreateItemRequest(
         title: state.title!,
         description: state.description!,
         categoryId: state.categoryId!,
-        condition: state.condition?.name,
+        condition: state.condition,
         images: imageUrls,
         city: state.city!,
         geoLat: state.geoLat,
@@ -181,6 +212,8 @@ class CreateItemCubit extends Cubit<CreateItemState> {
         isSubmitting: false,
         createdItem: response.data,
       ));
+
+
     } catch (error) {
       final errorMessage = ApiErrorHandler.handle(error).message;
       emit(state.copyWith(

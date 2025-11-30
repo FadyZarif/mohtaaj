@@ -29,7 +29,7 @@ class _CategoryItemsSearchBarState extends State<CategoryItemsSearchBar> {
     return Container(
       height: 48.h,
       decoration: BoxDecoration(
-        color: ColorsManager.searchBarBackground,
+        color: ColorsManager.inputBackground,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: TextField(

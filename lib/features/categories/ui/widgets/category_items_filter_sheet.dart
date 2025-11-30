@@ -243,7 +243,7 @@ class _FilterChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? ColorsManager.mainColor
-              : ColorsManager.searchBarBackground,
+              : ColorsManager.inputBackground,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
             color: isSelected
@@ -282,7 +282,7 @@ class _PriceTextField extends StatelessWidget {
         hintText: hintText,
         hintStyle: TextStyles.font14GreyRegular,
         filled: true,
-        fillColor: ColorsManager.searchBarBackground,
+        fillColor: ColorsManager.inputBackground,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
           borderSide: BorderSide(color: ColorsManager.borderColor),

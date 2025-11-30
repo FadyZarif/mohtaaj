@@ -5,7 +5,7 @@ import '../../../items/data/models/items_queries.dart';
 part 'category_items_state.freezed.dart';
 
 @freezed
-class CategoryItemsState with _$CategoryItemsState {
+abstract class CategoryItemsState with _$CategoryItemsState {
   const factory CategoryItemsState({
     @Default([]) List<ItemModel> items,
     @Default(true) bool isLoading,

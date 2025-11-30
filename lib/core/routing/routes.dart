@@ -16,7 +16,7 @@ class Routes {
 
   // Categories
   static const String categoriesScreen = '/categories';
-  static const String categoryItemsScreen = '/categoryItems';
+  static const String categoryItemsScreen = '/categoryItemsScreen';
 
 
   // Items Routes

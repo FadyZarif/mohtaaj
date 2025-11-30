@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mohtaaj/features/categories/ui/screens/categories_screen.dart';
 import '../../features/auth/data/models/user_model.dart';
+import '../../features/categories/data/models/category_model.dart';
 import '../../features/favorites/ui/screens/favorites_screen.dart';
+import '../../features/items/ui/screens/category_items_screen.dart';
 import '../../features/items/ui/screens/item_details_screen.dart';
 import '../../features/main_layout/ui/screens/main_layout_screen.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
@@ -79,6 +82,15 @@ class AppRouter {
         final userId = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => UserProfileScreen(userId: userId),
+        );
+
+      case Routes.categoriesScreen:
+        return MaterialPageRoute(builder: (_) => const CategoriesScreen());
+
+      case Routes.categoryItemsScreen:
+        final category = settings.arguments as CategoryModel;
+        return MaterialPageRoute(
+          builder: (_) => CategoryItemsScreen(category: category),
         );
 
       default:

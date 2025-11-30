@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../features/auth/data/models/user_model.dart';
+import '../../features/categories/data/models/category_model.dart';
+import '../../features/categories/ui/screens/categories_screen.dart';
+import '../../features/categories/ui/screens/category_items_screen.dart';
 import '../../features/favorites/ui/screens/favorites_screen.dart';
 import '../../features/items/ui/screens/item_details_screen.dart';
 import '../../features/main_layout/ui/screens/main_layout_screen.dart';
@@ -79,6 +82,21 @@ class AppRouter {
         final userId = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => UserProfileScreen(userId: userId),
+        );
+
+      // ========================== Categories Routes ==========================
+
+      // Categories Screen
+      case Routes.categoriesScreen:
+        return MaterialPageRoute(
+          builder: (_) => const CategoriesScreen(),
+        );
+
+      // Category Items Screen
+      case Routes.categoryItemsScreen:
+        final category = settings.arguments as CategoryModel;
+        return MaterialPageRoute(
+          builder: (_) => CategoryItemsScreen(category: category),
         );
 
       default:

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import '../../features/categories/logic/category_items_cubit/category_items_cubit.dart';
 import '../../features/favorites/logic/favorites_cubit/favorites_cubit.dart';
 import '../../features/items/logic/create_item_cubit/create_item_cubit.dart';
 import '../../features/items/logic/item_details_cubit/item_details_cubit.dart';
@@ -67,6 +68,10 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<CategoriesCubit>(
         () => CategoriesCubit(getIt<ApiService>()),
+  );
+
+  getIt.registerFactoryParam<CategoryItemsCubit, String, void>(
+        (categoryId, _) => CategoryItemsCubit(getIt<ApiService>(), categoryId),
   );
 
   // ========================== Home ==========================

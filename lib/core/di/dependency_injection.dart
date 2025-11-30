@@ -9,7 +9,6 @@ import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/categories/logic/categories_cubit/categories_cubit.dart';
 import '../../features/home/logic/home_cubit/home_cubit.dart';
 import '../../features/profile/logic/user_profile_cubit/user_profile_cubit.dart';
-import '../../features/search/logic/search_cubit/search_cubit.dart';
 import '../networking/api_service.dart';
 import '../networking/dio_factory.dart';
 import '../../features/auth/logic/login_cubit/login_cubit.dart';

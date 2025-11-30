@@ -64,13 +64,7 @@ class _HomeScreenBody extends StatelessWidget {
               ),
               verticalSpace(24),
               // Categories Section
-              SectionHeader(
-                title: 'الأقسام',
-                actionText: 'جميع الأقسام',
-                onActionTap: () {
-                  context.pushNamed(Routes.categoriesScreen);
-                },
-              ),
+              const SectionHeader(title: 'الأقسام'),
               verticalSpace(12),
               BlocBuilder<HomeCubit, HomeState>(
                 buildWhen: (previous, current) =>
@@ -82,10 +76,7 @@ class _HomeScreenBody extends StatelessWidget {
                     categories: state.categories,
                     isLoading: state.isCategoriesLoading,
                     onCategoryTap: (category) {
-                      context.pushNamed(
-                        Routes.categoryItemsScreen,
-                        arguments: category,
-                      );
+                      // TODO: Navigate to category items
                     },
                   );
                 },

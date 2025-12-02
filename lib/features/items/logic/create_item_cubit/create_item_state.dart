@@ -20,11 +20,15 @@ abstract class CreateItemState with _$CreateItemState {
     String? city,
     double? geoLat,
     double? geoLng,
-    double? price,  // ← غير من String لـ double
+    double? price,
     @Default(false) bool isFree,
 
     @Default(false) bool isSubmitting,
     String? error,
     ItemModel? createdItem,
+    // For Edit Mode
+    @Default(false) bool isEditMode,
+    String? editingItemId,
+    @Default([]) List<String> existingImageUrls, // للصور الموجودة من قبل
   }) = _CreateItemState;
 }

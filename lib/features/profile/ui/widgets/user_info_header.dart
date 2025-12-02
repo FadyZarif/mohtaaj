@@ -102,7 +102,7 @@ class UserInfoHeader extends StatelessWidget {
                 ' (${user.ratingsCount})',
                 style: TextStyles.font14GreyMedium,
               ),
-              horizontalSpace(8),
+             /* horizontalSpace(8),
               GestureDetector(
                 onTap: onRateUser,
                 child: Container(
@@ -118,7 +118,7 @@ class UserInfoHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
+              ),*/
               horizontalSpace(16),
               Icon(
                 Icons.emoji_events,

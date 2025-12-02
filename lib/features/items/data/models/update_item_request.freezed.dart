@@ -15,7 +15,10 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UpdateItemRequest {
 
- String? get title; String? get description; String? get categoryId; String? get condition; List<String>? get images; String? get city; String? get geoLat; String? get geoLng; String? get price; bool? get isFree;
+ String get title; String get description; String get categoryId; double? get price;// ✅ double
+ bool get isFree; ItemCondition? get condition;// ✅ enum
+ List<String> get images; String get city; double? get geoLat;// ✅ double
+ double? get geoLng;
 /// Create a copy of UpdateItemRequest
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +31,16 @@ $UpdateItemRequestCopyWith<UpdateItemRequest> get copyWith => _$UpdateItemReques
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateItemRequest&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.condition, condition) || other.condition == condition)&&const DeepCollectionEquality().equals(other.images, images)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateItemRequest&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree)&&(identical(other.condition, condition) || other.condition == condition)&&const DeepCollectionEquality().equals(other.images, images)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,title,description,categoryId,condition,const DeepCollectionEquality().hash(images),city,geoLat,geoLng,price,isFree);
+int get hashCode => Object.hash(runtimeType,title,description,categoryId,price,isFree,condition,const DeepCollectionEquality().hash(images),city,geoLat,geoLng);
 
 @override
 String toString() {
-  return 'UpdateItemRequest(title: $title, description: $description, categoryId: $categoryId, condition: $condition, images: $images, city: $city, geoLat: $geoLat, geoLng: $geoLng, price: $price, isFree: $isFree)';
+  return 'UpdateItemRequest(title: $title, description: $description, categoryId: $categoryId, price: $price, isFree: $isFree, condition: $condition, images: $images, city: $city, geoLat: $geoLat, geoLng: $geoLng)';
 }
 
 
@@ -48,7 +51,7 @@ abstract mixin class $UpdateItemRequestCopyWith<$Res>  {
   factory $UpdateItemRequestCopyWith(UpdateItemRequest value, $Res Function(UpdateItemRequest) _then) = _$UpdateItemRequestCopyWithImpl;
 @useResult
 $Res call({
- String? title, String? description, String? categoryId, String? condition, List<String>? images, String? city, String? geoLat, String? geoLng, String? price, bool? isFree
+ String title, String description, String categoryId, double? price, bool isFree, ItemCondition? condition, List<String> images, String city, double? geoLat, double? geoLng
 });
 
 
@@ -65,19 +68,19 @@ class _$UpdateItemRequestCopyWithImpl<$Res>
 
 /// Create a copy of UpdateItemRequest
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? title = freezed,Object? description = freezed,Object? categoryId = freezed,Object? condition = freezed,Object? images = freezed,Object? city = freezed,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? description = null,Object? categoryId = null,Object? price = freezed,Object? isFree = null,Object? condition = freezed,Object? images = null,Object? city = null,Object? geoLat = freezed,Object? geoLng = freezed,}) {
   return _then(_self.copyWith(
-title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
-as String?,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
-as String?,images: freezed == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
-as List<String>?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
-as String?,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
-as String?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable
-as String?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as String?,isFree: freezed == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
-as bool?,
+title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as String,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as double?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
+as bool,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
+as ItemCondition?,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
+as List<String>,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
+as double?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable
+as double?,
   ));
 }
 
@@ -162,10 +165,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? title,  String? description,  String? categoryId,  String? condition,  List<String>? images,  String? city,  String? geoLat,  String? geoLng,  String? price,  bool? isFree)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  String description,  String categoryId,  double? price,  bool isFree,  ItemCondition? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UpdateItemRequest() when $default != null:
-return $default(_that.title,_that.description,_that.categoryId,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree);case _:
+return $default(_that.title,_that.description,_that.categoryId,_that.price,_that.isFree,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng);case _:
   return orElse();
 
 }
@@ -183,10 +186,10 @@ return $default(_that.title,_that.description,_that.categoryId,_that.condition,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? title,  String? description,  String? categoryId,  String? condition,  List<String>? images,  String? city,  String? geoLat,  String? geoLng,  String? price,  bool? isFree)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  String description,  String categoryId,  double? price,  bool isFree,  ItemCondition? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng)  $default,) {final _that = this;
 switch (_that) {
 case _UpdateItemRequest():
-return $default(_that.title,_that.description,_that.categoryId,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree);case _:
+return $default(_that.title,_that.description,_that.categoryId,_that.price,_that.isFree,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -203,10 +206,10 @@ return $default(_that.title,_that.description,_that.categoryId,_that.condition,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? title,  String? description,  String? categoryId,  String? condition,  List<String>? images,  String? city,  String? geoLat,  String? geoLng,  String? price,  bool? isFree)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  String description,  String categoryId,  double? price,  bool isFree,  ItemCondition? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng)?  $default,) {final _that = this;
 switch (_that) {
 case _UpdateItemRequest() when $default != null:
-return $default(_that.title,_that.description,_that.categoryId,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree);case _:
+return $default(_that.title,_that.description,_that.categoryId,_that.price,_that.isFree,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng);case _:
   return null;
 
 }
@@ -215,30 +218,32 @@ return $default(_that.title,_that.description,_that.categoryId,_that.condition,_
 }
 
 /// @nodoc
+@JsonSerializable()
 
-@JsonSerializable(includeIfNull: false)
 class _UpdateItemRequest implements UpdateItemRequest {
-  const _UpdateItemRequest({this.title, this.description, this.categoryId, this.condition, final  List<String>? images, this.city, this.geoLat, this.geoLng, this.price, this.isFree}): _images = images;
+  const _UpdateItemRequest({required this.title, required this.description, required this.categoryId, this.price, this.isFree = true, this.condition, required final  List<String> images, required this.city, this.geoLat, this.geoLng}): _images = images;
   factory _UpdateItemRequest.fromJson(Map<String, dynamic> json) => _$UpdateItemRequestFromJson(json);
 
-@override final  String? title;
-@override final  String? description;
-@override final  String? categoryId;
-@override final  String? condition;
- final  List<String>? _images;
-@override List<String>? get images {
-  final value = _images;
-  if (value == null) return null;
+@override final  String title;
+@override final  String description;
+@override final  String categoryId;
+@override final  double? price;
+// ✅ double
+@override@JsonKey() final  bool isFree;
+@override final  ItemCondition? condition;
+// ✅ enum
+ final  List<String> _images;
+// ✅ enum
+@override List<String> get images {
   if (_images is EqualUnmodifiableListView) return _images;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(value);
+  return EqualUnmodifiableListView(_images);
 }
 
-@override final  String? city;
-@override final  String? geoLat;
-@override final  String? geoLng;
-@override final  String? price;
-@override final  bool? isFree;
+@override final  String city;
+@override final  double? geoLat;
+// ✅ double
+@override final  double? geoLng;
 
 /// Create a copy of UpdateItemRequest
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +258,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateItemRequest&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.condition, condition) || other.condition == condition)&&const DeepCollectionEquality().equals(other._images, _images)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateItemRequest&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree)&&(identical(other.condition, condition) || other.condition == condition)&&const DeepCollectionEquality().equals(other._images, _images)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,title,description,categoryId,condition,const DeepCollectionEquality().hash(_images),city,geoLat,geoLng,price,isFree);
+int get hashCode => Object.hash(runtimeType,title,description,categoryId,price,isFree,condition,const DeepCollectionEquality().hash(_images),city,geoLat,geoLng);
 
 @override
 String toString() {
-  return 'UpdateItemRequest(title: $title, description: $description, categoryId: $categoryId, condition: $condition, images: $images, city: $city, geoLat: $geoLat, geoLng: $geoLng, price: $price, isFree: $isFree)';
+  return 'UpdateItemRequest(title: $title, description: $description, categoryId: $categoryId, price: $price, isFree: $isFree, condition: $condition, images: $images, city: $city, geoLat: $geoLat, geoLng: $geoLng)';
 }
 
 
@@ -273,7 +278,7 @@ abstract mixin class _$UpdateItemRequestCopyWith<$Res> implements $UpdateItemReq
   factory _$UpdateItemRequestCopyWith(_UpdateItemRequest value, $Res Function(_UpdateItemRequest) _then) = __$UpdateItemRequestCopyWithImpl;
 @override @useResult
 $Res call({
- String? title, String? description, String? categoryId, String? condition, List<String>? images, String? city, String? geoLat, String? geoLng, String? price, bool? isFree
+ String title, String description, String categoryId, double? price, bool isFree, ItemCondition? condition, List<String> images, String city, double? geoLat, double? geoLng
 });
 
 
@@ -290,19 +295,19 @@ class __$UpdateItemRequestCopyWithImpl<$Res>
 
 /// Create a copy of UpdateItemRequest
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? title = freezed,Object? description = freezed,Object? categoryId = freezed,Object? condition = freezed,Object? images = freezed,Object? city = freezed,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? description = null,Object? categoryId = null,Object? price = freezed,Object? isFree = null,Object? condition = freezed,Object? images = null,Object? city = null,Object? geoLat = freezed,Object? geoLng = freezed,}) {
   return _then(_UpdateItemRequest(
-title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
-as String?,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
-as String?,images: freezed == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
-as List<String>?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
-as String?,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
-as String?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable
-as String?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as String?,isFree: freezed == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
-as bool?,
+title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as String,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as double?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullable_to_non_nullable
+as bool,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
+as ItemCondition?,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
+as List<String>,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
+as double?,geoLng: freezed == geoLng ? _self.geoLng : geoLng // ignore: cast_nullable_to_non_nullable
+as double?,
   ));
 }
 

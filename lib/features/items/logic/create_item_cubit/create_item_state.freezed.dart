@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 mixin _$CreateItemState {
 
  List<File> get selectedImages; List<String> get uploadedImageUrls; bool get isUploadingImages; String? get title; String? get description; String? get categoryId; ItemCondition? get condition; String? get city; double? get geoLat; double? get geoLng; double? get price;// ← غير من String لـ double
- bool get isFree; bool get isSubmitting; String? get error; ItemModel? get createdItem;
+ bool get isFree; bool get isSubmitting; String? get error; ItemModel? get createdItem;// For Edit Mode
+ bool get isEditMode; String? get editingItemId; List<String> get existingImageUrls;
 /// Create a copy of CreateItemState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +27,16 @@ $CreateItemStateCopyWith<CreateItemState> get copyWith => _$CreateItemStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateItemState&&const DeepCollectionEquality().equals(other.selectedImages, selectedImages)&&const DeepCollectionEquality().equals(other.uploadedImageUrls, uploadedImageUrls)&&(identical(other.isUploadingImages, isUploadingImages) || other.isUploadingImages == isUploadingImages)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.error, error) || other.error == error)&&(identical(other.createdItem, createdItem) || other.createdItem == createdItem));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateItemState&&const DeepCollectionEquality().equals(other.selectedImages, selectedImages)&&const DeepCollectionEquality().equals(other.uploadedImageUrls, uploadedImageUrls)&&(identical(other.isUploadingImages, isUploadingImages) || other.isUploadingImages == isUploadingImages)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.error, error) || other.error == error)&&(identical(other.createdItem, createdItem) || other.createdItem == createdItem)&&(identical(other.isEditMode, isEditMode) || other.isEditMode == isEditMode)&&(identical(other.editingItemId, editingItemId) || other.editingItemId == editingItemId)&&const DeepCollectionEquality().equals(other.existingImageUrls, existingImageUrls));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(selectedImages),const DeepCollectionEquality().hash(uploadedImageUrls),isUploadingImages,title,description,categoryId,condition,city,geoLat,geoLng,price,isFree,isSubmitting,error,createdItem);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(selectedImages),const DeepCollectionEquality().hash(uploadedImageUrls),isUploadingImages,title,description,categoryId,condition,city,geoLat,geoLng,price,isFree,isSubmitting,error,createdItem,isEditMode,editingItemId,const DeepCollectionEquality().hash(existingImageUrls));
 
 @override
 String toString() {
-  return 'CreateItemState(selectedImages: $selectedImages, uploadedImageUrls: $uploadedImageUrls, isUploadingImages: $isUploadingImages, title: $title, description: $description, categoryId: $categoryId, condition: $condition, city: $city, geoLat: $geoLat, geoLng: $geoLng, price: $price, isFree: $isFree, isSubmitting: $isSubmitting, error: $error, createdItem: $createdItem)';
+  return 'CreateItemState(selectedImages: $selectedImages, uploadedImageUrls: $uploadedImageUrls, isUploadingImages: $isUploadingImages, title: $title, description: $description, categoryId: $categoryId, condition: $condition, city: $city, geoLat: $geoLat, geoLng: $geoLng, price: $price, isFree: $isFree, isSubmitting: $isSubmitting, error: $error, createdItem: $createdItem, isEditMode: $isEditMode, editingItemId: $editingItemId, existingImageUrls: $existingImageUrls)';
 }
 
 
@@ -46,7 +47,7 @@ abstract mixin class $CreateItemStateCopyWith<$Res>  {
   factory $CreateItemStateCopyWith(CreateItemState value, $Res Function(CreateItemState) _then) = _$CreateItemStateCopyWithImpl;
 @useResult
 $Res call({
- List<File> selectedImages, List<String> uploadedImageUrls, bool isUploadingImages, String? title, String? description, String? categoryId, ItemCondition? condition, String? city, double? geoLat, double? geoLng, double? price, bool isFree, bool isSubmitting, String? error, ItemModel? createdItem
+ List<File> selectedImages, List<String> uploadedImageUrls, bool isUploadingImages, String? title, String? description, String? categoryId, ItemCondition? condition, String? city, double? geoLat, double? geoLng, double? price, bool isFree, bool isSubmitting, String? error, ItemModel? createdItem, bool isEditMode, String? editingItemId, List<String> existingImageUrls
 });
 
 
@@ -63,7 +64,7 @@ class _$CreateItemStateCopyWithImpl<$Res>
 
 /// Create a copy of CreateItemState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? selectedImages = null,Object? uploadedImageUrls = null,Object? isUploadingImages = null,Object? title = freezed,Object? description = freezed,Object? categoryId = freezed,Object? condition = freezed,Object? city = freezed,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isSubmitting = null,Object? error = freezed,Object? createdItem = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? selectedImages = null,Object? uploadedImageUrls = null,Object? isUploadingImages = null,Object? title = freezed,Object? description = freezed,Object? categoryId = freezed,Object? condition = freezed,Object? city = freezed,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isSubmitting = null,Object? error = freezed,Object? createdItem = freezed,Object? isEditMode = null,Object? editingItemId = freezed,Object? existingImageUrls = null,}) {
   return _then(_self.copyWith(
 selectedImages: null == selectedImages ? _self.selectedImages : selectedImages // ignore: cast_nullable_to_non_nullable
 as List<File>,uploadedImageUrls: null == uploadedImageUrls ? _self.uploadedImageUrls : uploadedImageUrls // ignore: cast_nullable_to_non_nullable
@@ -80,7 +81,10 @@ as double?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullab
 as bool,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,createdItem: freezed == createdItem ? _self.createdItem : createdItem // ignore: cast_nullable_to_non_nullable
-as ItemModel?,
+as ItemModel?,isEditMode: null == isEditMode ? _self.isEditMode : isEditMode // ignore: cast_nullable_to_non_nullable
+as bool,editingItemId: freezed == editingItemId ? _self.editingItemId : editingItemId // ignore: cast_nullable_to_non_nullable
+as String?,existingImageUrls: null == existingImageUrls ? _self.existingImageUrls : existingImageUrls // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 /// Create a copy of CreateItemState
@@ -177,10 +181,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  double? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  double? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem,  bool isEditMode,  String? editingItemId,  List<String> existingImageUrls)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateItemState() when $default != null:
-return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingImages,_that.title,_that.description,_that.categoryId,_that.condition,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isSubmitting,_that.error,_that.createdItem);case _:
+return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingImages,_that.title,_that.description,_that.categoryId,_that.condition,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isSubmitting,_that.error,_that.createdItem,_that.isEditMode,_that.editingItemId,_that.existingImageUrls);case _:
   return orElse();
 
 }
@@ -198,10 +202,10 @@ return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingIm
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  double? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  double? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem,  bool isEditMode,  String? editingItemId,  List<String> existingImageUrls)  $default,) {final _that = this;
 switch (_that) {
 case _CreateItemState():
-return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingImages,_that.title,_that.description,_that.categoryId,_that.condition,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isSubmitting,_that.error,_that.createdItem);case _:
+return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingImages,_that.title,_that.description,_that.categoryId,_that.condition,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isSubmitting,_that.error,_that.createdItem,_that.isEditMode,_that.editingItemId,_that.existingImageUrls);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -218,10 +222,10 @@ return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingIm
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  double? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<File> selectedImages,  List<String> uploadedImageUrls,  bool isUploadingImages,  String? title,  String? description,  String? categoryId,  ItemCondition? condition,  String? city,  double? geoLat,  double? geoLng,  double? price,  bool isFree,  bool isSubmitting,  String? error,  ItemModel? createdItem,  bool isEditMode,  String? editingItemId,  List<String> existingImageUrls)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateItemState() when $default != null:
-return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingImages,_that.title,_that.description,_that.categoryId,_that.condition,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isSubmitting,_that.error,_that.createdItem);case _:
+return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingImages,_that.title,_that.description,_that.categoryId,_that.condition,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isSubmitting,_that.error,_that.createdItem,_that.isEditMode,_that.editingItemId,_that.existingImageUrls);case _:
   return null;
 
 }
@@ -233,7 +237,7 @@ return $default(_that.selectedImages,_that.uploadedImageUrls,_that.isUploadingIm
 
 
 class _CreateItemState implements CreateItemState {
-  const _CreateItemState({final  List<File> selectedImages = const [], final  List<String> uploadedImageUrls = const [], this.isUploadingImages = false, this.title, this.description, this.categoryId, this.condition, this.city, this.geoLat, this.geoLng, this.price, this.isFree = false, this.isSubmitting = false, this.error, this.createdItem}): _selectedImages = selectedImages,_uploadedImageUrls = uploadedImageUrls;
+  const _CreateItemState({final  List<File> selectedImages = const [], final  List<String> uploadedImageUrls = const [], this.isUploadingImages = false, this.title, this.description, this.categoryId, this.condition, this.city, this.geoLat, this.geoLng, this.price, this.isFree = false, this.isSubmitting = false, this.error, this.createdItem, this.isEditMode = false, this.editingItemId, final  List<String> existingImageUrls = const []}): _selectedImages = selectedImages,_uploadedImageUrls = uploadedImageUrls,_existingImageUrls = existingImageUrls;
   
 
  final  List<File> _selectedImages;
@@ -264,6 +268,16 @@ class _CreateItemState implements CreateItemState {
 @override@JsonKey() final  bool isSubmitting;
 @override final  String? error;
 @override final  ItemModel? createdItem;
+// For Edit Mode
+@override@JsonKey() final  bool isEditMode;
+@override final  String? editingItemId;
+ final  List<String> _existingImageUrls;
+@override@JsonKey() List<String> get existingImageUrls {
+  if (_existingImageUrls is EqualUnmodifiableListView) return _existingImageUrls;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_existingImageUrls);
+}
+
 
 /// Create a copy of CreateItemState
 /// with the given fields replaced by the non-null parameter values.
@@ -275,16 +289,16 @@ _$CreateItemStateCopyWith<_CreateItemState> get copyWith => __$CreateItemStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateItemState&&const DeepCollectionEquality().equals(other._selectedImages, _selectedImages)&&const DeepCollectionEquality().equals(other._uploadedImageUrls, _uploadedImageUrls)&&(identical(other.isUploadingImages, isUploadingImages) || other.isUploadingImages == isUploadingImages)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.error, error) || other.error == error)&&(identical(other.createdItem, createdItem) || other.createdItem == createdItem));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateItemState&&const DeepCollectionEquality().equals(other._selectedImages, _selectedImages)&&const DeepCollectionEquality().equals(other._uploadedImageUrls, _uploadedImageUrls)&&(identical(other.isUploadingImages, isUploadingImages) || other.isUploadingImages == isUploadingImages)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.city, city) || other.city == city)&&(identical(other.geoLat, geoLat) || other.geoLat == geoLat)&&(identical(other.geoLng, geoLng) || other.geoLng == geoLng)&&(identical(other.price, price) || other.price == price)&&(identical(other.isFree, isFree) || other.isFree == isFree)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.error, error) || other.error == error)&&(identical(other.createdItem, createdItem) || other.createdItem == createdItem)&&(identical(other.isEditMode, isEditMode) || other.isEditMode == isEditMode)&&(identical(other.editingItemId, editingItemId) || other.editingItemId == editingItemId)&&const DeepCollectionEquality().equals(other._existingImageUrls, _existingImageUrls));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_selectedImages),const DeepCollectionEquality().hash(_uploadedImageUrls),isUploadingImages,title,description,categoryId,condition,city,geoLat,geoLng,price,isFree,isSubmitting,error,createdItem);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_selectedImages),const DeepCollectionEquality().hash(_uploadedImageUrls),isUploadingImages,title,description,categoryId,condition,city,geoLat,geoLng,price,isFree,isSubmitting,error,createdItem,isEditMode,editingItemId,const DeepCollectionEquality().hash(_existingImageUrls));
 
 @override
 String toString() {
-  return 'CreateItemState(selectedImages: $selectedImages, uploadedImageUrls: $uploadedImageUrls, isUploadingImages: $isUploadingImages, title: $title, description: $description, categoryId: $categoryId, condition: $condition, city: $city, geoLat: $geoLat, geoLng: $geoLng, price: $price, isFree: $isFree, isSubmitting: $isSubmitting, error: $error, createdItem: $createdItem)';
+  return 'CreateItemState(selectedImages: $selectedImages, uploadedImageUrls: $uploadedImageUrls, isUploadingImages: $isUploadingImages, title: $title, description: $description, categoryId: $categoryId, condition: $condition, city: $city, geoLat: $geoLat, geoLng: $geoLng, price: $price, isFree: $isFree, isSubmitting: $isSubmitting, error: $error, createdItem: $createdItem, isEditMode: $isEditMode, editingItemId: $editingItemId, existingImageUrls: $existingImageUrls)';
 }
 
 
@@ -295,7 +309,7 @@ abstract mixin class _$CreateItemStateCopyWith<$Res> implements $CreateItemState
   factory _$CreateItemStateCopyWith(_CreateItemState value, $Res Function(_CreateItemState) _then) = __$CreateItemStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<File> selectedImages, List<String> uploadedImageUrls, bool isUploadingImages, String? title, String? description, String? categoryId, ItemCondition? condition, String? city, double? geoLat, double? geoLng, double? price, bool isFree, bool isSubmitting, String? error, ItemModel? createdItem
+ List<File> selectedImages, List<String> uploadedImageUrls, bool isUploadingImages, String? title, String? description, String? categoryId, ItemCondition? condition, String? city, double? geoLat, double? geoLng, double? price, bool isFree, bool isSubmitting, String? error, ItemModel? createdItem, bool isEditMode, String? editingItemId, List<String> existingImageUrls
 });
 
 
@@ -312,7 +326,7 @@ class __$CreateItemStateCopyWithImpl<$Res>
 
 /// Create a copy of CreateItemState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? selectedImages = null,Object? uploadedImageUrls = null,Object? isUploadingImages = null,Object? title = freezed,Object? description = freezed,Object? categoryId = freezed,Object? condition = freezed,Object? city = freezed,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isSubmitting = null,Object? error = freezed,Object? createdItem = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? selectedImages = null,Object? uploadedImageUrls = null,Object? isUploadingImages = null,Object? title = freezed,Object? description = freezed,Object? categoryId = freezed,Object? condition = freezed,Object? city = freezed,Object? geoLat = freezed,Object? geoLng = freezed,Object? price = freezed,Object? isFree = null,Object? isSubmitting = null,Object? error = freezed,Object? createdItem = freezed,Object? isEditMode = null,Object? editingItemId = freezed,Object? existingImageUrls = null,}) {
   return _then(_CreateItemState(
 selectedImages: null == selectedImages ? _self._selectedImages : selectedImages // ignore: cast_nullable_to_non_nullable
 as List<File>,uploadedImageUrls: null == uploadedImageUrls ? _self._uploadedImageUrls : uploadedImageUrls // ignore: cast_nullable_to_non_nullable
@@ -329,7 +343,10 @@ as double?,isFree: null == isFree ? _self.isFree : isFree // ignore: cast_nullab
 as bool,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,createdItem: freezed == createdItem ? _self.createdItem : createdItem // ignore: cast_nullable_to_non_nullable
-as ItemModel?,
+as ItemModel?,isEditMode: null == isEditMode ? _self.isEditMode : isEditMode // ignore: cast_nullable_to_non_nullable
+as bool,editingItemId: freezed == editingItemId ? _self.editingItemId : editingItemId // ignore: cast_nullable_to_non_nullable
+as String?,existingImageUrls: null == existingImageUrls ? _self._existingImageUrls : existingImageUrls // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 

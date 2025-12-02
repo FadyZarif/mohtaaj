@@ -23,8 +23,8 @@ class Routes {
   static const String itemsListScreen = '/items';
   static const String itemDetailsScreen = '/itemDetails';
   static const String createItemScreen = '/createItem';
-  static const String editItemScreen = '/editItem';
-  static const String myItemsScreen = '/myItems';
+  static const String editItemScreen = '/editItemScreen';
+  static const String myItemsScreen = '/myItemsScreen';
 
 
   // Profile Routes

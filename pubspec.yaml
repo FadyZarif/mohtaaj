@@ -87,6 +87,10 @@ dependencies:
   # Localization
   #easy_localization: ^3.0.8
   permission_handler: ^12.0.1
+  # Socket IO
+  socket_io_client: ^3.1.3
+  # Time Ago
+  timeago: ^3.7.1
 
 dev_dependencies:
   flutter_test:

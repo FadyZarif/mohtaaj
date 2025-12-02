@@ -5,6 +5,7 @@ import '../../features/items/logic/create_item_cubit/create_item_cubit.dart';
 import '../../features/items/logic/item_details_cubit/item_details_cubit.dart';
 import '../../features/items/logic/items_list_cubit/items_list_cubit.dart';
 import '../../features/main_layout/logic/main_layout_cubit/main_layout_cubit.dart';
+import '../../features/profile/logic/my_items_cubit/my_items_cubit.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/categories/logic/categories_cubit/categories_cubit.dart';
 import '../../features/home/logic/home_cubit/home_cubit.dart';
@@ -61,6 +62,10 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactoryParam<UserProfileCubit, String, void>(
         (userId, _) => UserProfileCubit(getIt<ApiService>(), userId),
+  );
+
+  getIt.registerFactory<MyItemsCubit>(
+        () => MyItemsCubit(getIt(), getIt()),
   );
 
   // ========================== Categories ==========================

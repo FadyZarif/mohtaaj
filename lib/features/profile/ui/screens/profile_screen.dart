@@ -166,7 +166,7 @@ class _ProfileScreenBody extends StatelessWidget {
                   icon: Icons.list_alt,
                   title: 'إعلاناتي (${user.itemsCount})',
                   onTap: () {
-                    // TODO: Navigate to My Items
+                    context.pushNamed(Routes.myItemsScreen);
                   },
                 ),
                 Divider(

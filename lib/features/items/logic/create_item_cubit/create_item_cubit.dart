@@ -8,6 +8,7 @@ import '../../../../core/networking/api_service.dart';
 import '../../../../core/services/location_service.dart';
 import '../../data/models/create_item_request.dart';
 import '../../data/models/item_model.dart';
+import '../../data/models/update_item_request.dart';
 import 'create_item_state.dart';
 
 class CreateItemCubit extends Cubit<CreateItemState> {
@@ -131,13 +132,143 @@ class CreateItemCubit extends Cubit<CreateItemState> {
     ));
   }
 
-  // Validate Form
-  bool _validateForm() {
-    if (state.selectedImages.isEmpty) {
-      emit(state.copyWith(error: 'يجب إضافة صورة واحدة على الأقل'));
-      return false;
-    }
+  // Reset Form
+  void reset() {
+    emit(const CreateItemState());
+  }
 
+ // ========================== Edit Item Functionality ==========================
+
+  // Initialize Edit Mode
+  void initEditMode(ItemModel item) {
+    emit(state.copyWith(
+      isEditMode: true,
+      editingItemId: item.id,
+      title: item.title,
+      description: item.description,
+      categoryId: item.category.id,
+      condition: item.condition,
+      price: item.isFree ? null : (item.price != null ? double.tryParse(item.price!) : null),
+      isFree: item.isFree,
+      city: item.city,
+      existingImageUrls: item.images,
+      error: null,
+    ));
+  }
+
+  // Remove existing image
+  void removeExistingImage(int index) {
+    final updatedImages = List<String>.from(state.existingImageUrls);
+    updatedImages.removeAt(index);
+    emit(state.copyWith(existingImageUrls: updatedImages));
+  }
+
+  // Submit Item (Create)
+  Future<void> submitItem() async {
+    if (!_validateCreateForm()) return;
+
+    emit(state.copyWith(isSubmitting: true, error: null));
+
+    try {
+      // 1. Upload images
+      emit(state.copyWith(isUploadingImages: true));
+      final imageUrls = await _uploadImagesToCloudinary(state.selectedImages);
+      emit(state.copyWith(isUploadingImages: false));
+
+      if (imageUrls.isEmpty) {
+        emit(state.copyWith(
+          isSubmitting: false,
+          error: 'فشل رفع الصور',
+        ));
+        return;
+      }
+
+      // 2. Create request
+      final request = CreateItemRequest(
+        title: state.title ?? '',
+        description: state.description ?? '',
+        categoryId: state.categoryId!,
+        price: state.isFree ? null : state.price,
+        isFree: state.isFree,
+        condition: state.condition,
+        images: imageUrls,
+        city: state.city ?? '',
+        geoLat: state.geoLat,
+        geoLng: state.geoLng,
+      );
+
+      // 3. Call API
+      final response = await _apiService.createItem(request);
+
+      emit(state.copyWith(
+        isSubmitting: false,
+        createdItem: response.data,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        isSubmitting: false,
+        error: ApiErrorHandler.handle(error).message,
+      ));
+    }
+  }
+
+  // Update Item (Edit)
+  Future<void> updateItem() async {
+    if (!_validateEditForm()) return;
+
+    emit(state.copyWith(isSubmitting: true, error: null));
+
+    try {
+      // 1. Upload new images if any
+      List<String> newImageUrls = [];
+      if (state.selectedImages.isNotEmpty) {
+        emit(state.copyWith(isUploadingImages: true));
+        newImageUrls = await _uploadImagesToCloudinary(state.selectedImages);
+        emit(state.copyWith(isUploadingImages: false));
+      }
+
+      // 2. Combine existing + new images
+      final allImageUrls = [...state.existingImageUrls, ...newImageUrls];
+
+      if (allImageUrls.isEmpty) {
+        emit(state.copyWith(
+          isSubmitting: false,
+          error: 'يجب إضافة صورة واحدة على الأقل',
+        ));
+        return;
+      }
+
+      // 3. Create update request
+      final request = UpdateItemRequest(
+        title: state.title ?? '',
+        description: state.description ?? '',
+        categoryId: state.categoryId!,
+        price: state.isFree ? null : state.price,
+        isFree: state.isFree,
+        condition: state.condition,
+        images: allImageUrls,
+        city: state.city ?? '',
+        geoLat: state.geoLat,
+        geoLng: state.geoLng,
+      );
+
+      // 4. Call API
+      final response = await _apiService.updateItem(state.editingItemId!, request);
+
+      emit(state.copyWith(
+        isSubmitting: false,
+        createdItem: response.data,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        isSubmitting: false,
+        error: ApiErrorHandler.handle(error).message,
+      ));
+    }
+  }
+
+  // Validate for Create
+  bool _validateCreateForm() {
     if (state.title == null || state.title!.trim().isEmpty) {
       emit(state.copyWith(error: 'يجب إدخال عنوان الإعلان'));
       return false;
@@ -148,7 +279,7 @@ class CreateItemCubit extends Cubit<CreateItemState> {
       return false;
     }
 
-    if (state.categoryId == null) {
+    if (state.categoryId == null || state.categoryId!.isEmpty) {
       emit(state.copyWith(error: 'يجب اختيار التصنيف'));
       return false;
     }
@@ -158,74 +289,57 @@ class CreateItemCubit extends Cubit<CreateItemState> {
       return false;
     }
 
-    if (!state.isFree && state.price == null) {  // ← غير الشرط
-      emit(state.copyWith(error: 'يجب إدخال السعر أو اختيار مجاني'));
+    if (state.selectedImages.isEmpty) {
+      emit(state.copyWith(error: 'يجب إضافة صورة واحدة على الأقل'));
       return false;
     }
 
     return true;
   }
-  // Upload Images (Mock - replace with actual upload)
-  Future<List<String>> _uploadImages(List<File> images) async {
-    try {
-      final response = await _apiService.uploadImages(
-        images,
-        'items', // folder name
-      );
 
-      return response.data.images.map((img) => img.url).toList();
-    } catch (error) {
-      throw Exception('فشل رفع الصور. حاول مرة أخرى.');
+  // Validate for Edit
+  bool _validateEditForm() {
+    if (state.title == null || state.title!.trim().isEmpty) {
+      emit(state.copyWith(error: 'يجب إدخال عنوان الإعلان'));
+      return false;
     }
+
+    if (state.description == null || state.description!.trim().isEmpty) {
+      emit(state.copyWith(error: 'يجب إدخال وصف الإعلان'));
+      return false;
+    }
+
+    if (state.categoryId == null || state.categoryId!.isEmpty) {
+      emit(state.copyWith(error: 'يجب اختيار التصنيف'));
+      return false;
+    }
+
+    if (state.city == null || state.city!.trim().isEmpty) {
+      emit(state.copyWith(error: 'يجب إدخال المدينة'));
+      return false;
+    }
+
+    if (state.selectedImages.isEmpty && state.existingImageUrls.isEmpty) {
+      emit(state.copyWith(error: 'يجب إضافة صورة واحدة على الأقل'));
+      return false;
+    }
+
+    return true;
   }
 
-  // Submit Form
-  Future<void> submitItem() async {
-    if (!_validateForm()) return;
+  // Upload images to Cloudinary
+  Future<List<String>> _uploadImagesToCloudinary(List<File> images) async {
+    final List<String> uploadedUrls = [];
 
-    emit(state.copyWith(isSubmitting: true, error: null));
-
-    try {
-      emit(state.copyWith(isUploadingImages: true));
-      final imageUrls = await _uploadImages(state.selectedImages);
-      emit(state.copyWith(
-        uploadedImageUrls: imageUrls,
-        isUploadingImages: false,
-      ));
-
-      final request = CreateItemRequest(
-        title: state.title!,
-        description: state.description!,
-        categoryId: state.categoryId!,
-        condition: state.condition,
-        images: imageUrls,
-        city: state.city!,
-        geoLat: state.geoLat,
-        geoLng: state.geoLng,
-        price: state.price,
-        isFree: state.isFree,
-      );
-
-      final response = await _apiService.createItem(request);
-
-      emit(state.copyWith(
-        isSubmitting: false,
-        createdItem: response.data,
-      ));
-
-
-    } catch (error) {
-      final errorMessage = ApiErrorHandler.handle(error).message;
-      emit(state.copyWith(
-        isSubmitting: false,
-        isUploadingImages: false,
-        error: errorMessage,
-      ));
+    for (final image in images) {
+      try {
+        final response = await _apiService.uploadImage(image, 'items');
+        uploadedUrls.add(response.data.url);
+      } catch (e) {
+        throw Exception('فشل رفع الصور');
+      }
     }
-  }
 
-  // Reset Form
-  void reset() {
-    emit(const CreateItemState());
+    return uploadedUrls;
   }
 }

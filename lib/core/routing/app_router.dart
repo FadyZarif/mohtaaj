@@ -3,11 +3,14 @@ import 'package:mohtaaj/features/categories/ui/screens/categories_screen.dart';
 import '../../features/auth/data/models/user_model.dart';
 import '../../features/categories/data/models/category_model.dart';
 import '../../features/favorites/ui/screens/favorites_screen.dart';
+import '../../features/items/data/models/item_model.dart';
 import '../../features/items/ui/screens/category_items_screen.dart';
+import '../../features/items/ui/screens/edit_item_screen.dart';
 import '../../features/items/ui/screens/item_details_screen.dart';
 import '../../features/main_layout/ui/screens/main_layout_screen.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/profile/ui/screens/edit_profile_screen.dart';
+import '../../features/profile/ui/screens/my_items_screen.dart';
 import '../../features/profile/ui/screens/user_profile_screen.dart';
 import '../../features/search/ui/screens/search_screen.dart';
 import 'routes.dart';
@@ -56,6 +59,19 @@ class AppRouter {
         final cubit = args['cubit'] as ProfileCubit;
         return MaterialPageRoute(
           builder: (_) => EditProfileScreen(user: user, cubit: cubit),
+        );
+
+    // في app_router.dart:
+      case Routes.editItemScreen:
+        final item = settings.arguments as ItemModel;
+        return MaterialPageRoute(
+          builder: (_) => EditItemScreen(item: item),
+        );
+
+      // My Items Screen
+      case Routes.myItemsScreen:
+        return MaterialPageRoute(
+          builder: (_) => const MyItemsScreen(),
         );
 
       // Item Details Screen

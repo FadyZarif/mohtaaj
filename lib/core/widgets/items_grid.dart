@@ -62,7 +62,7 @@ class ItemsGrid extends StatelessWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 12.w,
               mainAxisSpacing: 12.h,
-              childAspectRatio: 0.7,
+              childAspectRatio: 0.65,
             ),
             itemCount: items.length + (isLoading ? 2 : 0),
             itemBuilder: (context, index) {
@@ -72,6 +72,7 @@ class ItemsGrid extends StatelessWidget {
               return ItemCard(
                 item: items[index],
                 onTap: () => onItemTap(items[index]),
+                showStatus: true,
               );
             },
           ),

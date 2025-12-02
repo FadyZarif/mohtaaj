@@ -1,24 +1,23 @@
-// features/items/data/models/update_item_request.dart
-
+// lib/features/items/data/models/update_item_request.dart
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'item_model.dart';
 
 part 'update_item_request.freezed.dart';
 part 'update_item_request.g.dart';
 
 @freezed
 abstract class UpdateItemRequest with _$UpdateItemRequest {
-  @JsonSerializable(includeIfNull: false)
   const factory UpdateItemRequest({
-    String? title,
-    String? description,
-    String? categoryId,
-    String? condition,
-    List<String>? images,
-    String? city,
-    String? geoLat,
-    String? geoLng,
-    String? price,
-    bool? isFree,
+    required String title,
+    required String description,
+    required String categoryId,
+    double? price, // ✅ double
+    @Default(true) bool isFree,
+    ItemCondition? condition, // ✅ enum
+    required List<String> images,
+    required String city,
+    @JsonKey(includeIfNull: false) double? geoLat,
+    @JsonKey(includeIfNull: false) double? geoLng,
   }) = _UpdateItemRequest;
 
   factory UpdateItemRequest.fromJson(Map<String, dynamic> json) =>

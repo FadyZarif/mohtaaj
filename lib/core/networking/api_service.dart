@@ -126,15 +126,17 @@ abstract class ApiService {
   );
 
   // Get User Items
-  @GET('${ApiConstants.itemsByUser}/{userId}')
-  Future<ItemsResponse> getItemsByUser(
-    @Path('userId') String userId,
-    @Queries() Map<String, dynamic>? queries,
-  );
+  // @GET('${ApiConstants.itemsByUser}/{userId}')
+  // Future<ItemsResponse> getItemsByUser(
+  //   @Path('userId') String userId,
+  //   @Queries() Map<String, dynamic>? queries,
+  // );
 
   // Get My Items
   @GET(ApiConstants.myItems)
-  Future<ItemsResponse> getMyItems(@Queries() Map<String, dynamic>? queries);
+  Future<ItemsResponse> getMyItems(
+      @Queries() ItemsQueries? queries,
+      );
 
   // Create Item
   @POST(ApiConstants.items)

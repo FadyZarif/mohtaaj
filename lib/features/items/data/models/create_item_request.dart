@@ -18,8 +18,8 @@ abstract class CreateItemRequest with _$CreateItemRequest {
     ItemCondition? condition,
     required List<String> images,
     required String city,
-    double? geoLat,  // 👈 غير من String لـ double
-    double? geoLng,  // 👈 غير من String لـ double
+    @JsonKey(includeIfNull: false) double? geoLat,
+    @JsonKey(includeIfNull: false) double? geoLng,
     double? price,
     required bool isFree,
   }) = _CreateItemRequest;

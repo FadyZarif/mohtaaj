@@ -4,16 +4,19 @@ import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
+import '../../../../core/widgets/item_status_badge.dart';
 import '../../../items/data/models/item_model.dart';
 
 class ItemCard extends StatelessWidget {
   final ItemModel item;
   final VoidCallback? onTap;
+  final bool showStatus; // ✅ أضف ده
 
   const ItemCard({
     super.key,
     required this.item,
     this.onTap,
+    this.showStatus = false, // ✅ default false
   });
 
   @override
@@ -37,17 +40,23 @@ class ItemCard extends StatelessWidget {
           children: [
             // Image
             _buildImage(),
+
             // Content
             Padding(
               padding: EdgeInsets.all(8.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (showStatus) ...[
+                    ItemStatusBadge(status: item.status),
+                    verticalSpace(4),
+                  ],
+
                   // Title
                   Text(
                     item.title,
                     style: TextStyles.font14BlackSemiBold,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   verticalSpace(4),
@@ -85,19 +94,20 @@ class ItemCard extends StatelessWidget {
           ),
         ),
         // Badges
-        Positioned(
+        Positioned.directional(
           top: 8.h,
-          right: 8.w,
+          start: 8.w,
+          textDirection: TextDirection.rtl,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (item.isFeatured)
-                _buildBadge('سعر مميز', ColorsManager.mainColor),
-              if (item.isFree)
-                Padding(
-                  padding: EdgeInsets.only(top: 4.h),
-                  child: _buildBadge('مجاني', ColorsManager.success),
-                ),
+                _buildBadge('مميز', ColorsManager.badgeGold),
+              // if (item.isFree)
+              //   Padding(
+              //     padding: EdgeInsets.only(top: 4.h),
+              //     child: _buildBadge('مجاني', ColorsManager.success),
+              //   ),
             ],
           ),
         ),
@@ -127,9 +137,7 @@ class ItemCard extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyles.font10GreyMedium.copyWith(
-          color: Colors.white,
-        ),
+        style: TextStyles.font10GreyMedium.copyWith(color: Colors.white),
       ),
     );
   }
@@ -147,23 +155,14 @@ class ItemCard extends StatelessWidget {
     if (item.price != null) {
       return Row(
         children: [
-          Text(
-            item.price!,
-            style: TextStyles.priceStyleSmall,
-          ),
+          Text(item.price!, style: TextStyles.priceStyleSmall),
           SizedBox(width: 4.w),
-          Text(
-            'ل.س',
-            style: TextStyles.font12GreyMedium,
-          ),
+          Text('\$', style: TextStyles.font12GreyMedium),
         ],
       );
     }
 
-    return Text(
-      'قابل للتفاوض',
-      style: TextStyles.font12CyanMedium,
-    );
+    return Text('قابل للتفاوض', style: TextStyles.font12CyanMedium);
   }
 
   Widget _buildLocationTime() {
@@ -184,10 +183,7 @@ class ItemCard extends StatelessWidget {
           ),
         ),
         // Time
-        Text(
-          item.createdAt.timeAgo(),
-          style: TextStyles.font10GreyRegular,
-        ),
+        Text(item.createdAt.timeAgo(), style: TextStyles.font10GreyRegular),
       ],
     );
   }

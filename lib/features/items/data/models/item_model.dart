@@ -1,6 +1,9 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../core/theming/colors.dart';
+import 'package:flutter/material.dart';
+
 part 'item_model.freezed.dart';
 part 'item_model.g.dart';
 
@@ -54,6 +57,32 @@ enum ItemStatus {
   reported,
 }
 
+extension ItemStatusX on ItemStatus {
+  String get displayName {
+    switch (this) {
+      case ItemStatus.pending:
+        return 'قيد المراجعة';
+      case ItemStatus.active:
+        return 'نشط';
+      case ItemStatus.closed:
+        return 'مغلق';
+      case ItemStatus.reported:
+        return 'مبلغ عنه';
+    }
+  }
+  Color get color {
+    switch (this) {
+      case ItemStatus.pending:
+        return ColorsManager.warning ?? Colors.orange;
+      case ItemStatus.active:
+        return ColorsManager.success;
+      case ItemStatus.closed:
+        return Color(0xFF6C757D); // Gray
+      case ItemStatus.reported:
+        return ColorsManager.error;
+    }
+  }
+}
 
 
 @freezed

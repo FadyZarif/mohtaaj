@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mohtaaj/features/categories/ui/screens/categories_screen.dart';
 import '../../features/auth/data/models/user_model.dart';
 import '../../features/categories/data/models/category_model.dart';
+import '../../features/chats/logic/chat_room/chat_room_cubit.dart';
+import '../../features/chats/logic/chats_list/chats_list_cubit.dart';
+import '../../features/chats/ui/screens/chat_room_screen.dart';
+import '../../features/chats/ui/screens/chats_list_screen.dart';
 import '../../features/favorites/ui/screens/favorites_screen.dart';
 import '../../features/items/data/models/item_model.dart';
 import '../../features/items/ui/screens/category_items_screen.dart';
@@ -13,6 +18,7 @@ import '../../features/profile/ui/screens/edit_profile_screen.dart';
 import '../../features/profile/ui/screens/my_items_screen.dart';
 import '../../features/profile/ui/screens/user_profile_screen.dart';
 import '../../features/search/ui/screens/search_screen.dart';
+import '../di/dependency_injection.dart';
 import 'routes.dart';
 import '../../features/onboarding/ui/screens/onboarding_screen.dart';
 import '../../features/auth/ui/login_screen.dart';
@@ -109,6 +115,24 @@ class AppRouter {
           builder: (_) => CategoryItemsScreen(category: category),
         );
 
+      // Chats List Screen
+      case Routes.chatsListScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<ChatsListCubit>(),
+            child: const ChatsListScreen(),
+          ),
+        );
+
+     // Chat Room Screen
+      case Routes.chatRoomScreen:
+        final chatId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<ChatRoomCubit>(param1: chatId),
+            child: ChatRoomScreen(chatId: chatId),
+          ),
+        );
       default:
         return null;
     }

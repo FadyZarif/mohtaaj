@@ -37,6 +37,11 @@ class ApiConstants {
   // Favorites
   static const String favorites = '$apiPath/favorites';
 
+  // chat
+  static const String chats = '$apiPath/chats';
+  static const String unreadCount = '$apiPath/chats/unread-count';
+  static const String messages = '$apiPath/messages';
+
   // Offers
   static const String offers = '$apiPath/offers';
   static const String receivedOffers = '$apiPath/offers/received';

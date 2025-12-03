@@ -34,6 +34,10 @@ class Routes {
   
   // Favorites Routes
   static const String favoritesScreen = '/favoritesScreen';
+
+  // Chats
+  static const String chatsListScreen = '/chatsListScreen';
+  static const String chatRoomScreen = '/chatRoomScreen';
   
   // Offers Routes
   static const String offersScreen = '/offers';

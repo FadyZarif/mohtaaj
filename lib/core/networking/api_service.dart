@@ -7,6 +7,7 @@ import '../../features/auth/data/models/refresh_token_response.dart';
 import '../../features/auth/data/models/register_request.dart';
 import '../../features/auth/data/models/register_response.dart';
 import '../../features/categories/data/models/categories_response.dart';
+import '../../features/chats/data/models/chat_model.dart';
 import '../../features/favorites/data/models/add_favorite_response.dart';
 import '../../features/favorites/data/models/check_favorite_response.dart';
 import '../../features/favorites/data/models/favorite_count_response.dart';
@@ -203,6 +204,48 @@ abstract class ApiService {
 
   @GET(ApiConstants.favorites)
   Future<FavoritesResponse> getMyFavorites(@Queries() ItemsQueries queries);
+
+
+  // ========================== Chats ==========================
+
+  @POST(ApiConstants.chats)
+  Future<ChatResponse> createChat(@Body() CreateChatRequest request);
+
+  @GET(ApiConstants.chats)
+  Future<ChatsResponse> getChats({
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+    @Query('search') String? search,
+  });
+
+  @GET('${ApiConstants.chats}/{chatId}')
+  Future<ChatResponse> getChatById(@Path('chatId') String chatId);
+
+  @POST('${ApiConstants.chats}/messages')
+  Future<MessageResponse> sendMessage(@Body() SendMessageRequest request);
+
+  @GET('${ApiConstants.chats}/{chatId}/messages')
+  Future<MessagesResponse> getMessages(
+      @Path('chatId') String chatId, {
+        @Query('page') int? page,
+        @Query('limit') int? limit,
+        @Query('before') String? before,
+      });
+
+  @POST('${ApiConstants.chats}/{chatId}/read')
+  Future<CountResponse> markAsRead(@Path('chatId') String chatId);
+
+  @GET(ApiConstants.unreadCount)
+  Future<CountResponse> getUnreadCount();
+
+  @PATCH('${ApiConstants.chats}/messages/{messageId}')
+  Future<MessageResponse> editMessage(
+      @Path('messageId') String messageId,
+      @Body() EditMessageRequest request,
+      );
+
+  @DELETE('${ApiConstants.chats}/messages/{messageId}')
+  Future<void> deleteMessage(@Path('messageId') String messageId);
 
   // ========================== Offers ==========================
 

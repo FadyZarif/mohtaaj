@@ -76,6 +76,13 @@ class TextStyles {
     height: 1.4,
   );
 
+  static TextStyle font18GreyMedium = TextStyle(
+    fontSize: 18.sp,
+    fontWeight: FontWeightHelper.medium,
+    color: ColorsManager.textSecondary,
+    height: 1.4,
+  );
+
   static TextStyle font18WhiteSemiBold = TextStyle(
     fontSize: 18.sp,
     fontWeight: FontWeightHelper.semiBold,
@@ -234,6 +241,13 @@ class TextStyles {
     height: 1.5,
   );
 
+  static TextStyle font14WhiteRegular = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeightHelper.regular,
+    color: ColorsManager.textOnPrimary,
+    height: 1.5,
+  );
+
   static TextStyle font14WhiteSemiBold = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeightHelper.semiBold,
@@ -320,6 +334,15 @@ class TextStyles {
     color: ColorsManager.textOnPrimary,
     height: 1.5,
   );
+
+  static TextStyle font12WhiteBold = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeightHelper.bold,
+    color: ColorsManager.textOnPrimary,
+    height: 1.5,
+  );
+
+
 
   // ==================== Tiny - 10sp ====================
 

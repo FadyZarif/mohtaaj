@@ -1,5 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import '../../features/chats/data/services/socket_service.dart';
+import '../../features/chats/logic/chat_room/chat_room_cubit.dart';
+import '../../features/chats/logic/chats_list/chats_list_cubit.dart';
+import '../../features/chats/logic/socket/socket_cubit.dart';
 import '../../features/favorites/logic/favorites_cubit/favorites_cubit.dart';
 import '../../features/items/logic/create_item_cubit/create_item_cubit.dart';
 import '../../features/items/logic/item_details_cubit/item_details_cubit.dart';
@@ -103,5 +107,29 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<FavoritesCubit>(
         () => FavoritesCubit(getIt<ApiService>()),
+  );
+
+  // ========================== Socket Service ==========================
+  getIt.registerLazySingleton<SocketService>(() => SocketService());
+
+  // ========================== Socket Cubit ==========================
+  getIt.registerFactory<SocketCubit>(
+        () => SocketCubit(getIt<SocketService>()),
+  );
+
+  // ========================== Chats Cubits ==========================
+  getIt.registerFactory<ChatsListCubit>(
+        () => ChatsListCubit(
+      getIt<ApiService>(),
+      getIt<SocketService>(),
+    ),
+  );
+
+  getIt.registerFactoryParam<ChatRoomCubit, String, void>(
+        (chatId, _) => ChatRoomCubit(
+      getIt<ApiService>(),
+      getIt<SocketService>(),
+      chatId,
+    ),
   );
 }

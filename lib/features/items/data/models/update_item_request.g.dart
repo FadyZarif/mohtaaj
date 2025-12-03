@@ -32,8 +32,8 @@ Map<String, dynamic> _$UpdateItemRequestToJson(_UpdateItemRequest instance) =>
       'condition': _$ItemConditionEnumMap[instance.condition],
       'images': instance.images,
       'city': instance.city,
-      'geoLat': instance.geoLat,
-      'geoLng': instance.geoLng,
+      'geoLat': ?instance.geoLat,
+      'geoLng': ?instance.geoLng,
     };
 
 const _$ItemConditionEnumMap = {

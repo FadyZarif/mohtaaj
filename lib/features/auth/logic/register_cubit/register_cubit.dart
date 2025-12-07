@@ -4,17 +4,20 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:mohtaaj/core/helpers/cache_helper.dart';
 import 'package:mohtaaj/core/services/auth_service.dart';
+import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/helpers/location_data.dart';
+import '../../../chats/data/services/socket_service.dart';
 import '../../data/models/register_request.dart';
 import 'register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
   final ApiService _apiService;
   final AuthService _authService;
+  final SocketService _socketService;
 
-  RegisterCubit(this._apiService, this._authService) : super(const RegisterState.initial());
+  RegisterCubit(this._apiService, this._authService, this._socketService) : super(const RegisterState.initial());
 
   String? detectedCity;
   String? detectedCountry;
@@ -138,6 +141,18 @@ class RegisterCubit extends Cubit<RegisterState> {
 
       // Save user Data
       await _authService.saveUserData(response.data.user);
+
+      // ✅ سجل الـ userId
+      if (getIt.isRegistered<String>(instanceName: 'userId')) {
+        await getIt.unregister<String>(instanceName: 'userId');
+      }
+      getIt.registerSingleton<String>(
+        response.data.user.id,
+        instanceName: 'userId',
+      );
+
+      // ✅ Connect Socket
+      await _socketService.connect();
 
       emit(const RegisterState.success('تم التسجيل بنجاح'));
     } catch (error) {

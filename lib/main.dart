@@ -6,6 +6,7 @@ import 'core/helpers/cache_helper.dart';
 import 'core/routing/app_router.dart';
 import 'core/routing/routes.dart';
 import 'core/services/auth_service.dart';
+import 'features/chats/data/services/socket_service.dart';
 import 'mohtaaj_app.dart';
 
 void main() async {
@@ -18,6 +19,9 @@ void main() async {
 
   // Setup dependency injection
   await setupGetIt();
+
+  // ✅ سجل الـ userId إذا كان User مسجل دخول
+  await _registerUserIdIfLoggedIn();
 
 
   // Determine initial route
@@ -32,6 +36,30 @@ void main() async {
 
   // Remove native splash
   // FlutterNativeSplash.remove();
+}
+
+Future<void> _registerUserIdIfLoggedIn() async {
+  try {
+    final authService = getIt<AuthService>();
+    final userId = await authService.getUserId();
+
+    if (userId != null && userId.isNotEmpty) {
+      // User is logged in - register userId
+      if (getIt.isRegistered<String>(instanceName: 'userId')) {
+        await getIt.unregister<String>(instanceName: 'userId');
+      }
+      getIt.registerSingleton<String>(userId, instanceName: 'userId');
+
+      // ✅ Connect Socket
+      await getIt<SocketService>().connect();
+
+      print('✅ User ID registered: $userId');
+    } else {
+      print('ℹ️ No user logged in');
+    }
+  } catch (e) {
+    print('❌ Error registering userId: $e');
+  }
 }
 
 Future<String> _determineInitialRoute() async {

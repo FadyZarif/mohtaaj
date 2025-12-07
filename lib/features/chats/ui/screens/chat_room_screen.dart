@@ -30,11 +30,18 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
   Timer? _typingTimer;
+  String? _currentUserId;
 
   @override
   void initState() {
     super.initState();
-    context.read<ChatRoomCubit>().init(getIt<String>()); // Current user ID
+    try {
+      _currentUserId = getIt<String>(instanceName: 'userId');
+      context.read<ChatRoomCubit>().init(_currentUserId!);
+    } catch (e) {
+      print('User not logged in: $e');
+      // Navigate back or show error
+    }
 
     // Listen to scroll for pagination
     _scrollController.addListener(_onScroll);
@@ -45,6 +52,22 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       // Reached top - load more messages
       context.read<ChatRoomCubit>().loadMoreMessages();
     }
+  }
+
+  // ✅ أضف الـ method ده
+  void _handleTyping() {
+    final cubit = context.read<ChatRoomCubit>();
+
+    // Emit typing = true
+    cubit.setTyping(true);
+
+    // Cancel previous timer
+    _typingTimer?.cancel();
+
+    // Stop typing after 2 seconds of inactivity
+    _typingTimer = Timer(const Duration(seconds: 2), () {
+      cubit.setTyping(false);
+    });
   }
 
   @override
@@ -64,6 +87,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         listener: (context, state) {
           state.maybeWhen(
             error: (message) {
+              print('❌ Error: $message');
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(message)),
               );
@@ -98,8 +122,22 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   // Input Field
                   ChatInputField(
                     controller: _messageController,
-                    onSend: _sendMessage,
-                    onTextChanged: _onTextChanged,
+                    onSend: () {
+                      final text = _messageController.text.trim();
+                      if (text.isNotEmpty) {
+                        context.read<ChatRoomCubit>().sendMessage(text);
+                        _messageController.clear();
+                      }
+                    },
+                    onTextChanged: (text) {
+                      _handleTyping();
+                    },
+                    onCameraPressed: () {
+                      context.read<ChatRoomCubit>().pickImageFromCamera();
+                    },
+                    onGalleryPressed: () {
+                      context.read<ChatRoomCubit>().pickImageFromGallery();
+                    },
                   ),
                 ],
               );
@@ -126,7 +164,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         builder: (context, state) {
           return state.maybeWhen(
             success: (chat, _, isOnline, __) {
-              final otherUser = chat.buyerId == getIt<String>()
+              final otherUser = chat.buyerId == _currentUserId
                   ? chat.seller
                   : chat.buyer;
 
@@ -182,7 +220,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 ],
               );
             },
-            orElse: () => const SizedBox(),
+            orElse: () => const Text(''),
           );
         },
       ),
@@ -218,21 +256,31 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       itemCount: messages.length + (isTyping ? 1 : 0),
       itemBuilder: (context, index) {
         // Typing indicator at bottom
-        if (isTyping && index == messages.length) {
+        if (isTyping && index == 0) {
           return const TypingIndicator();
         }
 
-        final messageIndex = isTyping ? index : index;
-        final reversedIndex = messages.length - 1 - messageIndex;
-        final message = messages[reversedIndex];
-        final isMe = message.senderId == getIt<String>();
+        final adjustedIndex = isTyping ? index - 1 : index;
 
-        // Show date separator
-        final showDateSeparator = reversedIndex == 0 ||
-            !_isSameDay(
-              message.createdAt,
-              messages[reversedIndex - 1].createdAt,
-            );
+        // ✅ messageIndex في الـ messages list
+        final messageIndex = messages.length - 1 - adjustedIndex;
+        final message = messages[messageIndex];
+        final isMe = message.senderId == _currentUserId;
+
+        // ✅ Date Separator يظهر فوق أول رسالة في اليوم الجديد
+        bool showDateSeparator = false;
+
+        if (messageIndex == 0) {
+          // ✅ أول رسالة (الأقدم) - دايماً نعرض separator فوقها
+          showDateSeparator = true;
+        } else {
+          // ✅ قارن مع الرسالة الأقدم منها (messageIndex - 1)
+          final previousMessage = messages[messageIndex - 1];
+          showDateSeparator = !_isSameDay(
+            message.createdAt,
+            previousMessage.createdAt,
+          );
+        }
 
         return Column(
           children: [
@@ -258,15 +306,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       padding: EdgeInsets.symmetric(vertical: 16.h),
       child: Row(
         children: [
-          Expanded(child: Divider(color: ColorsManager.dividerColor)),
+          Expanded(child: Divider(color: ColorsManager.borderColor)),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Text(
               _formatDate(date),
-              style: TextStyles.font12GreyRegular,
+              style: TextStyles.font12GreyMedium,
             ),
           ),
-          Expanded(child: Divider(color: ColorsManager.dividerColor)),
+          Expanded(child: Divider(color: ColorsManager.borderColor)),
         ],
       ),
     );
@@ -282,36 +330,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(const Duration(days: 1));
-    final messageDate = DateTime(date.year, date.month, date.day);
+    final chatDate = DateTime(date.year, date.month, date.day);
 
-    if (messageDate == today) {
+    if (chatDate == today) {
       return 'اليوم';
-    } else if (messageDate == yesterday) {
+    } else if (chatDate == yesterday) {
       return 'أمس';
     } else {
       return '${date.day}/${date.month}/${date.year}';
     }
-  }
-
-  void _sendMessage() {
-    final text = _messageController.text.trim();
-    if (text.isEmpty) return;
-
-    context.read<ChatRoomCubit>().sendMessage(text);
-    _messageController.clear();
-
-    // Scroll to bottom
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        0,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
-  }
-
-  void _onTextChanged(String text) {
-    context.read<ChatRoomCubit>().onTextChanged(text);
   }
 
   void _showEditDialog(MessageModel message) {
@@ -320,12 +347,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text('تعديل الرسالة', style: TextStyles.font18BlackBold),
+        title: Text('تعديل الرسالة', style: TextStyles.font16BlackSemiBold),
         content: TextField(
           controller: controller,
-          maxLines: 3,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
+          maxLines: null,
+          decoration: InputDecoration(
+            hintText: 'اكتب الرسالة...',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         ),
         actions: [
@@ -335,10 +365,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              context.read<ChatRoomCubit>().editMessage(
-                message.id,
-                controller.text.trim(),
-              );
+              final newText = controller.text.trim();
+              if (newText.isNotEmpty && newText != message.body) {
+                context.read<ChatRoomCubit>().editMessage(message.id, newText);
+              }
               Navigator.pop(dialogContext);
             },
             style: ElevatedButton.styleFrom(
@@ -355,7 +385,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text('حذف الرسالة', style: TextStyles.font18BlackBold),
+        title: Text('حذف الرسالة', style: TextStyles.font16BlackSemiBold),
         content: Text(
           'هل أنت متأكد من حذف هذه الرسالة؟',
           style: TextStyles.font14GreyRegular,

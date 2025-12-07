@@ -1,7 +1,10 @@
 // lib/features/chats/logic/chat_room/chat_room_cubit.dart
 
 import 'dart:async';
+import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../data/models/chat_model.dart';
@@ -11,6 +14,7 @@ import 'chat_room_state.dart';
 class ChatRoomCubit extends Cubit<ChatRoomState> {
   final ApiService _apiService;
   final SocketService _socketService;
+
   final String chatId;
 
   ChatModel? _currentChat;
@@ -64,7 +68,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       // Load messages
       final messagesResponse = await _apiService.getMessages(chatId, limit: 50);
-      _messages = messagesResponse.data.reversed.toList();
+      _messages = messagesResponse.data;
 
       emit(ChatRoomState.success(
         chat: _currentChat!,
@@ -73,8 +77,17 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         isOtherUserTyping: false,
       ));
 
-      // Mark as read
-      _socketService.markRead(chatId);
+      // ✅ Mark as read - بس لو فيه رسائل من الطرف الآخر
+      final hasUnreadMessages = _messages.any(
+            (msg) => msg.senderId != _currentUserId && msg.readAt == null,
+      );
+
+      if (hasUnreadMessages) {
+        print('📖 Marking unread messages as read');
+        _socketService.markRead(chatId);
+      } else {
+        print('ℹ️ No unread messages from other user');
+      }
     } catch (e) {
       final error = ApiErrorHandler.handle(e);
       emit(ChatRoomState.error(error.message ?? 'فشل تحميل المحادثة'));
@@ -82,29 +95,95 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   void _setupSocketListeners() {
-    // New message received
-    _newMessageSub = _socketService.newMessageStream.listen((data) {
-      final message = MessageModel.fromJson(data['message']);
-      if (message.chatId == chatId) {
-        _messages.add(message);
-        _emitSuccessState();
+    // Message sent confirmation
+    _messageSentSub = _socketService.messageSentStream.listen((data) {
+      print('📤 Message sent confirmation: $data');
 
-        // Mark as read
-        _socketService.markRead(chatId);
+      final message = MessageModel.fromJson(data['message']);
+
+      if (message.chatId == chatId) {
+        print('✅ Replacing optimistic message with confirmed message');
+
+        final index = _messages.indexWhere((m) =>
+        m.isOptimistic && m.body == message.body && m.type == message.type);
+
+        if (index != -1) {
+          _messages = [
+            ..._messages.sublist(0, index),
+            message,
+            ..._messages.sublist(index + 1),
+          ];
+          _emitSuccessState();
+          print('✅ Optimistic message replaced');
+        } else {
+          print('⚠️ Optimistic message not found, adding new message');
+          _messages = [..._messages, message];
+          _emitSuccessState();
+        }
       }
     });
 
-    // Message sent confirmation
-    _messageSentSub = _socketService.messageSentStream.listen((data) {
-      final message = MessageModel.fromJson(data['message']);
-      if (message.chatId == chatId) {
-        // Update optimistic message with real data
-        final index = _messages.indexWhere(
-              (m) => m.isOptimistic && m.body == message.body,
-        );
+    // New message received
+    _newMessageSub = _socketService.newMessageStream.listen((data) {
+      print('📩 Socket event received: $data');
+
+      final eventType = data['type'] as String?;
+
+      if (eventType == 'message_edited') {
+        // ✅ Handle edited message
+        print('✏️ Handling edited message');
+        final messageData = data['message'];
+        final messageId = messageData['id'] as String;
+
+        final index = _messages.indexWhere((m) => m.id == messageId);
         if (index != -1) {
-          _messages[index] = message;
+          final updatedMessage = MessageModel.fromJson(messageData);
+
+          _messages = [
+            ..._messages.sublist(0, index),
+            updatedMessage,
+            ..._messages.sublist(index + 1),
+          ];
+
           _emitSuccessState();
+          print('✅ Message edited in UI');
+        } else {
+          print('⚠️ Message not found for edit: $messageId');
+        }
+      } else if (eventType == 'message_deleted') {
+        // ✅ Handle deleted message
+        print('🗑️ Handling deleted message');
+        final messageData = data['message'];
+        final messageId = messageData['id'] as String;
+
+        final index = _messages.indexWhere((m) => m.id == messageId);
+        if (index != -1) {
+          final deletedMessage = MessageModel.fromJson(messageData);
+
+          _messages = [
+            ..._messages.sublist(0, index),
+            deletedMessage,
+            ..._messages.sublist(index + 1),
+          ];
+
+          _emitSuccessState();
+          print('✅ Message marked as deleted in UI');
+        } else {
+          print('⚠️ Message not found for delete: $messageId');
+        }
+      } else {
+        // ✅ Handle new message
+        final message = MessageModel.fromJson(data['message']);
+
+        if (message.chatId == chatId && message.senderId != _currentUserId) {
+          print('✅ Adding received message from other user');
+          _messages = [..._messages, message];
+          _emitSuccessState();
+
+          _socketService.markRead(chatId);
+          print('✅ Marked as read');
+        } else if (message.senderId == _currentUserId) {
+          print('ℹ️ Ignoring my own message (already handled by message_sent)');
         }
       }
     });
@@ -119,14 +198,21 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
     // Messages read
     _messagesReadSub = _socketService.messagesReadStream.listen((data) {
+      print('📖 Messages read event received: $data');
+
       if (data['chatId'] == chatId) {
-        // Update all unread messages to read
-        for (var i = 0; i < _messages.length; i++) {
-          if (_messages[i].senderId == _currentUserId && _messages[i].readAt == null) {
-            _messages[i] = _messages[i].copyWith(readAt: DateTime.now());
+        print('✅ Updating read receipts for my messages');
+
+        _messages = _messages.map((msg) {
+          if (msg.senderId == _currentUserId && msg.readAt == null) {
+            print('✓✓ Marking message as read: ${msg.id}');
+            return msg.copyWith(readAt: DateTime.now());
           }
-        }
+          return msg;
+        }).toList();
+
         _emitSuccessState();
+        print('✅ Read receipts updated in UI');
       }
     });
 
@@ -157,8 +243,52 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
+  void _handleEditedMessage(Map<String, dynamic> data) {
+    print('✏️ Handling edited message');
+
+    final messageData = data['message'];
+    final messageId = messageData['id'] as String;
+
+    final index = _messages.indexWhere((m) => m.id == messageId);
+    if (index != -1) {
+      final updatedMessage = MessageModel.fromJson(messageData);
+
+      _messages = [
+        ..._messages.sublist(0, index),
+        updatedMessage,
+        ..._messages.sublist(index + 1),
+      ];
+
+      _emitSuccessState();
+      print('✅ Message edited in UI');
+    }
+  }
+
+  void _handleDeletedMessage(Map<String, dynamic> data) {
+    print('🗑️ Handling deleted message');
+
+    final messageData = data['message'];
+    final messageId = messageData['id'] as String;
+
+    final index = _messages.indexWhere((m) => m.id == messageId);
+    if (index != -1) {
+      final deletedMessage = MessageModel.fromJson(messageData);
+
+      _messages = [
+        ..._messages.sublist(0, index),
+        deletedMessage, // ✅ نخلي الرسالة موجودة لكن isDeleted = true
+        ..._messages.sublist(index + 1),
+      ];
+
+      _emitSuccessState();
+      print('✅ Message marked as deleted in UI');
+    }
+  }
+
   void sendMessage(String body) {
     if (body.trim().isEmpty) return;
+
+    print('📝 Sending message: $body');
 
     // Optimistic UI update
     final optimisticMessage = MessageModel(
@@ -171,13 +301,151 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       isOptimistic: true,
     );
 
-    _messages.add(optimisticMessage);
+    print('➕ Adding optimistic message');
+
+    // ✅ اعمل list جديدة تماماً
+    _messages = [..._messages, optimisticMessage];
+
+    print('Messages count after add: ${_messages.length}');
+
     _emitSuccessState();
+    print('✅ State emitted with optimistic message');
 
     // Send via socket
     _socketService.sendMessage(chatId, body);
+    print('📡 Message sent via socket');
   }
 
+  final ImagePicker _imagePicker = ImagePicker();
+  // ✅ أضف Method - Pick from Gallery
+  Future<void> pickImageFromGallery() async {
+    try {
+      final XFile? image = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        final file = File(image.path);
+        await _sendImageMessage(file);
+      }
+    } catch (e) {
+      print('❌ Error picking image from gallery: $e');
+      emit(ChatRoomState.error('فشل اختيار الصورة'));
+      _emitSuccessState();
+    }
+  }
+
+  // ✅ أضف Method - Pick from Camera
+  Future<void> pickImageFromCamera() async {
+    try {
+      final XFile? image = await _imagePicker.pickImage(
+        source: ImageSource.camera,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        final file = File(image.path);
+        await _sendImageMessage(file);
+      }
+    } catch (e) {
+      print('❌ Error picking image from camera: $e');
+      emit(ChatRoomState.error('فشل التقاط الصورة'));
+      _emitSuccessState();
+    }
+  }
+
+  // ✅ أضف Method - Send Image Message
+  Future<void> _sendImageMessage(File imageFile) async {
+    try {
+      print('📤 Uploading image...');
+      // emit(const ChatRoomState.uploadingImage());
+
+      // 1. Upload image
+      final uploadResponse = await _apiService.uploadImage(
+        imageFile,
+        'chat-images',
+      );
+
+      final imageUrl = uploadResponse.data.url;
+      print('✅ Image uploaded: $imageUrl');
+
+      // 2. Create optimistic message
+      final optimisticMessage = MessageModel(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        chatId: chatId,
+        senderId: _currentUserId!,
+        body: '📷', // Empty body for image-only messages
+        type: MessageType.image,
+        imageUrl: imageUrl,
+        createdAt: DateTime.now(),
+        isOptimistic: true,
+      );
+
+      print('➕ Adding optimistic image message');
+      _messages = [..._messages, optimisticMessage];
+      _emitSuccessState();
+
+      // 3. Send via Socket
+      if (_socketService.isConnected) {
+        _socketService.sendMessage(
+          chatId,
+          '📷',
+          type: 'image',
+          imageUrl: imageUrl,
+        );
+        print('📡 Image message sent via socket');
+      } else {
+        print('⚠️ Socket not connected, reconnecting...');
+        await _socketService.connect();
+
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        if (_socketService.isConnected) {
+          _socketService.sendMessage(
+            chatId,
+            '📷',
+            type: 'image',
+            imageUrl: imageUrl,
+          );
+          print('✅ Reconnected - Image message sent via socket');
+        } else {
+          print('❌ Failed to reconnect');
+        }
+      }
+
+        // 4. Auto scroll to bottom
+        // Future.delayed(const Duration(milliseconds: 100), () {
+        //   if (_scrollController.hasClients) {
+        //     _scrollController.animateTo(
+        //       0,
+        //       duration: const Duration(milliseconds: 300),
+        //       curve: Curves.easeOut,
+        //     );
+        //   }
+        // });
+    } catch (e) {
+      print('❌ Error sending image: $e');
+      final error = ApiErrorHandler.handle(e);
+      emit(ChatRoomState.error(error.message ?? 'فشل إرسال الصورة'));
+      _emitSuccessState();
+    }
+  }
+
+  void setTyping(bool isTyping) {
+    if (_socketService.isConnected) {
+      _socketService.typing(chatId, isTyping);
+      print('⌨️ Typing: $isTyping');
+    } else {
+      print('❌ Cannot send typing - socket not connected');
+    }
+  }
+
+/*
   void sendImageMessage(String imageUrl, String body) {
     // Optimistic UI update
     final optimisticMessage = MessageModel(
@@ -197,6 +465,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     // Send via socket
     _socketService.sendMessage(chatId, body, type: 'image', imageUrl: imageUrl);
   }
+*/
 
   void onTextChanged(String text) {
     // Emit typing event
@@ -222,21 +491,44 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       final index = _messages.indexWhere((m) => m.id == messageId);
       if (index != -1) {
-        _messages[index] = response.data;
+        _messages = [
+          ..._messages.sublist(0, index),
+          response.data,
+          ..._messages.sublist(index + 1),
+        ];
         _emitSuccessState();
+
+        // ✅ Emit socket event (optional - الـ API بيعمل broadcast)
+        // _socketService.emit('edit_message', {'messageId': messageId, 'body': newBody});
       }
     } catch (e) {
       final error = ApiErrorHandler.handle(e);
       emit(ChatRoomState.error(error.message ?? 'فشل تعديل الرسالة'));
-      _emitSuccessState(); // Return to success state
+      _emitSuccessState();
     }
   }
 
   Future<void> deleteMessage(String messageId) async {
     try {
       await _apiService.deleteMessage(messageId);
-      _messages.removeWhere((m) => m.id == messageId);
+
+      // ✅ بدل ما نشيل الرسالة - نحدثها لـ isDeleted
+      final index = _messages.indexWhere((m) => m.id == messageId);
+      if (index != -1) {
+        _messages = [
+          ..._messages.sublist(0, index),
+          _messages[index].copyWith(
+            isDeleted: true,
+            body: '', // ✅ نفضي الـ body
+          ),
+          ..._messages.sublist(index + 1),
+        ];
+      }
+
       _emitSuccessState();
+
+      // ✅ Emit socket event (optional - الـ API بيعمل broadcast)
+      // _socketService.emit('delete_message', {'messageId': messageId});
     } catch (e) {
       final error = ApiErrorHandler.handle(e);
       emit(ChatRoomState.error(error.message ?? 'فشل حذف الرسالة'));
@@ -255,16 +547,23 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         before: oldestMessage.createdAt.toIso8601String(),
       );
 
-      final newMessages = response.data.reversed.toList();
-      _messages.insertAll(0, newMessages);
+      // ✅ خليها زي ما هي - شيل .reversed
+      final newMessages = response.data; // ✅ شيل .reversed.toList()
+
+      // ✅ حط الرسائل الجديدة (الأقدم) في الأول
+      _messages = [...newMessages, ..._messages];
+
       _emitSuccessState();
     } catch (e) {
-      // Ignore error for pagination
+      print('Error loading more messages: $e');
     }
   }
 
   void _emitSuccessState({bool? isOnline}) {
-    if (_currentChat == null) return;
+    if (_currentChat == null) {
+      print('❌ Cannot emit state: _currentChat is null');
+      return;
+    }
 
     final currentState = state;
     final currentOnlineStatus = currentState.maybeWhen(
@@ -272,9 +571,12 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       orElse: () => false,
     );
 
+    print('📤 Emitting success state with ${_messages.length} messages');
+
+    // ✅ استخدم spread operator عشان تضمن list جديدة
     emit(ChatRoomState.success(
       chat: _currentChat!,
-      messages: List.from(_messages),
+      messages: [..._messages], // ✅ هنا المهم
       isOtherUserOnline: isOnline ?? currentOnlineStatus,
       isOtherUserTyping: _isTyping,
     ));

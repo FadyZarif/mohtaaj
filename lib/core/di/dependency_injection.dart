@@ -32,104 +32,95 @@ Future<void> setupGetIt() async {
 
   // AuthService - Singleton لإدارة الـ Tokens
   getIt.registerLazySingleton<AuthService>(
-        () => AuthService(getIt<ApiService>()),
+    () => AuthService(getIt<ApiService>()),
   );
 
   getIt.registerLazySingleton<LocationService>(() => LocationService());
-
 
   // ========================== Auth ==========================
 
   // Login
   getIt.registerFactory<LoginCubit>(
-        () => LoginCubit(getIt<ApiService>(),getIt<AuthService>()),
+    () => LoginCubit(
+      getIt<ApiService>(),
+      getIt<AuthService>(),
+      getIt<SocketService>(),
+    ),
   );
 
   // Register
   getIt.registerFactory<RegisterCubit>(
-        () => RegisterCubit(getIt<ApiService>(),getIt<AuthService>()),
+    () => RegisterCubit(getIt<ApiService>(), getIt<AuthService>(), getIt<SocketService>(),)
   );
 
   // ========================== Main Layout ==========================
 
   getIt.registerFactory<MainLayoutCubit>(
-        () => MainLayoutCubit(getIt<AuthService>()),
+    () => MainLayoutCubit(getIt<AuthService>(), getIt<ApiService>(), getIt<SocketService>())
   );
 
   // ========================== Profile ==========================
 
   getIt.registerFactory<ProfileCubit>(
-          () => ProfileCubit(
-        getIt<ApiService>(),
-        getIt<AuthService>(),
-      ));
+    () => ProfileCubit(
+      getIt<ApiService>(),
+      getIt<AuthService>(),
+      getIt<SocketService>(),
+    ),
+  );
 
   getIt.registerFactoryParam<UserProfileCubit, String, void>(
-        (userId, _) => UserProfileCubit(getIt<ApiService>(), userId),
+    (userId, _) => UserProfileCubit(getIt<ApiService>(), userId),
   );
 
-  getIt.registerFactory<MyItemsCubit>(
-        () => MyItemsCubit(getIt(), getIt()),
-  );
+  getIt.registerFactory<MyItemsCubit>(() => MyItemsCubit(getIt(), getIt()));
 
   // ========================== Categories ==========================
 
   getIt.registerFactory<CategoriesCubit>(
-        () => CategoriesCubit(getIt<ApiService>()),
+    () => CategoriesCubit(getIt<ApiService>()),
   );
 
   // ========================== Home ==========================
 
-  getIt.registerFactory<HomeCubit>(
-        () => HomeCubit(getIt<ApiService>()),
-  );
-
+  getIt.registerFactory<HomeCubit>(() => HomeCubit(getIt<ApiService>()));
 
   // ========================== Items ==========================
 
   getIt.registerFactoryParam<ItemDetailsCubit, String, void>(
-        (itemId, _) => ItemDetailsCubit(getIt<ApiService>(), itemId),
+    (itemId, _) => ItemDetailsCubit(getIt<ApiService>(), itemId),
   );
 
   // ========================== Create Item ==========================
 
   getIt.registerFactory<CreateItemCubit>(
-        () => CreateItemCubit(getIt<ApiService>(), getIt<LocationService>()),
+    () => CreateItemCubit(getIt<ApiService>(), getIt<LocationService>()),
   );
 
   // ========================== Search ==========================
 
-  getIt.registerFactory<ItemsListCubit>(
-        () => ItemsListCubit(getIt()),
-  );
+  getIt.registerFactory<ItemsListCubit>(() => ItemsListCubit(getIt()));
 
   // ========================== Favorites ==========================
 
   getIt.registerFactory<FavoritesCubit>(
-        () => FavoritesCubit(getIt<ApiService>()),
+    () => FavoritesCubit(getIt<ApiService>()),
   );
 
   // ========================== Socket Service ==========================
   getIt.registerLazySingleton<SocketService>(() => SocketService());
 
   // ========================== Socket Cubit ==========================
-  getIt.registerFactory<SocketCubit>(
-        () => SocketCubit(getIt<SocketService>()),
-  );
+  getIt.registerFactory<SocketCubit>(() => SocketCubit(getIt<SocketService>()));
 
   // ========================== Chats Cubits ==========================
   getIt.registerFactory<ChatsListCubit>(
-        () => ChatsListCubit(
-      getIt<ApiService>(),
-      getIt<SocketService>(),
-    ),
+    () => ChatsListCubit(getIt<ApiService>(), getIt<SocketService>()),
   );
 
   getIt.registerFactoryParam<ChatRoomCubit, String, void>(
-        (chatId, _) => ChatRoomCubit(
-      getIt<ApiService>(),
-      getIt<SocketService>(),
-      chatId,
-    ),
+    (chatId, _) =>
+        ChatRoomCubit(getIt<ApiService>(), getIt<SocketService>(), chatId),
   );
+
 }

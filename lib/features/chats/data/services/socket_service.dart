@@ -11,9 +11,9 @@ class SocketService {
 
   IO.Socket? _socket;
   bool _isConnected = false;
-  final _connectionController = StreamController<bool>.broadcast();
 
-  // Event Streams
+  // Controllers
+  final _connectionController = StreamController<bool>.broadcast();
   final _newMessageController = StreamController<Map<String, dynamic>>.broadcast();
   final _messageSentController = StreamController<Map<String, dynamic>>.broadcast();
   final _messageNotificationController = StreamController<Map<String, dynamic>>.broadcast();
@@ -25,9 +25,8 @@ class SocketService {
   final _authInvalidController = StreamController<Map<String, dynamic>>.broadcast();
   final _tokenExpiringController = StreamController<Map<String, dynamic>>.broadcast();
 
+  // Getters
   bool get isConnected => _isConnected;
-  IO.Socket? get socket => _socket;
-
   Stream<bool> get connectionStream => _connectionController.stream;
   Stream<Map<String, dynamic>> get newMessageStream => _newMessageController.stream;
   Stream<Map<String, dynamic>> get messageSentStream => _messageSentController.stream;
@@ -41,26 +40,45 @@ class SocketService {
   Stream<Map<String, dynamic>> get tokenExpiringStream => _tokenExpiringController.stream;
 
   Future<void> connect() async {
-    if (_socket != null && _isConnected) return;
+    if (_socket != null && _isConnected) {
+      print('ℹ️ Socket already connected');
+      return;
+    }
 
-    final token = await CacheHelper.getSecureData(key: 'accessToken');
-    if (token == null) return;
+    try {
+      print('🔌 Getting token...');
+      final token = await CacheHelper.getSecureData(key: 'accessToken');
 
-    _socket = IO.io(
-      'https://mohtaaj.onrender.com',
-      IO.OptionBuilder()
-          .setTransports(['websocket', 'polling'])
-          .setAuth({'token': token})
-          .disableAutoConnect()
-          .build(),
-    );
+      if (token == null || token.isEmpty) {
+        print('❌ No token found');
+        return;
+      }
 
-    _setupListeners();
-    _socket!.connect();
+      print('✅ Token found, connecting...');
+
+      _socket = IO.io(
+        'https://mohtaaj.onrender.com',
+        IO.OptionBuilder()
+            .setTransports(['websocket', 'polling'])
+            .setAuth({'token': token})
+            .enableAutoConnect()
+            .enableReconnection()
+            .setReconnectionAttempts(5)
+            .setReconnectionDelay(1000)
+            .build(),
+      );
+
+      _setupListeners();
+      _socket!.connect();
+
+      print('🚀 Socket connection initiated');
+    } catch (e) {
+      print('❌ Socket connection error: $e');
+    }
   }
 
   void _setupListeners() {
-    // Connection Events
+    // Connection
     _socket!.onConnect((_) {
       _isConnected = true;
       _connectionController.add(true);
@@ -77,100 +95,158 @@ class SocketService {
       print('🔴 Connection Error: $error');
     });
 
-    // Auth Events
+    // Auth
     _socket!.on('connected', (data) {
-      print('✅ Connected: $data');
+      print('🔗 [Socket] connected: $data');
     });
 
     _socket!.on('auth_invalid', (data) {
+      print('🚫 [Socket] auth_invalid: $data');
       _authInvalidController.add(data);
     });
 
     _socket!.on('token_expiring_soon', (data) {
+      print('⚠️ [Socket] token_expiring_soon: $data');
       _tokenExpiringController.add(data);
     });
 
-    // Message Events
+    // Messages
     _socket!.on('new_message', (data) {
+      print('📩 [Socket] new_message: $data');
       _newMessageController.add(data);
     });
 
     _socket!.on('message_sent', (data) {
+      print('📤 [Socket] message_sent: $data');
       _messageSentController.add(data);
     });
 
     _socket!.on('new_message_notification', (data) {
+      print('🔔 [Socket] new_message_notification: $data');
       _messageNotificationController.add(data);
     });
 
-    // Typing Events
+    // ✅ Edit/Delete Events
+    _socket!.on('message_edited', (data) {
+      print('✏️ [Socket] message_edited: $data');
+      _newMessageController.add({
+        'type': 'message_edited',
+        'message': data['message'],
+      });
+    });
+
+    _socket!.on('message_deleted', (data) {
+      print('🗑️ [Socket] message_deleted: $data');
+      _newMessageController.add({
+        'type': 'message_deleted',
+        'message': data['message'],
+      });
+    });
+
+    // Typing
     _socket!.on('user_typing', (data) {
+      print('⌨️ [Socket] user_typing: $data');
       _userTypingController.add(data);
     });
 
-    // Read Events
+    // Read
     _socket!.on('messages_read', (data) {
+      print('📖 [Socket] messages_read: $data');
       _messagesReadController.add(data);
     });
 
     _socket!.on('marked_read', (data) {
-      print('✅ Marked as read: $data');
+      print('✅ [Socket] marked_read: $data');
+      _messagesReadController.add({
+        'chatId': data['chatId'],
+        'userId': data['userId'],
+        'timestamp': data['timestamp'],
+      });
     });
 
-    // Online Status Events
+    // Online Status
     _socket!.on('user_online', (data) {
+      print('🟢 [Socket] user_online: $data');
       _userOnlineController.add(data);
     });
 
     _socket!.on('user_offline', (data) {
+      print('⚫ [Socket] user_offline: $data');
       _userOfflineController.add(data);
     });
 
     _socket!.on('online_statuses', (data) {
+      print('📊 [Socket] online_statuses: $data');
       _onlineStatusesController.add(data);
     });
 
-    // Error Events
+    // Error
     _socket!.on('error', (data) {
-      print('🔴 Socket Error: $data');
+      print('🔴 [Socket] error: $data');
     });
   }
 
   // Emit Events
   void joinChat(String chatId) {
-    _socket?.emit('join_chat', {'chatId': chatId});
+    if (_isConnected) {
+      _socket?.emit('join_chat', {'chatId': chatId});
+      print('🏠 Joined chat: $chatId');
+    } else {
+      print('❌ Cannot join - not connected');
+    }
   }
 
   void leaveChat(String chatId) {
-    _socket?.emit('leave_chat', {'chatId': chatId});
+    if (_isConnected) {
+      _socket?.emit('leave_chat', {'chatId': chatId});
+      print('🚪 Left chat: $chatId');
+    }
   }
 
   void sendMessage(String chatId, String body, {String type = 'text', String? imageUrl}) {
-    final data = {
-      'chatId': chatId,
-      'body': body,
-      'type': type,
-    };
-    if (imageUrl != null) data['imageUrl'] = imageUrl;
-    _socket?.emit('send_message', data);
+    if (_isConnected) {
+      final data = {
+        'chatId': chatId,
+        'body': body,
+        'type': type,
+      };
+      if (imageUrl != null) data['imageUrl'] = imageUrl;
+
+      _socket?.emit('send_message', data);
+      print('📤 Sending message: $data');
+    } else {
+      print('❌ Cannot send - not connected');
+    }
   }
 
   void typing(String chatId, bool isTyping) {
-    _socket?.emit('typing', {'chatId': chatId, 'isTyping': isTyping});
+    if (_isConnected) {
+      _socket?.emit('typing', {'chatId': chatId, 'isTyping': isTyping});
+      print('⌨️ Typing: $isTyping in $chatId');
+    }
   }
 
   void markRead(String chatId) {
-    _socket?.emit('mark_read', {'chatId': chatId});
+    if (_isConnected) {
+      _socket?.emit('mark_read', {'chatId': chatId});
+      print('✅ Mark read: $chatId');
+    }
   }
 
   void checkOnline(List<String> userIds) {
-    _socket?.emit('check_online', {'userIds': userIds});
+    if (_isConnected) {
+      _socket?.emit('check_online', {'userIds': userIds});
+      print('🔍 Check online: $userIds');
+    }
   }
 
   void disconnect() {
+    print('🔌 Disconnecting...');
     _socket?.disconnect();
+    _socket?.dispose();
     _socket = null;
     _isConnected = false;
+    print('❌ Disconnected');
   }
 
   void dispose() {

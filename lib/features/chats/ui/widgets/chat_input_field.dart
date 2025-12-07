@@ -9,12 +9,16 @@ class ChatInputField extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onSend;
   final Function(String) onTextChanged;
+  final VoidCallback onCameraPressed;
+  final VoidCallback onGalleryPressed;
 
   const ChatInputField({
     super.key,
     required this.controller,
     required this.onSend,
     required this.onTextChanged,
+    required this.onCameraPressed,
+    required this.onGalleryPressed,
   });
 
   @override
@@ -34,33 +38,27 @@ class ChatInputField extends StatelessWidget {
       child: SafeArea(
         child: Row(
           children: [
-            // Camera button
+            // Gallery button
             IconButton(
-              onPressed: () {
-                // TODO: Implement image picker
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('إرسال صورة قريباً...')),
-                );
-              },
+              onPressed: onGalleryPressed,
               icon: Icon(
-                Icons.camera_alt,
-                color: ColorsManager.iconSecondary,
+                Icons.photo_library,
+                color: ColorsManager.mainColor,
+                size: 24.sp,
               ),
             ),
 
-            // Attachment button
+            // Camera button
             IconButton(
-              onPressed: () {
-                // TODO: Implement file picker
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('إرفاق ملف قريباً...')),
-                );
-              },
+              onPressed: onCameraPressed,
               icon: Icon(
-                Icons.attach_file,
-                color: ColorsManager.iconSecondary,
+                Icons.camera_alt,
+                color: ColorsManager.mainColor,
+                size: 24.sp,
               ),
             ),
+
+            SizedBox(width: 4.w),
 
             // Text field
             Expanded(

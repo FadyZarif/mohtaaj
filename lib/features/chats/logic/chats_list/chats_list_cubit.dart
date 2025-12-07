@@ -8,11 +8,13 @@ import '../../data/services/socket_service.dart';
 import 'chats_list_state.dart';
 import '../../../../core/networking/api_service.dart';
 
+// في ChatsListCubit
+
 class ChatsListCubit extends Cubit<ChatsListState> {
   final ApiService _apiService;
   final SocketService _socketService;
 
-  List<ChatModel> _allChats = [];
+  List<ChatModel> _allChats = []; // ✅ عادي
   ChatFilterType _currentFilter = ChatFilterType.all;
   String? _currentUserId;
   StreamSubscription? _messageNotificationSub;
@@ -27,7 +29,10 @@ class ChatsListCubit extends Cubit<ChatsListState> {
 
     try {
       final response = await _apiService.getChats(page: 1, limit: 100);
-      _allChats = response.data;
+
+      // ✅ اعمل copy من الـ list
+      _allChats = List<ChatModel>.from(response.data);
+
       _applyFilter();
       _listenToSocketEvents();
     } catch (e) {
@@ -44,6 +49,8 @@ class ChatsListCubit extends Cubit<ChatsListState> {
 
       if (index != -1) {
         final message = data['message'];
+
+        // ✅ استخدم copyWith بدل التعديل المباشر
         final updatedChat = _allChats[index].copyWith(
           lastMsg: message['body'],
           lastMsgType: MessageType.values.firstWhere(
@@ -54,8 +61,11 @@ class ChatsListCubit extends Cubit<ChatsListState> {
           updatedAt: DateTime.parse(message['createdAt']),
         );
 
+        // ✅ اعمل list جديدة بدل التعديل المباشر
+        _allChats = List<ChatModel>.from(_allChats);
         _allChats[index] = updatedChat;
         _allChats.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+
         _applyFilter();
       }
     });
@@ -76,8 +86,11 @@ class ChatsListCubit extends Cubit<ChatsListState> {
           updatedAt: DateTime.parse(message['createdAt']),
         );
 
+        // ✅ اعمل list جديدة
+        _allChats = List<ChatModel>.from(_allChats);
         _allChats[index] = updatedChat;
         _allChats.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+
         _applyFilter();
       }
     });
@@ -130,6 +143,8 @@ class ChatsListCubit extends Cubit<ChatsListState> {
   void markChatAsRead(String chatId) {
     final index = _allChats.indexWhere((c) => c.id == chatId);
     if (index != -1) {
+      // ✅ اعمل list جديدة
+      _allChats = List<ChatModel>.from(_allChats);
       _allChats[index] = _allChats[index].copyWith(unreadCount: 0);
       _applyFilter();
     }

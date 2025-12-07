@@ -34,9 +34,9 @@ class _TypingIndicatorState extends State<TypingIndicator>
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.centerRight,
+      alignment: Alignment.centerLeft,
       child: Container(
-        margin: EdgeInsets.only(bottom: 8.h, left: 60.w),
+        margin:  EdgeInsets.only(bottom: 8.h, right: 60.w),
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: BoxDecoration(
           color: Colors.white,

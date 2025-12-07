@@ -25,24 +25,31 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: isMe ? Alignment.centerLeft : Alignment.centerRight,
+      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: GestureDetector(
         onLongPress: () {
-          if (onEdit != null || onDelete != null) {
+          if (!message.isDeleted && (onEdit != null || onDelete != null)) {
             _showOptionsBottomSheet(context);
+          }
+        },
+        onTap: () {
+          if (message.type == MessageType.image && message.imageUrl != null) {
+            _showImageViewer(context);
           }
         },
         child: Container(
           margin: EdgeInsets.only(
             bottom: 8.h,
-            left: isMe ? 0 : 60.w,
-            right: isMe ? 60.w : 0,
+            left: isMe ? 60.w : 0,
+            right: isMe ? 0 : 60.w,
           ),
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: isMe
+            color: message.isDeleted
+                ? ColorsManager.backgroundColor // ✅ لون مختلف للمحذوفة
+                : isMe
                 ? ColorsManager.mainColor
-                : Colors.white,
+                : Colors.white ,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(12.r),
               topRight: Radius.circular(12.r),
@@ -69,18 +76,41 @@ class MessageBubble extends StatelessWidget {
                 SizedBox(height: 4.h),
               ],
 
-              // Image message
-              if (message.type == MessageType.image && message.imageUrl != null)
-                _buildImageMessage(),
-
-              // Text body
-              if (message.body.isNotEmpty)
-                Text(
-                  message.body,
-                  style: isMe
-                      ? TextStyles.font14WhiteRegular
-                      : TextStyles.font14BlackRegular,
+              // ✅ لو محذوفة - اعرض رسالة مخصصة
+              if (message.isDeleted) ...[
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.block,
+                      size: 14.sp,
+                      color: ColorsManager.textTertiary,
+                    ),
+                    SizedBox(width: 4.w),
+                    Text(
+                      'تم حذف هذه الرسالة',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: ColorsManager.textTertiary,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
                 ),
+              ] else ...[
+                // Image message
+                if (message.type == MessageType.image && message.imageUrl != null)
+                  _buildImageMessage(),
+
+                // Text body
+                if (message.body.isNotEmpty)
+                  Text(
+                    message.body,
+                    style: isMe
+                        ? TextStyles.font14WhiteRegular
+                        : TextStyles.font14BlackRegular,
+                  ),
+              ],
 
               SizedBox(height: 4.h),
 
@@ -88,8 +118,16 @@ class MessageBubble extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Edited indicator
-                  if (message.isEdited) ...[
+                  // ✅ Edited indicator - بخط أكبر وأوضح
+                  if (message.isEdited && !message.isDeleted) ...[
+                    Icon(
+                      Icons.edit,
+                      size: 10.sp,
+                      color: isMe
+                          ? Colors.white.withOpacity(0.7)
+                          : ColorsManager.textTertiary,
+                    ),
+                    SizedBox(width: 2.w),
                     Text(
                       'معدلة',
                       style: TextStyle(
@@ -97,6 +135,7 @@ class MessageBubble extends StatelessWidget {
                         color: isMe
                             ? Colors.white.withOpacity(0.7)
                             : ColorsManager.textTertiary,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(width: 4.w),
@@ -107,14 +146,16 @@ class MessageBubble extends StatelessWidget {
                     _formatTime(message.createdAt),
                     style: TextStyle(
                       fontSize: 10.sp,
-                      color: isMe
+                      color: message.isDeleted
+                          ? ColorsManager.textTertiary
+                          : isMe
                           ? Colors.white.withOpacity(0.7)
                           : ColorsManager.textTertiary,
                     ),
                   ),
 
-                  // Read receipt (for my messages only)
-                  if (isMe) ...[
+                  // Read receipt (for my messages only) - مش للمحذوفة
+                  if (isMe && !message.isDeleted) ...[
                     SizedBox(width: 4.w),
                     Icon(
                       message.readAt != null
@@ -151,28 +192,56 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget _buildImageMessage() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 8.h),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8.r),
-        child: CachedNetworkImage(
-          imageUrl: message.imageUrl!,
-          width: 200.w,
-          fit: BoxFit.cover,
-          placeholder: (_, __) => Container(
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8.r),
+      child: Image.network(
+        message.imageUrl!,
+        width: 200.w,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Container(
             width: 200.w,
-            height: 150.h,
-            color: ColorsManager.shimmerBase,
-            child: const Center(child: CircularProgressIndicator()),
-          ),
-          errorWidget: (_, __, ___) => Container(
+            height: 200.h,
+            color: Colors.grey[300],
+            child: Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes!
+                    : null,
+              ),
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
             width: 200.w,
-            height: 150.h,
-            color: ColorsManager.shimmerBase,
+            height: 200.h,
+            color: Colors.grey[300],
             child: Icon(
               Icons.broken_image,
-              color: ColorsManager.iconTertiary,
-              size: 40.sp,
+              size: 50.sp,
+              color: Colors.grey[600],
+            ),
+          );
+        },
+      ),
+    );
+  }
+  // ✅ أضف Method - Show Image Viewer
+  void _showImageViewer(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          backgroundColor: Colors.black,
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            iconTheme: const IconThemeData(color: Colors.white),
+          ),
+          body: Center(
+            child: InteractiveViewer(
+              child: Image.network(message.imageUrl!),
             ),
           ),
         ),

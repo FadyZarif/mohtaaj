@@ -37,6 +37,7 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final _searchController = TextEditingController();
+  String? _currentUserId;
 
   @override
   void initState() {
@@ -44,10 +45,15 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(_onTabChanged);
 
-    // Load chats
-    context.read<ChatsListCubit>().loadChats(
-      userId: getIt<String>(), // Current user ID from DI
-    );
+    // ✅ جيب الـ userId من GetIt
+    try {
+      _currentUserId = getIt<String>(instanceName: 'userId');
+      context.read<ChatsListCubit>().loadChats(userId: _currentUserId);
+    } catch (e) {
+      // User not logged in
+      print('User not logged in: $e');
+    }
+
   }
 
   void _onTabChanged() {
@@ -132,9 +138,11 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
 
     return RefreshIndicator(
       onRefresh: () async {
-        await context.read<ChatsListCubit>().loadChats(
-          userId: getIt<String>(),
-        );
+        if (_currentUserId != null) {
+          await context.read<ChatsListCubit>().loadChats(
+            userId: _currentUserId,
+          );
+        }
       },
       child: ListView.separated(
         padding: EdgeInsets.symmetric(vertical: 8.h),
@@ -146,7 +154,7 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
         itemBuilder: (context, index) {
           return ChatItemCard(
             chat: chats[index],
-            currentUserId: getIt<String>(),
+            currentUserId: _currentUserId ?? '',
             onTap: () {
               context.pushNamed(
                 Routes.chatRoomScreen,

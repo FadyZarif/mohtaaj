@@ -55,15 +55,15 @@ extension ChatRoomStatePatterns on ChatRoomState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Success value)?  success,TResult Function( _EditingMessage value)?  editingMessage,TResult Function( _Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Success value)?  success,TResult Function( _Error value)?  error,TResult Function( _EditingMessage value)?  editingMessage,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Success() when success != null:
-return success(_that);case _EditingMessage() when editingMessage != null:
-return editingMessage(_that);case _Error() when error != null:
-return error(_that);case _:
+return success(_that);case _Error() when error != null:
+return error(_that);case _EditingMessage() when editingMessage != null:
+return editingMessage(_that);case _:
   return orElse();
 
 }
@@ -81,15 +81,15 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Success value)  success,required TResult Function( _EditingMessage value)  editingMessage,required TResult Function( _Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Success value)  success,required TResult Function( _Error value)  error,required TResult Function( _EditingMessage value)  editingMessage,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case _Loading():
 return loading(_that);case _Success():
-return success(_that);case _EditingMessage():
-return editingMessage(_that);case _Error():
-return error(_that);case _:
+return success(_that);case _Error():
+return error(_that);case _EditingMessage():
+return editingMessage(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -106,15 +106,15 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Success value)?  success,TResult? Function( _EditingMessage value)?  editingMessage,TResult? Function( _Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Success value)?  success,TResult? Function( _Error value)?  error,TResult? Function( _EditingMessage value)?  editingMessage,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Success() when success != null:
-return success(_that);case _EditingMessage() when editingMessage != null:
-return editingMessage(_that);case _Error() when error != null:
-return error(_that);case _:
+return success(_that);case _Error() when error != null:
+return error(_that);case _EditingMessage() when editingMessage != null:
+return editingMessage(_that);case _:
   return null;
 
 }
@@ -131,14 +131,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping)?  success,TResult Function()?  editingMessage,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping)?  success,TResult Function( String message)?  error,TResult Function()?  editingMessage,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
-return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping);case _EditingMessage() when editingMessage != null:
-return editingMessage();case _Error() when error != null:
-return error(_that.message);case _:
+return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping);case _Error() when error != null:
+return error(_that.message);case _EditingMessage() when editingMessage != null:
+return editingMessage();case _:
   return orElse();
 
 }
@@ -156,14 +156,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping)  success,required TResult Function()  editingMessage,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping)  success,required TResult Function( String message)  error,required TResult Function()  editingMessage,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _Success():
-return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping);case _EditingMessage():
-return editingMessage();case _Error():
-return error(_that.message);case _:
+return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping);case _Error():
+return error(_that.message);case _EditingMessage():
+return editingMessage();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -180,14 +180,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping)?  success,TResult? Function()?  editingMessage,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping)?  success,TResult? Function( String message)?  error,TResult? Function()?  editingMessage,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
-return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping);case _EditingMessage() when editingMessage != null:
-return editingMessage();case _Error() when error != null:
-return error(_that.message);case _:
+return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping);case _Error() when error != null:
+return error(_that.message);case _EditingMessage() when editingMessage != null:
+return editingMessage();case _:
   return null;
 
 }
@@ -349,38 +349,6 @@ $ChatModelCopyWith<$Res> get chat {
 /// @nodoc
 
 
-class _EditingMessage implements ChatRoomState {
-  const _EditingMessage();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditingMessage);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'ChatRoomState.editingMessage()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
 class _Error implements ChatRoomState {
   const _Error(this.message);
   
@@ -443,5 +411,37 @@ as String,
 
 
 }
+
+/// @nodoc
+
+
+class _EditingMessage implements ChatRoomState {
+  const _EditingMessage();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditingMessage);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ChatRoomState.editingMessage()';
+}
+
+
+}
+
+
+
 
 // dart format on

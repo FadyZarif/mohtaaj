@@ -12,6 +12,7 @@ import '../../../../core/theming/styles.dart';
 import '../../data/models/chat_model.dart';
 import '../../logic/chat_room/chat_room_cubit.dart';
 import '../../logic/chat_room/chat_room_state.dart';
+import '../../logic/chats_list/chats_list_cubit.dart';
 import '../widgets/chat_input_field.dart';
 import '../widgets/item_preview_card.dart';
 import '../widgets/message_bubble.dart';
@@ -37,13 +38,20 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     super.initState();
     try {
       _currentUserId = getIt<String>(instanceName: 'userId');
+
+      // ✅ Mark as read - بس لو ChatsListCubit موجود
+      try {
+        context.read<ChatsListCubit>().markChatAsRead(widget.chatId);
+      } catch (e) {
+        print('⚠️ ChatsListCubit not found - skipping markChatAsRead');
+      }
+
+      // Initialize chat room
       context.read<ChatRoomCubit>().init(_currentUserId!);
     } catch (e) {
       print('User not logged in: $e');
-      // Navigate back or show error
     }
 
-    // Listen to scroll for pagination
     _scrollController.addListener(_onScroll);
   }
 

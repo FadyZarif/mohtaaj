@@ -8,6 +8,7 @@ import '../../../../core/helpers/extensions.dart';
 import '../../../../core/routing/routes.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
+import '../../../main_layout/logic/main_layout_cubit/main_layout_cubit.dart';
 import '../../data/models/chat_model.dart';
 import '../../logic/chats_list/chats_list_cubit.dart';
 import '../../logic/chats_list/chats_list_state.dart';
@@ -19,7 +20,17 @@ class ChatsListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<ChatsListCubit>(),
+      create: (context) => getIt<ChatsListCubit>(
+        // ✅ أضف callback
+        param1: (int totalUnread) {
+          // Update MainLayoutCubit
+          context.read<MainLayoutCubit>().updateUnreadChatsCount(totalUnread);
+        },
+      )..loadChats(
+        userId: getIt.isRegistered<String>(instanceName: 'userId')
+            ? getIt<String>(instanceName: 'userId')
+            : null,
+      ),
       child: const _ChatsListScreen(),
     );
   }
@@ -101,11 +112,21 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
         ),
       ),
       body: BlocBuilder<ChatsListCubit, ChatsListState>(
+        buildWhen: (previous, current) {
+          print('🔄 buildWhen called');
+          print('   Previous: ${previous.runtimeType}');
+          print('   Current: ${current.runtimeType}');
+          return true; // Always rebuild
+        },
         builder: (context, state) {
+          print('🎨 Builder called with state: ${state.runtimeType}');
           return state.when(
             initial: () => const SizedBox(),
             loading: () => const Center(child: CircularProgressIndicator()),
-            success: (chats, filter) => _buildChatsList(chats),
+            success: (chats, filter) {
+              print('✅ Success state - Chats count: ${chats.length}');
+              return _buildChatsList(chats);
+            },
             error: (message) => Center(
               child: Text(message, style: TextStyles.font16GreyRegular),
             ),

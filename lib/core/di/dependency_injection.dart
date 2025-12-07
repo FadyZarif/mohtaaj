@@ -114,8 +114,12 @@ Future<void> setupGetIt() async {
   getIt.registerFactory<SocketCubit>(() => SocketCubit(getIt<SocketService>()));
 
   // ========================== Chats Cubits ==========================
-  getIt.registerFactory<ChatsListCubit>(
-    () => ChatsListCubit(getIt<ApiService>(), getIt<SocketService>()),
+  getIt.registerFactoryParam<ChatsListCubit, Function(int)?, void>(
+        (callback, _) => ChatsListCubit(
+      getIt<ApiService>(),
+      getIt<SocketService>(),
+      onTotalUnreadChanged: callback,
+    ),
   );
 
   getIt.registerFactoryParam<ChatRoomCubit, String, void>(

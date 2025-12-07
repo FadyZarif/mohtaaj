@@ -8,20 +8,25 @@ import '../../data/services/socket_service.dart';
 import 'chats_list_state.dart';
 import '../../../../core/networking/api_service.dart';
 
-// في ChatsListCubit
-
 class ChatsListCubit extends Cubit<ChatsListState> {
   final ApiService _apiService;
   final SocketService _socketService;
+  final Function(int)? onTotalUnreadChanged;
 
-  List<ChatModel> _allChats = []; // ✅ عادي
+  List<ChatModel> _allChats = [];
   ChatFilterType _currentFilter = ChatFilterType.all;
   String? _currentUserId;
   StreamSubscription? _messageNotificationSub;
-  StreamSubscription? _newMessageSub;
+  StreamSubscription? _messagesReadSub;
 
-  ChatsListCubit(this._apiService, this._socketService)
-      : super(const ChatsListState.initial());
+  // ✅ أضف set للـ de-duplication
+  final Set<String> _processedMessageIds = {};
+
+  ChatsListCubit(
+      this._apiService,
+      this._socketService, {
+        this.onTotalUnreadChanged,
+      }) : super(const ChatsListState.initial());
 
   Future<void> loadChats({String? userId}) async {
     _currentUserId = userId;
@@ -29,8 +34,6 @@ class ChatsListCubit extends Cubit<ChatsListState> {
 
     try {
       final response = await _apiService.getChats(page: 1, limit: 100);
-
-      // ✅ اعمل copy من الـ list
       _allChats = List<ChatModel>.from(response.data);
 
       _applyFilter();
@@ -42,56 +45,119 @@ class ChatsListCubit extends Cubit<ChatsListState> {
   }
 
   void _listenToSocketEvents() {
+    // ✅ Cancel any existing subscriptions
+    _messageNotificationSub?.cancel();
+    _messagesReadSub?.cancel();
+
     // Listen to new message notifications
     _messageNotificationSub = _socketService.messageNotificationStream.listen((data) {
-      final chatId = data['chatId'] as String;
-      final index = _allChats.indexWhere((c) => c.id == chatId);
+      try {
+        print('🔔 Message notification received: $data');
 
-      if (index != -1) {
+        final chatId = data['chatId'] as String?;
+        if (chatId == null) {
+          print('⚠️ chatId is null, skipping');
+          return;
+        }
+
         final message = data['message'];
+        if (message == null) {
+          print('⚠️ message is null, skipping');
+          return;
+        }
 
-        // ✅ استخدم copyWith بدل التعديل المباشر
-        final updatedChat = _allChats[index].copyWith(
-          lastMsg: message['body'],
-          lastMsgType: MessageType.values.firstWhere(
-                (e) => e.name == message['type'],
-            orElse: () => MessageType.text,
-          ),
-          unreadCount: (_allChats[index].unreadCount ?? 0) + 1,
-          updatedAt: DateTime.parse(message['createdAt']),
-        );
+        final messageId = message['id'] as String?;
+        if (messageId == null) {
+          print('⚠️ messageId is null, skipping');
+          return;
+        }
 
-        // ✅ اعمل list جديدة بدل التعديل المباشر
-        _allChats = List<ChatModel>.from(_allChats);
-        _allChats[index] = updatedChat;
-        _allChats.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+        // ✅ Check if already processed
+        if (_processedMessageIds.contains(messageId)) {
+          print('⚠️ Message already processed: $messageId, skipping');
+          return;
+        }
 
-        _applyFilter();
+        // ✅ Add to processed set
+        _processedMessageIds.add(messageId);
+
+        // ✅ Keep only last 100 IDs
+        if (_processedMessageIds.length > 100) {
+          final toRemove = _processedMessageIds.length - 100;
+          _processedMessageIds.removeAll(
+            _processedMessageIds.take(toRemove).toList(),
+          );
+        }
+
+        final index = _allChats.indexWhere((c) => c.id == chatId);
+
+        if (index != -1) {
+          final sender = message['sender'];
+          final senderId = sender != null ? sender['id'] as String? : null;
+
+          if (senderId == null) {
+            print('⚠️ senderId is null, skipping');
+            return;
+          }
+
+          final chat = _allChats[index];
+          final isBuyer = chat.buyerId == _currentUserId;
+
+          print('📊 Processing message: $messageId');
+          print('   Current user: $_currentUserId');
+          print('   Is buyer: $isBuyer');
+          print('   Sender: $senderId');
+          print('   Should increment: ${senderId != _currentUserId}');
+
+          final updatedChat = chat.copyWith(
+            lastMsg: message['body'] as String? ?? '',
+            lastMsgType: MessageType.values.firstWhere(
+                  (e) => e.name == (message['type'] as String?),
+              orElse: () => MessageType.text,
+            ),
+            updatedAt: data['timestamp'] != null
+                ? DateTime.parse(data['timestamp'] as String)
+                : DateTime.now(),
+            unreadCountBuyer: isBuyer && senderId != _currentUserId
+                ? chat.unreadCountBuyer + 1
+                : chat.unreadCountBuyer,
+            unreadCountSeller: !isBuyer && senderId != _currentUserId
+                ? chat.unreadCountSeller + 1
+                : chat.unreadCountSeller,
+          );
+
+          _allChats = List<ChatModel>.from(_allChats);
+          _allChats[index] = updatedChat;
+          _allChats.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+
+          _applyFilter();
+
+          print('✅ Unread count updated for chat: $chatId');
+          print('   Buyer unread: ${updatedChat.unreadCountBuyer}');
+          print('   Seller unread: ${updatedChat.unreadCountSeller}');
+        } else {
+          print('⚠️ Chat not found: $chatId');
+        }
+      } catch (e, stackTrace) {
+        print('❌ Error in message notification listener: $e');
+        print('Stack trace: $stackTrace');
+        print('Data: $data');
       }
     });
 
-    // Listen to messages in opened chats (to update last message)
-    _newMessageSub = _socketService.newMessageStream.listen((data) {
-      final message = data['message'];
-      final chatId = message['chatId'] as String;
-      final index = _allChats.indexWhere((c) => c.id == chatId);
+    // Listen to marked_read
+    _messagesReadSub = _socketService.messagesReadStream.listen((data) {
+      try {
+        final chatId = data['chatId'] as String?;
+        if (chatId == null) {
+          print('⚠️ chatId is null in marked_read');
+          return;
+        }
 
-      if (index != -1) {
-        final updatedChat = _allChats[index].copyWith(
-          lastMsg: message['body'],
-          lastMsgType: MessageType.values.firstWhere(
-                (e) => e.name == message['type'],
-            orElse: () => MessageType.text,
-          ),
-          updatedAt: DateTime.parse(message['createdAt']),
-        );
-
-        // ✅ اعمل list جديدة
-        _allChats = List<ChatModel>.from(_allChats);
-        _allChats[index] = updatedChat;
-        _allChats.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-
-        _applyFilter();
+        print('📖 Messages marked as read for chat: $chatId');
+        markChatAsRead(chatId);
+      } catch (e) {
+        print('❌ Error in marked_read listener: $e');
       }
     });
   }
@@ -120,7 +186,27 @@ class ChatsListCubit extends Cubit<ChatsListState> {
         filtered = _allChats;
     }
 
-    emit(ChatsListState.success(filtered, _currentFilter));
+    // ✅ Always emit new list
+    emit(ChatsListState.success(
+      List<ChatModel>.from(filtered),
+      _currentFilter,
+    ));
+
+    // Notify total unread
+    _notifyTotalUnread();
+  }
+
+  void _notifyTotalUnread() {
+    if (onTotalUnreadChanged != null && _currentUserId != null) {
+      final total = _allChats.fold<int>(0, (sum, chat) {
+        final isBuyer = chat.buyerId == _currentUserId;
+        final unread = isBuyer ? chat.unreadCountBuyer : chat.unreadCountSeller;
+        return sum + unread;
+      });
+
+      onTotalUnreadChanged!(total);
+      print('📊 Total unread: $total');
+    }
   }
 
   void searchChats(String query) {
@@ -143,17 +229,23 @@ class ChatsListCubit extends Cubit<ChatsListState> {
   void markChatAsRead(String chatId) {
     final index = _allChats.indexWhere((c) => c.id == chatId);
     if (index != -1) {
-      // ✅ اعمل list جديدة
+      final chat = _allChats[index];
+      final isBuyer = chat.buyerId == _currentUserId;
+
       _allChats = List<ChatModel>.from(_allChats);
-      _allChats[index] = _allChats[index].copyWith(unreadCount: 0);
+      _allChats[index] = chat.copyWith(
+        unreadCountBuyer: isBuyer ? 0 : chat.unreadCountBuyer,
+        unreadCountSeller: !isBuyer ? 0 : chat.unreadCountSeller,
+      );
       _applyFilter();
+      print('✅ Chat marked as read: $chatId');
     }
   }
 
   @override
   Future<void> close() {
     _messageNotificationSub?.cancel();
-    _newMessageSub?.cancel();
+    _messagesReadSub?.cancel();
     return super.close();
   }
 }

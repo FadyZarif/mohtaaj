@@ -23,9 +23,22 @@ class ChatItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final otherUser = chat.buyerId == currentUserId ? chat.seller : chat.buyer;
-    final unreadCount = chat.unreadCount ?? 0;
+    // ✅ احسب الـ unread count الصح حسب الـ user
+    final unreadCount = chat.buyerId == currentUserId
+        ? chat.unreadCountBuyer  // أنا buyer
+        : chat.unreadCountSeller; // أنا seller
+
     final hasUnread = unreadCount > 0;
 
+    // ✅ Debug print
+    print('🎨 ChatItemCard rebuild:');
+    print('   Chat: ${otherUser.name}');
+    print('   UnreadCountBuyer: ${chat.unreadCountBuyer}');
+    print('   UnreadCountSeller: ${chat.unreadCountSeller}');
+    print('   CurrentUserId: $currentUserId');
+    print('   IsBuyer: ${chat.buyerId == currentUserId}');
+    print('   Calculated Unread: $unreadCount');
+    print('   HasUnread: $hasUnread');
     return InkWell(
       onTap: onTap,
       child: Container(

@@ -38,22 +38,58 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       this.chatId,
       ) : super(const ChatRoomState.initial());
 
-  Future<void> init(String userId) async {
-    _currentUserId = userId;
-    emit(const ChatRoomState.loading());
+  Future<void> init(String currentUserId) async {
+    _currentUserId = currentUserId;
+    _otherUserId = null;
+
+    print('🔄 Initializing chat room: $chatId');
+
+    // ✅ Mark as read via API
+    try {
+      await _markChatAsReadViaAPI();
+    } catch (e) {
+      print('⚠️ Failed to mark as read: $e');
+    }
+
+    // Wait for socket connection
+    if (!_socketService.isConnected) {
+      print('⏳ Waiting for socket to connect...');
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      int attempts = 0;
+      while (!_socketService.isConnected && attempts < 10) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        attempts++;
+      }
+
+      if (!_socketService.isConnected) {
+        print('❌ Socket connection timeout');
+        emit(const ChatRoomState.error('فشل الاتصال بالخادم'));
+        return;
+      }
+    }
+
+    print('✅ Socket connected - joining chat');
 
     // Join chat room
     _socketService.joinChat(chatId);
 
-    // Load chat details & messages
-    await _loadChatAndMessages();
-
     // Setup socket listeners
     _setupSocketListeners();
 
-    // Check online status
-    if (_otherUserId != null) {
-      _socketService.checkOnline([_otherUserId!]);
+    // Load chat and messages
+    await _loadChatAndMessages();
+  }
+
+  Future<void> _markChatAsReadViaAPI() async {
+    try {
+      // استخدم الـ socket event
+      if (_socketService.isConnected) {
+        _socketService.markRead(chatId);
+        print('✅ Marked as read via socket');
+      }
+    } catch (e) {
+      print('❌ Error marking as read: $e');
     }
   }
 

@@ -9,6 +9,8 @@ import '../../../../core/helpers/extensions.dart';
 import '../../../../core/routing/routes.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
+import '../../../reports/data/models/report_model.dart';
+import '../../../reports/ui/widgets/report_dialog.dart';
 import '../../data/models/chat_model.dart';
 import '../../logic/chat_room/chat_room_cubit.dart';
 import '../../logic/chat_room/chat_room_state.dart';
@@ -302,6 +304,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               onDelete: isMe && !message.isDeleted
                   ? () => _confirmDelete(message)
                   : null,
+               onReport: !isMe
+                  ? () => _reportMessageDialog(context,message)
+                  : null,
             ),
           ],
         );
@@ -414,6 +419,22 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             child: Text('حذف', style: TextStyles.font14WhiteMedium),
           ),
         ],
+      ),
+    );
+  }
+
+  void _reportMessageDialog(BuildContext context, MessageModel message) {
+    // ✅ Check if reporting self
+    final currentUserId = getIt<String>(instanceName: 'userId');
+    final isReportingSelf = message.sender?.id == currentUserId;
+
+    showDialog(
+      context: context,
+      builder: (context) => ReportDialog(
+        targetType: ReportTargetType.message,
+        targetId: message.id,
+        targetName: '\"${message.body}\" من ${message.sender?.name ?? 'مستخدم'}',
+        isOwnContent: isReportingSelf, // ✅ Pass ownership info
       ),
     );
   }

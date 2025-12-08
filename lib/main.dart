@@ -8,10 +8,13 @@ import 'core/routing/routes.dart';
 import 'core/services/auth_service.dart';
 import 'features/chats/data/services/socket_service.dart';
 import 'mohtaaj_app.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  timeago.setLocaleMessages('ar', timeago.ArMessages());
+  timeago.setLocaleMessages('ar_short', timeago.ArShortMessages());
 
   Bloc.observer = MyBlocObserver();
   await CacheHelper.init();

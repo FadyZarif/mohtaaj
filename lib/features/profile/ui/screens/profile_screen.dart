@@ -187,6 +187,18 @@ class _ProfileScreenBody extends StatelessWidget {
                   indent: 56.w,
                 ),
                 ProfileMenuItem(
+                  icon: Icons.flag_outlined,
+                  title: 'بلاغاتي',
+                  onTap: () {
+                    context.pushNamed(Routes.myReportsScreen);
+                  },
+                ),
+                Divider(
+                  color: ColorsManager.borderColor,
+                  height: 1,
+                  indent: 56.w,
+                ),
+                ProfileMenuItem(
                   icon: Icons.edit_outlined,
                   title: 'تعديل الحساب',
                   onTap: () {

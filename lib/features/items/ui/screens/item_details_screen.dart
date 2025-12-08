@@ -55,7 +55,7 @@ class _ItemDetailsBody extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Images Carousel
-                        ItemImagesCarousel(images: item.images),
+                        ItemImagesCarousel(item: item),
                         verticalSpace(8),
                         // Item Info
                         ItemInfoSection(item: item),

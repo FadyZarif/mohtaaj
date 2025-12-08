@@ -1,16 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
+import '../../../reports/data/models/report_model.dart';
+import '../../../reports/ui/widgets/report_dialog.dart';
+import '../../data/models/item_model.dart';
 
 class ItemImagesCarousel extends StatefulWidget {
-  final List<String> images;
+  final ItemModel item;
 
-  const ItemImagesCarousel({
-    super.key,
-    required this.images,
-  });
+  const ItemImagesCarousel({super.key, required this.item});
 
   @override
   State<ItemImagesCarousel> createState() => _ItemImagesCarouselState();
@@ -28,7 +28,8 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.images.isEmpty) {
+    final images = widget.item.images;
+    if (images.isEmpty) {
       return _buildPlaceholder();
     }
 
@@ -44,10 +45,10 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
                 _currentPage = index;
               });
             },
-            itemCount: widget.images.length,
+            itemCount: images.length,
             itemBuilder: (context, index) {
               return Image.network(
-                widget.images[index],
+                images[index],
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return _buildPlaceholder();
@@ -57,7 +58,7 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
           ),
         ),
         // Indicator
-        if (widget.images.length > 1)
+        if (images.length > 1)
           Positioned(
             bottom: 16.h,
             left: 0,
@@ -65,8 +66,8 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                widget.images.length,
-                    (index) => Container(
+                images.length,
+                (index) => Container(
                   width: 8.w,
                   height: 8.h,
                   margin: EdgeInsets.symmetric(horizontal: 4.w),
@@ -92,14 +93,36 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
                 color: Colors.white,
                 shape: BoxShape.circle,
                 boxShadow: [
-                  BoxShadow(
-                    color: ColorsManager.shadowColor,
-                    blurRadius: 8,
-                  ),
+                  BoxShadow(color: ColorsManager.shadowColor, blurRadius: 8),
                 ],
               ),
               child: Icon(
-                Icons.arrow_forward,
+                Icons.arrow_back,
+                size: 20.sp,
+                color: ColorsManager.textPrimary,
+              ),
+            ),
+          ),
+        ),
+        // Report Button
+        Positioned(
+          top: 40.h,
+          left: 16.w,
+          child: GestureDetector(
+            onTap: () {
+              _showReportDialog(context);
+            },
+            child: Container(
+              padding: EdgeInsets.all(8.r),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(color: ColorsManager.shadowColor, blurRadius: 8),
+                ],
+              ),
+              child: Icon(
+                Icons.report_outlined,
                 size: 20.sp,
                 color: ColorsManager.textPrimary,
               ),
@@ -120,6 +143,22 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
           size: 60.sp,
           color: ColorsManager.iconTertiary,
         ),
+      ),
+    );
+  }
+
+  void _showReportDialog(BuildContext context) {
+    // ✅ Check if item belongs to current user
+    final currentUserId = getIt<String>(instanceName: 'userId');
+    final isOwnItem = widget.item.owner?.id == currentUserId; // Adjust based on your model
+
+    showDialog(
+      context: context,
+      builder: (context) => ReportDialog(
+        targetType: ReportTargetType.item,
+        targetId: widget.item.id,
+        targetName: widget.item.title,
+        isOwnContent: isOwnItem, // ✅ Pass ownership info
       ),
     );
   }

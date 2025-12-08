@@ -13,6 +13,8 @@ class MessageBubble extends StatelessWidget {
   final bool isMe;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final VoidCallback? onReport;
+
 
   const MessageBubble({
     super.key,
@@ -20,6 +22,7 @@ class MessageBubble extends StatelessWidget {
     required this.isMe,
     this.onEdit,
     this.onDelete,
+    this.onReport,
   });
 
   @override
@@ -28,7 +31,7 @@ class MessageBubble extends StatelessWidget {
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: GestureDetector(
         onLongPress: () {
-          if (!message.isDeleted && (onEdit != null || onDelete != null)) {
+          if (!message.isDeleted && (onEdit != null || onDelete != null || onReport != null)) {
             _showOptionsBottomSheet(context);
           }
         },
@@ -280,6 +283,15 @@ class MessageBubble extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(sheetContext);
                   onDelete!();
+                },
+              ),
+            if (onReport != null)
+              ListTile(
+                leading: const Icon(Icons.flag, color: ColorsManager.error),
+                title: Text('إبلاغ', style: TextStyles.font16BlackMedium),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  onReport!();
                 },
               ),
           ],

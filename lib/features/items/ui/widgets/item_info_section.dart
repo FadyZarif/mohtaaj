@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/theming/colors.dart';
@@ -53,7 +54,7 @@ class ItemInfoSection extends StatelessWidget {
               ),
               horizontalSpace(4),
               Text(
-                item.createdAt.timeAgo(),
+                timeago.format(item.createdAt,locale: 'ar'),
                 style: TextStyles.font14GreyMedium,
               ),
               const Spacer(),

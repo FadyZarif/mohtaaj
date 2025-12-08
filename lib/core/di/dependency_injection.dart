@@ -14,6 +14,7 @@ import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/categories/logic/categories_cubit/categories_cubit.dart';
 import '../../features/home/logic/home_cubit/home_cubit.dart';
 import '../../features/profile/logic/user_profile_cubit/user_profile_cubit.dart';
+import '../../features/reports/logic/reports_cubit/reports_cubit.dart';
 import '../networking/api_service.dart';
 import '../networking/dio_factory.dart';
 import '../../features/auth/logic/login_cubit/login_cubit.dart';
@@ -125,6 +126,11 @@ Future<void> setupGetIt() async {
   getIt.registerFactoryParam<ChatRoomCubit, String, void>(
     (chatId, _) =>
         ChatRoomCubit(getIt<ApiService>(), getIt<SocketService>(), chatId),
+  );
+
+  // ========================== Reports Cubits ==========================
+  getIt.registerFactory<ReportsCubit>(
+    () => ReportsCubit(getIt<ApiService>()),
   );
 
 }

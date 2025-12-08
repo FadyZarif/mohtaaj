@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mohtaaj/features/categories/ui/screens/categories_screen.dart';
+import 'package:mohtaaj/features/reports/ui/screens/my_reports_screen.dart';
 import '../../features/auth/data/models/user_model.dart';
 import '../../features/categories/data/models/category_model.dart';
 import '../../features/chats/logic/chat_room/chat_room_cubit.dart';
@@ -97,6 +98,12 @@ class AppRouter {
       case Routes.favoritesScreen:
         return MaterialPageRoute(
           builder: (_) => const FavoritesScreen(),
+        );
+
+      // Reports Screen
+      case Routes.myReportsScreen:
+        return MaterialPageRoute(
+          builder: (_) => const MyReportsScreen(),
         );
 
       // User Profile Screen

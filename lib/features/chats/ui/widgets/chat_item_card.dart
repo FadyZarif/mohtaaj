@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
@@ -114,7 +115,8 @@ class ChatItemCard extends StatelessWidget {
                       ),
 
                       Text(
-                        chat.updatedAt.timeAgo(),
+                        timeago.format(chat.updatedAt, locale: 'ar'),
+                        // chat.updatedAt.timeAgo(),
                         style: TextStyles.font12GreyRegular,
                       ),
 

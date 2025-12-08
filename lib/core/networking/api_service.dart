@@ -24,6 +24,7 @@ import '../../features/profile/data/models/rate_user_response.dart';
 import '../../features/profile/data/models/update_profile_request.dart';
 import '../../features/profile/data/models/user_ratings_response.dart';
 import '../../features/profile/data/models/user_response.dart';
+import '../../features/reports/data/models/report_model.dart';
 import 'api_constants.dart';
 import '../../features/auth/data/models/login_request.dart';
 import '../../features/auth/data/models/login_response.dart';
@@ -211,10 +212,15 @@ abstract class ApiService {
 
   // ========================== Reports ==========================
   @POST(ApiConstants.reports)
-  Future<dynamic> reportItem(@Body() Map<String, dynamic> reportRequest);
+  Future<CreateReportResponse> createReport(@Body() CreateReportRequest  reportRequest);
 
   @GET(ApiConstants.myReports)
-  Future<dynamic> getMyReports();
+  Future<MyReportsResponse> getMyReports(
+      {
+        @Query('page') int page = 1,
+        @Query('limit') int limit = 20,
+      }
+      );
 
 
   // ========================== Chats ==========================

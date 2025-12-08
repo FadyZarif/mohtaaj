@@ -51,7 +51,7 @@ class Routes {
   static const String myRequestsScreen = '/myRequests';
   
   // Reports Routes
-  static const String reportsScreen = '/reports';
+  static const String myReportsScreen  = '/myReportsScreen ';
   
   // Badges Routes
   static const String badgesScreen = '/badges';

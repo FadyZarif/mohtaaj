@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/theming/colors.dart';
@@ -183,7 +184,7 @@ class ItemCard extends StatelessWidget {
           ),
         ),
         // Time
-        Text(item.createdAt.timeAgo(), style: TextStyles.font10GreyRegular),
+        Text(timeago.format(item.createdAt,locale: 'ar'), style: TextStyles.font10GreyRegular),
       ],
     );
   }

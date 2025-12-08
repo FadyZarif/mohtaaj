@@ -133,6 +133,10 @@ abstract class ApiService {
   //   @Queries() Map<String, dynamic>? queries,
   // );
 
+
+
+  // ========================== Authenticated Endpoints Items ==========================
+
   // Get My Items
   @GET(ApiConstants.myItems)
   Future<ItemsResponse> getMyItems(
@@ -204,6 +208,13 @@ abstract class ApiService {
 
   @GET(ApiConstants.favorites)
   Future<FavoritesResponse> getMyFavorites(@Queries() ItemsQueries queries);
+
+  // ========================== Reports ==========================
+  @POST(ApiConstants.reports)
+  Future<dynamic> reportItem(@Body() Map<String, dynamic> reportRequest);
+
+  @GET(ApiConstants.myReports)
+  Future<dynamic> getMyReports();
 
 
   // ========================== Chats ==========================

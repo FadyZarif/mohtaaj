@@ -52,9 +52,7 @@ class ApiConstants {
   static const String myRequests = '$apiPath/requests/my';
   
   // Reports
-  static const String reportItem = '$apiPath/reports/item';
-  static const String reportUser = '$apiPath/reports/user';
-  static const String reportMessage = '$apiPath/reports/message';
+  static const String reports = '$apiPath/reports';
   static const String myReports = '$apiPath/reports/my';
   
   // Upload

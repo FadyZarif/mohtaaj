@@ -2,6 +2,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
+import '../../../chats/data/models/chat_model.dart';
 import 'item_details_state.dart';
 
 class ItemDetailsCubit extends Cubit<ItemDetailsState> {
@@ -77,5 +78,39 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
       },
       orElse: () {},
     );
+  }
+
+  Future<String?> getOrCreateChat() async {
+    try {
+      // ✅ استخدم mapOrNull
+      final result = await state.mapOrNull(
+        success: (successState) async {
+          final item = successState.item;
+
+          if (item.owner == null) {
+            print('⚠️ Owner not found');
+            return null;
+          }
+
+          print('🔄 Creating chat for item: ${item.id}');
+
+          final response = await _apiService.createChat(
+            CreateChatRequest(
+              type: ChatType.item,
+              itemId: item.id,
+            ),
+          );
+
+          print('✅ Chat created: ${response.data.id}');
+          return response.data.id;
+        },
+      );
+
+      return result;
+    } catch (e, stackTrace) {
+      print('❌ Error in getOrCreateChat: $e');
+      print('Stack trace: $stackTrace');
+      return null;
+    }
   }
 }

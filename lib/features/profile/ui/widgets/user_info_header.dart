@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/helpers/spacing.dart';
+import '../../../../core/services/auth_service.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../../reports/data/models/report_model.dart';
@@ -22,8 +23,13 @@ class UserInfoHeader extends StatelessWidget {
 
 
   bool get isOwnProfile {
-    final currentUserId = getIt<String>(instanceName: 'userId');
-    return user.id == currentUserId;
+    if(getIt.isRegistered<String>(instanceName: 'userId')){
+      final currentUserId = getIt<String>(instanceName: 'userId');
+      return user.id == currentUserId;
+    }else{
+      return false;
+    }
+
   }
 
   @override
@@ -207,7 +213,7 @@ class UserInfoHeader extends StatelessWidget {
             end: 10.w,
             textDirection: TextDirection.rtl,
             child:  GestureDetector(
-              onTap:()=> _showReportDialog(context),
+              onTap:()=> getIt<AuthService>().requireAuth(context,()=>_showReportDialog(context)),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 decoration: BoxDecoration(

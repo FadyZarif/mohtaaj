@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mohtaaj/core/routing/routes.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
@@ -88,6 +89,9 @@ class ItemInfoSection extends StatelessWidget {
               _buildInfoChip(
                 icon: Icons.category_outlined,
                 label: item.category.name,
+                onTap: (){
+                  context.pushNamed(Routes.categoryItemsScreen,arguments: item.category);
+                },
               ),
               horizontalSpace(8),
               _buildInfoChip(
@@ -151,27 +155,30 @@ class ItemInfoSection extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoChip({required IconData icon, required String label}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-      decoration: BoxDecoration(
-        color: ColorsManager.mainColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 16.sp,
-            color: ColorsManager.mainColor,
-          ),
-          horizontalSpace(4),
-          Text(
-            label,
-            style: TextStyles.font14BlackMedium,
-          ),
-        ],
+  Widget _buildInfoChip({required IconData icon, required String label, VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+        decoration: BoxDecoration(
+          color: ColorsManager.mainColor.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 16.sp,
+              color: ColorsManager.mainColor,
+            ),
+            horizontalSpace(4),
+            Text(
+              label,
+              style: TextStyles.font14BlackMedium,
+            ),
+          ],
+        ),
       ),
     );
   }

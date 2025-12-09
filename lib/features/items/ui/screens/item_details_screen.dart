@@ -6,6 +6,7 @@ import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/routing/routes.dart';
+import '../../../../core/services/auth_service.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../logic/item_details_cubit/item_details_cubit.dart';
@@ -141,7 +142,7 @@ class _ItemDetailsBody extends StatelessWidget {
             // Favorite Button
             GestureDetector(
               onTap: () {
-                context.read<ItemDetailsCubit>().toggleFavorite();
+                getIt<AuthService>().requireAuth(context, ()=>context.read<ItemDetailsCubit>().toggleFavorite());
               },
               child: Container(
                 width: 48.w,
@@ -161,9 +162,7 @@ class _ItemDetailsBody extends StatelessWidget {
             // Chat Button
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  // TODO: Navigate to chat
-                },
+                onTap:()=> _createChat(context),
                 child: Container(
                   height: 48.h,
                   decoration: BoxDecoration(
@@ -192,7 +191,10 @@ class _ItemDetailsBody extends StatelessWidget {
             // Call Button
             GestureDetector(
               onTap: () {
-                // TODO: Make call
+                // TODO
+                // getIt<AuthService>().requireAuth(context, () {
+                //   _makePhoneCall(context, item.owner?.phone);
+                // });
               },
               child: Container(
                 width: 48.w,
@@ -212,5 +214,75 @@ class _ItemDetailsBody extends StatelessWidget {
         ),
       ),
     );
+
+  }
+  // TODO
+  /*Future<void> _makePhoneCall(BuildContext context, String? phoneNumber) async {
+    if (phoneNumber == null || phoneNumber.isEmpty) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('رقم الهاتف غير متوفر'),
+            backgroundColor: ColorsManager.error,
+          ),
+        );
+      }
+      return;
+    }
+
+    final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+
+    try {
+      if (await canLaunchUrl(phoneUri)) {
+        await launchUrl(phoneUri);
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('لا يمكن إجراء المكالمة'),
+              backgroundColor: ColorsManager.error,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('فشل إجراء المكالمة: $e'),
+            backgroundColor: ColorsManager.error,
+          ),
+        );
+      }
+    }
+  }*/
+
+  void _createChat(BuildContext context) async {
+    getIt<AuthService>().requireAuth(context, () async {
+      if (!context.mounted) return;
+
+      try {
+        // Get or create chat with item owner
+        final chatId = await context.read<ItemDetailsCubit>().getOrCreateChat();
+
+        if (chatId != null && context.mounted) {
+          context.pushNamed(
+            Routes.chatRoomScreen,
+            arguments: chatId,
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('فشل فتح المحادثة: $e'),
+              backgroundColor: ColorsManager.error,
+            ),
+          );
+        }
+      }
+    });
   }
 }
+
+

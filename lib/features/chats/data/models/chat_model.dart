@@ -163,6 +163,7 @@ abstract class SendMessageRequest with _$SendMessageRequest {
 
 @freezed
 abstract class CreateChatRequest with _$CreateChatRequest {
+  @JsonSerializable(includeIfNull: false)
   const factory CreateChatRequest({
     required ChatType type,
     String? itemId,

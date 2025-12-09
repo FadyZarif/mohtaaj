@@ -17,7 +17,7 @@ mixin _$ItemModel {
 
  String get id; String? get ownerId;// 👈 خليه optional
  String get title; String get description; String? get categoryId;// 👈 خليه optional
- ItemCategory get category; ItemCondition? get condition; List<String> get images; String get city; String? get geoLat; String? get geoLng; String? get price; bool get isFree; bool get isFeatured; ItemStatus get status; int get views; int get favoritesCount; DateTime get createdAt; DateTime? get closedAt; ItemOwner? get owner;// 👈 خليه optional
+ CategoryModel get category; ItemCondition? get condition; List<String> get images; String get city; String? get geoLat; String? get geoLng; String? get price; bool get isFree; bool get isFeatured; ItemStatus get status; int get views; int get favoritesCount; DateTime get createdAt; DateTime? get closedAt; ItemOwner? get owner;// 👈 خليه optional
 @JsonKey(name: '_count') ItemCount? get count; FavoriteInfo? get favoriteInfo;
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
@@ -51,11 +51,11 @@ abstract mixin class $ItemModelCopyWith<$Res>  {
   factory $ItemModelCopyWith(ItemModel value, $Res Function(ItemModel) _then) = _$ItemModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String? ownerId, String title, String description, String? categoryId, ItemCategory category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner? owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
+ String id, String? ownerId, String title, String description, String? categoryId, CategoryModel category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner? owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
 });
 
 
-$ItemCategoryCopyWith<$Res> get category;$ItemOwnerCopyWith<$Res>? get owner;$ItemCountCopyWith<$Res>? get count;$FavoriteInfoCopyWith<$Res>? get favoriteInfo;
+$CategoryModelCopyWith<$Res> get category;$ItemOwnerCopyWith<$Res>? get owner;$ItemCountCopyWith<$Res>? get count;$FavoriteInfoCopyWith<$Res>? get favoriteInfo;
 
 }
 /// @nodoc
@@ -76,7 +76,7 @@ as String?,title: null == title ? _self.title : title // ignore: cast_nullable_t
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as String?,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
-as ItemCategory,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
+as CategoryModel,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
 as ItemCondition?,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
@@ -99,9 +99,9 @@ as FavoriteInfo?,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ItemCategoryCopyWith<$Res> get category {
+$CategoryModelCopyWith<$Res> get category {
   
-  return $ItemCategoryCopyWith<$Res>(_self.category, (value) {
+  return $CategoryModelCopyWith<$Res>(_self.category, (value) {
     return _then(_self.copyWith(category: value));
   });
 }/// Create a copy of ItemModel
@@ -222,7 +222,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? ownerId,  String title,  String description,  String? categoryId,  ItemCategory category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? ownerId,  String title,  String description,  String? categoryId,  CategoryModel category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ItemModel() when $default != null:
 return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
@@ -243,7 +243,7 @@ return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? ownerId,  String title,  String description,  String? categoryId,  ItemCategory category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? ownerId,  String title,  String description,  String? categoryId,  CategoryModel category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)  $default,) {final _that = this;
 switch (_that) {
 case _ItemModel():
 return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
@@ -263,7 +263,7 @@ return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? ownerId,  String title,  String description,  String? categoryId,  ItemCategory category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? ownerId,  String title,  String description,  String? categoryId,  CategoryModel category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,) {final _that = this;
 switch (_that) {
 case _ItemModel() when $default != null:
 return $default(_that.id,_that.ownerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
@@ -288,7 +288,7 @@ class _ItemModel implements ItemModel {
 @override final  String description;
 @override final  String? categoryId;
 // 👈 خليه optional
-@override final  ItemCategory category;
+@override final  CategoryModel category;
 @override final  ItemCondition? condition;
  final  List<String> _images;
 @override List<String> get images {
@@ -346,11 +346,11 @@ abstract mixin class _$ItemModelCopyWith<$Res> implements $ItemModelCopyWith<$Re
   factory _$ItemModelCopyWith(_ItemModel value, $Res Function(_ItemModel) _then) = __$ItemModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String? ownerId, String title, String description, String? categoryId, ItemCategory category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner? owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
+ String id, String? ownerId, String title, String description, String? categoryId, CategoryModel category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner? owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
 });
 
 
-@override $ItemCategoryCopyWith<$Res> get category;@override $ItemOwnerCopyWith<$Res>? get owner;@override $ItemCountCopyWith<$Res>? get count;@override $FavoriteInfoCopyWith<$Res>? get favoriteInfo;
+@override $CategoryModelCopyWith<$Res> get category;@override $ItemOwnerCopyWith<$Res>? get owner;@override $ItemCountCopyWith<$Res>? get count;@override $FavoriteInfoCopyWith<$Res>? get favoriteInfo;
 
 }
 /// @nodoc
@@ -371,7 +371,7 @@ as String?,title: null == title ? _self.title : title // ignore: cast_nullable_t
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as String?,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
-as ItemCategory,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
+as CategoryModel,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
 as ItemCondition?,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,geoLat: freezed == geoLat ? _self.geoLat : geoLat // ignore: cast_nullable_to_non_nullable
@@ -395,9 +395,9 @@ as FavoriteInfo?,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ItemCategoryCopyWith<$Res> get category {
+$CategoryModelCopyWith<$Res> get category {
   
-  return $ItemCategoryCopyWith<$Res>(_self.category, (value) {
+  return $CategoryModelCopyWith<$Res>(_self.category, (value) {
     return _then(_self.copyWith(category: value));
   });
 }/// Create a copy of ItemModel
@@ -437,306 +437,6 @@ $FavoriteInfoCopyWith<$Res>? get favoriteInfo {
     return _then(_self.copyWith(favoriteInfo: value));
   });
 }
-}
-
-
-/// @nodoc
-mixin _$ItemCategory {
-
- String get id; String get name; String get slug; String? get iconUrl; String? get description;// 👈 إضافة
- String? get parentId;// 👈 إضافة
- bool? get isActive;// 👈 إضافة
- int? get sortOrder;// 👈 إضافة
- DateTime? get createdAt;// 👈 إضافة
- DateTime? get updatedAt;
-/// Create a copy of ItemCategory
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$ItemCategoryCopyWith<ItemCategory> get copyWith => _$ItemCategoryCopyWithImpl<ItemCategory>(this as ItemCategory, _$identity);
-
-  /// Serializes this ItemCategory to a JSON map.
-  Map<String, dynamic> toJson();
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemCategory&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.iconUrl, iconUrl) || other.iconUrl == iconUrl)&&(identical(other.description, description) || other.description == description)&&(identical(other.parentId, parentId) || other.parentId == parentId)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,id,name,slug,iconUrl,description,parentId,isActive,sortOrder,createdAt,updatedAt);
-
-@override
-String toString() {
-  return 'ItemCategory(id: $id, name: $name, slug: $slug, iconUrl: $iconUrl, description: $description, parentId: $parentId, isActive: $isActive, sortOrder: $sortOrder, createdAt: $createdAt, updatedAt: $updatedAt)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $ItemCategoryCopyWith<$Res>  {
-  factory $ItemCategoryCopyWith(ItemCategory value, $Res Function(ItemCategory) _then) = _$ItemCategoryCopyWithImpl;
-@useResult
-$Res call({
- String id, String name, String slug, String? iconUrl, String? description, String? parentId, bool? isActive, int? sortOrder, DateTime? createdAt, DateTime? updatedAt
-});
-
-
-
-
-}
-/// @nodoc
-class _$ItemCategoryCopyWithImpl<$Res>
-    implements $ItemCategoryCopyWith<$Res> {
-  _$ItemCategoryCopyWithImpl(this._self, this._then);
-
-  final ItemCategory _self;
-  final $Res Function(ItemCategory) _then;
-
-/// Create a copy of ItemCategory
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? slug = null,Object? iconUrl = freezed,Object? description = freezed,Object? parentId = freezed,Object? isActive = freezed,Object? sortOrder = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
-  return _then(_self.copyWith(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
-as String,iconUrl: freezed == iconUrl ? _self.iconUrl : iconUrl // ignore: cast_nullable_to_non_nullable
-as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,parentId: freezed == parentId ? _self.parentId : parentId // ignore: cast_nullable_to_non_nullable
-as String?,isActive: freezed == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool?,sortOrder: freezed == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
-as int?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [ItemCategory].
-extension ItemCategoryPatterns on ItemCategory {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ItemCategory value)?  $default,{required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _ItemCategory() when $default != null:
-return $default(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ItemCategory value)  $default,){
-final _that = this;
-switch (_that) {
-case _ItemCategory():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ItemCategory value)?  $default,){
-final _that = this;
-switch (_that) {
-case _ItemCategory() when $default != null:
-return $default(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String slug,  String? iconUrl,  String? description,  String? parentId,  bool? isActive,  int? sortOrder,  DateTime? createdAt,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _ItemCategory() when $default != null:
-return $default(_that.id,_that.name,_that.slug,_that.iconUrl,_that.description,_that.parentId,_that.isActive,_that.sortOrder,_that.createdAt,_that.updatedAt);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String slug,  String? iconUrl,  String? description,  String? parentId,  bool? isActive,  int? sortOrder,  DateTime? createdAt,  DateTime? updatedAt)  $default,) {final _that = this;
-switch (_that) {
-case _ItemCategory():
-return $default(_that.id,_that.name,_that.slug,_that.iconUrl,_that.description,_that.parentId,_that.isActive,_that.sortOrder,_that.createdAt,_that.updatedAt);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String slug,  String? iconUrl,  String? description,  String? parentId,  bool? isActive,  int? sortOrder,  DateTime? createdAt,  DateTime? updatedAt)?  $default,) {final _that = this;
-switch (_that) {
-case _ItemCategory() when $default != null:
-return $default(_that.id,_that.name,_that.slug,_that.iconUrl,_that.description,_that.parentId,_that.isActive,_that.sortOrder,_that.createdAt,_that.updatedAt);case _:
-  return null;
-
-}
-}
-
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _ItemCategory implements ItemCategory {
-  const _ItemCategory({required this.id, required this.name, required this.slug, this.iconUrl, this.description, this.parentId, this.isActive, this.sortOrder, this.createdAt, this.updatedAt});
-  factory _ItemCategory.fromJson(Map<String, dynamic> json) => _$ItemCategoryFromJson(json);
-
-@override final  String id;
-@override final  String name;
-@override final  String slug;
-@override final  String? iconUrl;
-@override final  String? description;
-// 👈 إضافة
-@override final  String? parentId;
-// 👈 إضافة
-@override final  bool? isActive;
-// 👈 إضافة
-@override final  int? sortOrder;
-// 👈 إضافة
-@override final  DateTime? createdAt;
-// 👈 إضافة
-@override final  DateTime? updatedAt;
-
-/// Create a copy of ItemCategory
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$ItemCategoryCopyWith<_ItemCategory> get copyWith => __$ItemCategoryCopyWithImpl<_ItemCategory>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$ItemCategoryToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemCategory&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.iconUrl, iconUrl) || other.iconUrl == iconUrl)&&(identical(other.description, description) || other.description == description)&&(identical(other.parentId, parentId) || other.parentId == parentId)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,id,name,slug,iconUrl,description,parentId,isActive,sortOrder,createdAt,updatedAt);
-
-@override
-String toString() {
-  return 'ItemCategory(id: $id, name: $name, slug: $slug, iconUrl: $iconUrl, description: $description, parentId: $parentId, isActive: $isActive, sortOrder: $sortOrder, createdAt: $createdAt, updatedAt: $updatedAt)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$ItemCategoryCopyWith<$Res> implements $ItemCategoryCopyWith<$Res> {
-  factory _$ItemCategoryCopyWith(_ItemCategory value, $Res Function(_ItemCategory) _then) = __$ItemCategoryCopyWithImpl;
-@override @useResult
-$Res call({
- String id, String name, String slug, String? iconUrl, String? description, String? parentId, bool? isActive, int? sortOrder, DateTime? createdAt, DateTime? updatedAt
-});
-
-
-
-
-}
-/// @nodoc
-class __$ItemCategoryCopyWithImpl<$Res>
-    implements _$ItemCategoryCopyWith<$Res> {
-  __$ItemCategoryCopyWithImpl(this._self, this._then);
-
-  final _ItemCategory _self;
-  final $Res Function(_ItemCategory) _then;
-
-/// Create a copy of ItemCategory
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? slug = null,Object? iconUrl = freezed,Object? description = freezed,Object? parentId = freezed,Object? isActive = freezed,Object? sortOrder = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
-  return _then(_ItemCategory(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
-as String,iconUrl: freezed == iconUrl ? _self.iconUrl : iconUrl // ignore: cast_nullable_to_non_nullable
-as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,parentId: freezed == parentId ? _self.parentId : parentId // ignore: cast_nullable_to_non_nullable
-as String?,isActive: freezed == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool?,sortOrder: freezed == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
-as int?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
-  ));
-}
-
-
 }
 
 

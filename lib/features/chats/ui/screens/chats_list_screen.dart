@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/routing/routes.dart';
+import '../../../../core/services/auth_service.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../../main_layout/logic/main_layout_cubit/main_layout_cubit.dart';
@@ -19,23 +20,39 @@ class ChatsListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<ChatsListCubit>(
-        // ✅ أضف callback
-        param1: (int totalUnread) {
-          // Update MainLayoutCubit
-          context.read<MainLayoutCubit>().updateUnreadChatsCount(totalUnread);
-        },
-      )..loadChats(
-        userId: getIt.isRegistered<String>(instanceName: 'userId')
-            ? getIt<String>(instanceName: 'userId')
-            : null,
-      ),
-      child: const _ChatsListScreen(),
+    return FutureBuilder(
+      future: getIt<AuthService>().isLoggedIn(),
+      builder: (context, asyncSnapshot) {
+        if (!asyncSnapshot.hasData) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (asyncSnapshot.data == false) {
+          return const SizedBox.shrink();
+        } else {
+          return BlocProvider(
+            create: (context) =>
+                getIt<ChatsListCubit>(
+                  // ✅ أضف callback
+                  param1: (int totalUnread) {
+                    // Update MainLayoutCubit
+                    context.read<MainLayoutCubit>().updateUnreadChatsCount(
+                      totalUnread,
+                    );
+                  },
+                )..loadChats(
+                  userId: getIt.isRegistered<String>(instanceName: 'userId')
+                      ? getIt<String>(instanceName: 'userId')
+                      : null,
+                ),
+            child: const _ChatsListScreen(),
+          );
+        }
+      },
     );
   }
 }
-
 
 class _ChatsListScreen extends StatefulWidget {
   const _ChatsListScreen({super.key});
@@ -64,7 +81,6 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
       // User not logged in
       print('User not logged in: $e');
     }
-
   }
 
   void _onTabChanged() {
@@ -148,10 +164,7 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
               color: ColorsManager.textTertiary,
             ),
             SizedBox(height: 16.h),
-            Text(
-              'لا توجد محادثات',
-              style: TextStyles.font18GreyMedium,
-            ),
+            Text('لا توجد محادثات', style: TextStyles.font18GreyMedium),
           ],
         ),
       );
@@ -168,10 +181,8 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
       child: ListView.separated(
         padding: EdgeInsets.symmetric(vertical: 8.h),
         itemCount: chats.length,
-        separatorBuilder: (_, __) => Divider(
-          height: 1,
-          color: ColorsManager.dividerColor,
-        ),
+        separatorBuilder: (_, __) =>
+            Divider(height: 1, color: ColorsManager.dividerColor),
         itemBuilder: (context, index) {
           return ChatItemCard(
             chat: chats[index],

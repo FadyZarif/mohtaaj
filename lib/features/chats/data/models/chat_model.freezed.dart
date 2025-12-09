@@ -3389,8 +3389,8 @@ return $default(_that.type,_that.itemId,_that.requestId);case _:
 }
 
 /// @nodoc
-@JsonSerializable()
 
+@JsonSerializable(includeIfNull: false)
 class _CreateChatRequest implements CreateChatRequest {
   const _CreateChatRequest({required this.type, this.itemId, this.requestId});
   factory _CreateChatRequest.fromJson(Map<String, dynamic> json) => _$CreateChatRequestFromJson(json);

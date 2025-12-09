@@ -102,7 +102,9 @@ class ItemsListCubit extends Cubit<ItemsListState> {
         hasMoreItems: hasMore,
         error: null,
       ));
-    } catch (error) {
+    } catch (error,s) {
+      print(error);
+      print(s);
       final errorMessage = ApiErrorHandler.handle(error).message;
       emit(state.copyWith(
         isLoading: false,

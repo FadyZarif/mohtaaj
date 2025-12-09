@@ -7,6 +7,7 @@ import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/routing/routes.dart';
 import '../../../../core/helpers/extensions.dart';
+import '../../../../core/services/auth_service.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../../categories/logic/categories_cubit/categories_cubit.dart';
@@ -23,12 +24,26 @@ class CreateItemScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => getIt<CreateItemCubit>()..getCurrentLocation()),
-        BlocProvider(create: (context) => getIt<CategoriesCubit>()..getCategories()),
-      ],
-      child: const _CreateItemScreenBody(),
+    return FutureBuilder(
+      future: getIt<AuthService>().isLoggedIn(),
+      builder: (context, asyncSnapshot) {
+        if (!asyncSnapshot.hasData) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (asyncSnapshot.data == false) {
+          return const SizedBox.shrink();
+        }else {
+          return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => getIt<CreateItemCubit>()..getCurrentLocation()),
+            BlocProvider(create: (context) => getIt<CategoriesCubit>()..getCategories()),
+          ],
+          child: const _CreateItemScreenBody(),
+        );
+        }
+      }
     );
   }
 }

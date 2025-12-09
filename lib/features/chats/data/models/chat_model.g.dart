@@ -227,8 +227,8 @@ _CreateChatRequest _$CreateChatRequestFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CreateChatRequestToJson(_CreateChatRequest instance) =>
     <String, dynamic>{
       'type': _$ChatTypeEnumMap[instance.type]!,
-      'itemId': instance.itemId,
-      'requestId': instance.requestId,
+      'itemId': ?instance.itemId,
+      'requestId': ?instance.requestId,
     };
 
 const _$ChatTypeEnumMap = {ChatType.item: 'item', ChatType.request: 'request'};

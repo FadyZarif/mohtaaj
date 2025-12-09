@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mohtaaj/core/services/auth_service.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
@@ -110,7 +111,7 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
           left: 16.w,
           child: GestureDetector(
             onTap: () {
-              _showReportDialog(context);
+              getIt<AuthService>().requireAuth(context,()=>_showReportDialog(context));
             },
             child: Container(
               padding: EdgeInsets.all(8.r),

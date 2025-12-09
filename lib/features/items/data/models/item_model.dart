@@ -4,6 +4,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../core/theming/colors.dart';
 import 'package:flutter/material.dart';
 
+import '../../../categories/data/models/category_model.dart';
+
 part 'item_model.freezed.dart';
 part 'item_model.g.dart';
 
@@ -93,7 +95,7 @@ abstract class ItemModel with _$ItemModel {
     required String title,
     required String description,
     String? categoryId,  // 👈 خليه optional
-    required ItemCategory category,
+    required CategoryModel category,
     ItemCondition? condition,
     required List<String> images,
     required String city,
@@ -115,7 +117,7 @@ abstract class ItemModel with _$ItemModel {
   factory ItemModel.fromJson(Map<String, dynamic> json) =>
       _$ItemModelFromJson(json);
 }
-
+/*
 @freezed
 abstract class ItemCategory with _$ItemCategory {
   const factory ItemCategory({
@@ -134,6 +136,7 @@ abstract class ItemCategory with _$ItemCategory {
   factory ItemCategory.fromJson(Map<String, dynamic> json) =>
       _$ItemCategoryFromJson(json);
 }
+*/
 
 @freezed
 abstract class ItemOwner with _$ItemOwner {

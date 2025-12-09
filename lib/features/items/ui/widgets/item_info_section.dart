@@ -59,11 +59,22 @@ class ItemInfoSection extends StatelessWidget {
               ),
               const Spacer(),
               Icon(
+                Icons.favorite_border,
+                size: 16.sp,
+                color: ColorsManager.textSecondary,
+              ),
+              horizontalSpace(4),
+              Text(
+                '${item.count?.favorites??0}',
+                style: TextStyles.font14GreyMedium,
+              ),
+              horizontalSpace(16),
+              Icon(
                 Icons.visibility_outlined,
                 size: 16.sp,
                 color: ColorsManager.textSecondary,
               ),
-              SizedBox(width: 4.w),
+              horizontalSpace(4),
               Text(
                 '${item.views}',
                 style: TextStyles.font14GreyMedium,
@@ -78,7 +89,7 @@ class ItemInfoSection extends StatelessWidget {
                 icon: Icons.category_outlined,
                 label: item.category.name,
               ),
-              verticalSpace(8),
+              horizontalSpace(8),
               _buildInfoChip(
                 icon: Icons.info_outline,
                 label: item.condition?.displayName??'غير محدد',

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mohtaaj/core/di/dependency_injection.dart';
 import '../../features/items/data/models/item_model.dart';
 import '../../features/items/data/models/items_queries.dart';
 import '../../features/items/logic/items_list_cubit/items_list_cubit.dart';
@@ -9,6 +10,7 @@ import '../../features/items/logic/items_list_cubit/items_list_state.dart';
 import '../../features/auth/ui/widgets/searchable_dropdown.dart';
 import '../helpers/location_data.dart';
 import '../helpers/spacing.dart';
+import '../services/auth_service.dart';
 import '../theming/colors.dart';
 import '../theming/styles.dart';
 
@@ -99,7 +101,7 @@ class _ItemsFiltersSheetState extends State<ItemsFiltersSheet> {
                     _buildCityDropdown(),
                     verticalSpace(16),
                     // Price Range
-                    _buildSectionTitle('السعر (ل.س)'),
+                    _buildSectionTitle('السعر'),
                     verticalSpace(8),
                     _buildPriceRange(),
                     verticalSpace(16),
@@ -160,15 +162,28 @@ class _ItemsFiltersSheetState extends State<ItemsFiltersSheet> {
     return BlocBuilder<ItemsListCubit, ItemsListState>(
       buildWhen: (previous, current) => previous.selectedCity != current.selectedCity,
       builder: (context, state) {
-        return SearchableDropdown(
-          items: LocationData.getCitiesByCountry('مصر'),
-          selectedItem: state.selectedCity,
-          onChanged: (city) {
-            context.read<ItemsListCubit>().updateCity(city);
-          }, hintText: '',
+        return FutureBuilder<String>(
+          future: _getUserCountry(),
+          builder: (context, snapshot) {
+            final userCountry = snapshot.data ?? 'مصر';
+
+            return SearchableDropdown(
+              items: LocationData.getCitiesByCountry(userCountry),
+              selectedItem: state.selectedCity,
+              onChanged: (city) {
+                context.read<ItemsListCubit>().updateCity(city);
+              },
+              hintText: 'اختر ${LocationData.getAdministrativeDivisionType(userCountry)}',
+            );
+          },
         );
       },
     );
+  }
+
+  Future<String> _getUserCountry() async {
+    final user = await getIt<AuthService>().getUserData();
+    return user?.country ?? 'مصر';
   }
 
   Widget _buildPriceRange() {
@@ -290,7 +305,7 @@ class _ItemsFiltersSheetState extends State<ItemsFiltersSheet> {
                   onChanged: (value) {
                     context.read<ItemsListCubit>().toggleFreeOnly();
                   },
-                  activeColor: ColorsManager.mainColor,
+                  activeTrackColor: ColorsManager.mainColor,
                 ),
               ],
             ),

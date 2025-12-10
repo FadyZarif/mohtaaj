@@ -82,7 +82,6 @@ class _HomeScreenBody extends StatelessWidget {
                     categories: state.categories,
                     isLoading: state.isCategoriesLoading,
                     onCategoryTap: (category) {
-                      // TODO: Navigate to category items
                       context.pushNamed(
                         Routes.categoryItemsScreen,
                         arguments: category,

@@ -34,65 +34,66 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      actions: [
-        // Location
-        GestureDetector(
-          onTap: onLocationTap,
-          child: Row(
-            children: [
-              Text(
-                location,
-                style: TextStyles.font14BlackMedium,
-              ),
-              SizedBox(width: 4.w),
-              Icon(
-                Icons.keyboard_arrow_down,
-                size: 20.sp,
-                color: ColorsManager.textPrimary,
-              ),
-            ],
-          ),
-        ),
-        SizedBox(width: 12.w),
-        // Notifications
-        GestureDetector(
-          onTap: onNotificationTap,
-          child: Stack(
-            children: [
-              Icon(
-                Icons.notifications_outlined,
-                size: 24.sp,
-                color: ColorsManager.textPrimary,
-              ),
-              if (notificationCount > 0)
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Container(
-                    padding: EdgeInsets.all(4.r),
-                    decoration: const BoxDecoration(
-                      color: ColorsManager.error,
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: BoxConstraints(
-                      minWidth: 16.w,
-                      minHeight: 16.h,
-                    ),
-                    child: Text(
-                      notificationCount > 9 ? '9+' : '$notificationCount',
-                      style: TextStyles.font10GreyMedium.copyWith(
-                        color: Colors.white,
-                        fontSize: 8.sp,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-        SizedBox(width: 16.w),
-      ],
+      // TODO: Enable actions when needed
+      // actions: [
+      //   // Location
+      //   GestureDetector(
+      //     onTap: onLocationTap,
+      //     child: Row(
+      //       children: [
+      //         Text(
+      //           location,
+      //           style: TextStyles.font14BlackMedium,
+      //         ),
+      //         SizedBox(width: 4.w),
+      //         Icon(
+      //           Icons.keyboard_arrow_down,
+      //           size: 20.sp,
+      //           color: ColorsManager.textPrimary,
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      //   SizedBox(width: 12.w),
+      //   // Notifications
+      //   GestureDetector(
+      //     onTap: onNotificationTap,
+      //     child: Stack(
+      //       children: [
+      //         Icon(
+      //           Icons.notifications_outlined,
+      //           size: 24.sp,
+      //           color: ColorsManager.textPrimary,
+      //         ),
+      //         if (notificationCount > 0)
+      //           Positioned(
+      //             right: 0,
+      //             top: 0,
+      //             child: Container(
+      //               padding: EdgeInsets.all(4.r),
+      //               decoration: const BoxDecoration(
+      //                 color: ColorsManager.error,
+      //                 shape: BoxShape.circle,
+      //               ),
+      //               constraints: BoxConstraints(
+      //                 minWidth: 16.w,
+      //                 minHeight: 16.h,
+      //               ),
+      //               child: Text(
+      //                 notificationCount > 9 ? '9+' : '$notificationCount',
+      //                 style: TextStyles.font10GreyMedium.copyWith(
+      //                   color: Colors.white,
+      //                   fontSize: 8.sp,
+      //                 ),
+      //                 textAlign: TextAlign.center,
+      //               ),
+      //             ),
+      //           ),
+      //       ],
+      //     ),
+      //   ),
+      //   SizedBox(width: 16.w),
+      // ],
     );
   }
 

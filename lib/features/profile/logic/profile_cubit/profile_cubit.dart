@@ -21,12 +21,14 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     try {
       final response = await _apiService.getMyProfile();
+
+      // ✅ Save user data to cache for offline access
+      await _authService.saveUserData(response.data);
+
       emit(ProfileState.success(response.data));
     } catch (error) {
       final apiError = ApiErrorHandler.handle(error);
-      emit(ProfileState.error(
-        apiError.message ?? 'حدث خطأ في جلب البيانات',
-      ));
+      emit(ProfileState.error(apiError.message));
     }
   }
 
@@ -36,12 +38,14 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     try {
       final response = await _apiService.updateProfile(request);
+
+      // ✅ Save updated user data to cache
+      await _authService.saveUserData(response.data);
+
       emit(ProfileState.updateSuccess(response.data));
     } catch (error) {
       final apiError = ApiErrorHandler.handle(error);
-      emit(ProfileState.error(
-        apiError.message ?? 'حدث خطأ في تحديث البيانات',
-      ));
+      emit(ProfileState.error(apiError.message));
     }
   }
 

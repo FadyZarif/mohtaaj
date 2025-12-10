@@ -202,38 +202,6 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
 
                       verticalSpace(20),
 
-                      // Phone Field
-                      Text(
-                        'رقم الهاتف',
-                        style: TextStyles.font14BlackSemiBold,
-                      ),
-                      verticalSpace(8),
-                      PhoneTextField(
-                        key: _phoneFieldKey,
-                        controller: _phoneController,
-                        initialCode: _initialCode,
-                        validator: AppValidators.validatePhone,
-                        onCountryChanged: (code) {
-                          _dial = code;
-                        },
-                      ),
-
-                      verticalSpace(20),
-
-                      // Password Field
-                      Text(
-                        'كلمة المرور',
-                        style: TextStyles.font14BlackSemiBold,
-                      ),
-                      verticalSpace(8),
-                      PasswordTextField(
-                        hintText: '••••••••',
-                        controller: _passwordController,
-                        validator: AppValidators.validatePassword,
-                      ),
-
-                      verticalSpace(20),
-
                       // Country Dropdown
                       Row(
                         children: [
@@ -299,6 +267,38 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
                         },
                         validator: (value) =>
                         value == null ? 'الرجاء اختيار المدينة' : null,
+                      ),
+
+                      verticalSpace(20),
+
+                      // Phone Field
+                      Text(
+                        'رقم الهاتف',
+                        style: TextStyles.font14BlackSemiBold,
+                      ),
+                      verticalSpace(8),
+                      PhoneTextField(
+                        key: _phoneFieldKey,
+                        controller: _phoneController,
+                        initialCode: _initialCode,
+                        validator: AppValidators.validatePhone,
+                        onCountryChanged: (code) {
+                          _dial = code;
+                        },
+                      ),
+
+                      verticalSpace(20),
+
+                      // Password Field
+                      Text(
+                        'كلمة المرور',
+                        style: TextStyles.font14BlackSemiBold,
+                      ),
+                      verticalSpace(8),
+                      PasswordTextField(
+                        hintText: '••••••••',
+                        controller: _passwordController,
+                        validator: AppValidators.validatePassword,
                       ),
 
                       verticalSpace(32),

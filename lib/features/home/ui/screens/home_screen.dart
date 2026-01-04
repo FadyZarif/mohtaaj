@@ -74,7 +74,6 @@ class _HomeScreenBody extends StatelessWidget {
               verticalSpace(12),
               BlocBuilder<HomeCubit, HomeState>(
                 buildWhen: (previous, current) =>
-
                     previous.categories != current.categories ||
                     previous.isCategoriesLoading != current.isCategoriesLoading,
                 builder: (context, state) {
@@ -115,13 +114,13 @@ class _HomeScreenBody extends StatelessWidget {
                       ),
                       verticalSpace(12),
                       SizedBox(
-                        height: 220.h,
+                        height: 200.h,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
                           itemCount: state.featuredItems.length,
                           separatorBuilder: (context, index) =>
-                              SizedBox(width: 12.w),
+                              horizontalSpace(12),
                           itemBuilder: (context, index) {
                             return SizedBox(
                               width: 160.w,
@@ -166,7 +165,7 @@ class _HomeScreenBody extends StatelessWidget {
                         crossAxisCount: 2,
                         crossAxisSpacing: 12.w,
                         mainAxisSpacing: 12.h,
-                        childAspectRatio: 0.7,
+                        childAspectRatio: 0.75.r,
                       ),
                       itemCount: state.items.length,
                       itemBuilder: (context, index) {
@@ -196,9 +195,7 @@ class _HomeScreenBody extends StatelessWidget {
     return SizedBox(
       height: 100.h,
       child: const Center(
-        child: CircularProgressIndicator(
-          color: ColorsManager.mainColor,
-        ),
+        child: CircularProgressIndicator(color: ColorsManager.mainColor),
       ),
     );
   }
@@ -215,10 +212,7 @@ class _HomeScreenBody extends StatelessWidget {
               color: ColorsManager.iconTertiary,
             ),
             verticalSpace(12),
-            Text(
-              'لا توجد إعلانات حالياً',
-              style: TextStyles.font14GreyRegular,
-            ),
+            Text('لا توجد إعلانات حالياً', style: TextStyles.font14GreyRegular),
           ],
         ),
       ),

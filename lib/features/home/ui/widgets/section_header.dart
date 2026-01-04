@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 
 class SectionHeader extends StatelessWidget {
@@ -22,17 +21,11 @@ class SectionHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: TextStyles.font18BlackSemiBold,
-          ),
+          Text(title, style: TextStyles.font18BlackSemiBold),
           if (actionText != null)
             GestureDetector(
               onTap: onActionTap,
-              child: Text(
-                actionText!,
-                style: TextStyles.font14CyanMedium,
-              ),
+              child: Text(actionText!, style: TextStyles.font14CyanMedium),
             ),
         ],
       ),

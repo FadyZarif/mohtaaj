@@ -55,7 +55,7 @@ class ChatsListScreen extends StatelessWidget {
 }
 
 class _ChatsListScreen extends StatefulWidget {
-  const _ChatsListScreen({super.key});
+  const _ChatsListScreen();
 
   @override
   State<_ChatsListScreen> createState() => _ChatsListScreenState();

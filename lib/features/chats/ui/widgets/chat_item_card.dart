@@ -1,10 +1,10 @@
 // lib/features/chats/ui/widgets/chat_item_card.dart
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import '../../../../core/helpers/extensions.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../data/models/chat_model.dart';
@@ -26,20 +26,24 @@ class ChatItemCard extends StatelessWidget {
     final otherUser = chat.buyerId == currentUserId ? chat.seller : chat.buyer;
     // ✅ احسب الـ unread count الصح حسب الـ user
     final unreadCount = chat.buyerId == currentUserId
-        ? chat.unreadCountBuyer  // أنا buyer
+        ? chat
+              .unreadCountBuyer // أنا buyer
         : chat.unreadCountSeller; // أنا seller
 
     final hasUnread = unreadCount > 0;
 
     // ✅ Debug print
-    print('🎨 ChatItemCard rebuild:');
-    print('   Chat: ${otherUser.name}');
-    print('   UnreadCountBuyer: ${chat.unreadCountBuyer}');
-    print('   UnreadCountSeller: ${chat.unreadCountSeller}');
-    print('   CurrentUserId: $currentUserId');
-    print('   IsBuyer: ${chat.buyerId == currentUserId}');
-    print('   Calculated Unread: $unreadCount');
-    print('   HasUnread: $hasUnread');
+
+    if (kDebugMode) {
+      print('🎨 ChatItemCard rebuild:');
+      print('   Chat: ${otherUser.name}');
+      print('   UnreadCountBuyer: ${chat.unreadCountBuyer}');
+      print('   UnreadCountSeller: ${chat.unreadCountSeller}');
+      print('   CurrentUserId: $currentUserId');
+      print('   IsBuyer: ${chat.buyerId == currentUserId}');
+      print('   Calculated Unread: $unreadCount');
+      print('   HasUnread: $hasUnread');
+    }
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -160,28 +164,24 @@ class ChatItemCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.r),
             child: chat.item?.images.isNotEmpty ?? false
                 ? CachedNetworkImage(
-              imageUrl: chat.item!.images.first,
-              width: 70.w,
-              height: 70.w,
-              fit: BoxFit.cover,
-              placeholder: (_, __) => Container(
-                color: ColorsManager.shimmerBase,
-              ),
-              errorWidget: (_, __, ___) => Container(
-                color: ColorsManager.shimmerBase,
-                child: Icon(
-                  Icons.image,
-                  color: ColorsManager.iconTertiary,
-                ),
-              ),
-            )
+                    imageUrl: chat.item!.images.first,
+                    width: 70.w,
+                    height: 70.w,
+                    fit: BoxFit.cover,
+                    placeholder: (_, _) =>
+                        Container(color: ColorsManager.shimmerBase),
+                    errorWidget: (_, _, _) => Container(
+                      color: ColorsManager.shimmerBase,
+                      child: Icon(
+                        Icons.image,
+                        color: ColorsManager.iconTertiary,
+                      ),
+                    ),
+                  )
                 : Container(
-              color: ColorsManager.shimmerBase,
-              child: Icon(
-                Icons.image,
-                color: ColorsManager.iconTertiary,
-              ),
-            ),
+                    color: ColorsManager.shimmerBase,
+                    child: Icon(Icons.image, color: ColorsManager.iconTertiary),
+                  ),
           ),
 
           // User avatar (small circle)
@@ -197,17 +197,18 @@ class ChatItemCard extends StatelessWidget {
                 border: Border.all(color: Colors.white, width: 2),
               ),
               child: ClipOval(
-                child: (chat.buyerId == currentUserId
-                    ? chat.seller.avatarUrl
-                    : chat.buyer.avatarUrl) !=
-                    null
+                child:
+                    (chat.buyerId == currentUserId
+                            ? chat.seller.avatarUrl
+                            : chat.buyer.avatarUrl) !=
+                        null
                     ? CachedNetworkImage(
-                  imageUrl: chat.buyerId == currentUserId
-                      ? chat.seller.avatarUrl!
-                      : chat.buyer.avatarUrl!,
-                  fit: BoxFit.cover,
-                  errorWidget: (_, __, ___) => _defaultAvatar(),
-                )
+                        imageUrl: chat.buyerId == currentUserId
+                            ? chat.seller.avatarUrl!
+                            : chat.buyer.avatarUrl!,
+                        fit: BoxFit.cover,
+                        errorWidget: (_, _, _) => _defaultAvatar(),
+                      )
                     : _defaultAvatar(),
               ),
             ),
@@ -220,11 +221,7 @@ class ChatItemCard extends StatelessWidget {
   Widget _defaultAvatar() {
     return Container(
       color: ColorsManager.mainColorLight,
-      child: Icon(
-        Icons.person,
-        size: 14.sp,
-        color: Colors.white,
-      ),
+      child: Icon(Icons.person, size: 14.sp, color: Colors.white),
     );
   }
 }

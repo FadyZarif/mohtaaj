@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
@@ -102,8 +101,7 @@ class ItemCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (item.isFeatured)
-                _buildBadge('مميز', ColorsManager.badgeGold),
+              if (item.isFeatured) _buildBadge('مميز', ColorsManager.badgeGold),
               // if (item.isFree)
               //   Padding(
               //     padding: EdgeInsets.only(top: 4.h),
@@ -184,7 +182,10 @@ class ItemCard extends StatelessWidget {
           ),
         ),
         // Time
-        Text(timeago.format(item.createdAt,locale: 'ar'), style: TextStyles.font10GreyRegular),
+        Text(
+          timeago.format(item.createdAt, locale: 'ar'),
+          style: TextStyles.font10GreyRegular,
+        ),
       ],
     );
   }

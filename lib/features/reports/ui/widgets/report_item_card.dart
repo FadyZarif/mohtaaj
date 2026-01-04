@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mohtaaj/core/helpers/spacing.dart';
-import '../../../../core/helpers/extensions.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../data/models/report_model.dart';
@@ -12,10 +11,7 @@ import 'package:timeago/timeago.dart' as timeago;
 class ReportItemCard extends StatelessWidget {
   final ReportModel report;
 
-  const ReportItemCard({
-    super.key,
-    required this.report,
-  });
+  const ReportItemCard({super.key, required this.report});
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +56,7 @@ class ReportItemCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      _getTypeText(),
-                      style: TextStyles.font14BlackMedium,
-                    ),
+                    Text(_getTypeText(), style: TextStyles.font14BlackMedium),
                     verticalSpace(2),
                     Text(
                       timeago.format(report.createdAt, locale: 'ar'),
@@ -105,10 +98,7 @@ class ReportItemCard extends StatelessWidget {
           verticalSpace(12),
 
           // Reason
-          Text(
-            'السبب:',
-            style: TextStyles.font12GreyMedium,
-          ),
+          Text('السبب:', style: TextStyles.font12GreyMedium),
           verticalSpace(4),
           Text(
             report.reason,
@@ -129,7 +119,7 @@ class ReportItemCard extends StatelessWidget {
                 ),
                 SizedBox(width: 4.w),
                 Text(
-                  'تم المعالجة في ${timeago.format(report.resolvedAt!,locale: 'ar') }',
+                  'تم المعالجة في ${timeago.format(report.resolvedAt!, locale: 'ar')}',
                   style: TextStyles.font12GreyRegular,
                 ),
               ],

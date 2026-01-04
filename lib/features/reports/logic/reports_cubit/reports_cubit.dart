@@ -34,16 +34,18 @@ class ReportsCubit extends Cubit<ReportsState> {
 
       final response = await _apiService.createReport(request);
 
-      emit(ReportsState.reportCreated(
-        report: response.data.report,
-        message: response.data.message,
-      ));
+      emit(
+        ReportsState.reportCreated(
+          report: response.data.report,
+          message: response.data.message,
+        ),
+      );
 
       print('✅ Report created successfully');
     } catch (e) {
       final error = ApiErrorHandler.handle(e);
 
-      String errorMessage = error.message ?? 'فشل إرسال البلاغ';
+      String errorMessage = error.message;
 
       emit(ReportsState.error(errorMessage));
       print('❌ Error creating report: $errorMessage');
@@ -80,17 +82,19 @@ class ReportsCubit extends Cubit<ReportsState> {
       _hasMorePages = _currentPage < response.data.meta.totalPages;
       _currentPage++;
 
-      emit(ReportsState.reportsLoaded(
-        reports: List.from(_allReports),
-        hasMorePages: _hasMorePages,
-      ));
+      emit(
+        ReportsState.reportsLoaded(
+          reports: List.from(_allReports),
+          hasMorePages: _hasMorePages,
+        ),
+      );
 
-      print('✅ Reports loaded: ${_allReports.length}, Has more: $_hasMorePages');
+      print(
+        '✅ Reports loaded: ${_allReports.length}, Has more: $_hasMorePages',
+      );
     } catch (e) {
       final error = ApiErrorHandler.handle(e);
-      emit(ReportsState.error(
-        error.message ?? 'فشل تحميل البلاغات',
-      ));
+      emit(ReportsState.error(error.message));
       print('❌ Error loading reports: ${error.message}');
     }
   }

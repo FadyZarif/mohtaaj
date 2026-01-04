@@ -15,7 +15,8 @@ class RegisterCubit extends Cubit<RegisterState> {
   final AuthService _authService;
   final SocketService _socketService;
 
-  RegisterCubit(this._apiService, this._authService, this._socketService) : super(const RegisterState.initial());
+  RegisterCubit(this._apiService, this._authService, this._socketService)
+    : super(const RegisterState.initial());
 
   String? detectedCity;
   String? detectedCountry;
@@ -32,17 +33,19 @@ class RegisterCubit extends Cubit<RegisterState> {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          emit(const RegisterState.locationError(
-            'يرجى السماح بالوصول إلى الموقع',
-          ));
+          emit(
+            const RegisterState.locationError('يرجى السماح بالوصول إلى الموقع'),
+          );
           return;
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        emit(const RegisterState.locationError(
-          'يرجى تفعيل صلاحية الموقع من الإعدادات',
-        ));
+        emit(
+          const RegisterState.locationError(
+            'يرجى تفعيل صلاحية الموقع من الإعدادات',
+          ),
+        );
         return;
       }
 
@@ -80,22 +83,26 @@ class RegisterCubit extends Cubit<RegisterState> {
         // detectedPhoneCode = LocationData.getCodeByCountry(detectedCountry!);
         detectedPhoneCode = placemark.isoCountryCode;
 
-        emit(RegisterState.locationDetected(
-          city: detectedCity!,
-          country: detectedCountry!,
-          phoneCountryCode: detectedPhoneCode!,
-        ));
+        emit(
+          RegisterState.locationDetected(
+            city: detectedCity!,
+            country: detectedCountry!,
+            phoneCountryCode: detectedPhoneCode!,
+          ),
+        );
       } else {
         // Default values
         detectedCity = 'القاهرة';
         detectedCountry = 'مصر';
         detectedPhoneCode = 'EG';
 
-        emit(RegisterState.locationDetected(
-          city: detectedCity!,
-          country: detectedCountry!,
-          phoneCountryCode: detectedPhoneCode!,
-        ));
+        emit(
+          RegisterState.locationDetected(
+            city: detectedCity!,
+            country: detectedCountry!,
+            phoneCountryCode: detectedPhoneCode!,
+          ),
+        );
       }
     } catch (error) {
       // Set defaults on error
@@ -104,28 +111,22 @@ class RegisterCubit extends Cubit<RegisterState> {
       detectedPhoneCode = 'EG';
 
       final apiError = ApiErrorHandler.handle(error);
-      emit(RegisterState.locationError(
-        apiError.message ?? 'حدث خطأ في تحديد الموقع',
-      ));
+      emit(RegisterState.locationError(apiError.message));
     }
   }
 
   /// Register user
-  Future<void> register(RegisterRequest request) async
-  {
+  Future<void> register(RegisterRequest request) async {
     emit(const RegisterState.loading());
 
     try {
-      final response = await _apiService.register(
-        request
-      );
+      final response = await _apiService.register(request);
 
       // Save tokens
       await _authService.saveTokens(
         accessToken: response.data.tokens.accessToken,
         refreshToken: response.data.tokens.refreshToken,
       );
-
 
       // Save user ID
       await _authService.saveUserId(response.data.user.id);
@@ -148,9 +149,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       emit(const RegisterState.success('تم التسجيل بنجاح'));
     } catch (error) {
       final apiError = ApiErrorHandler.handle(error);
-      emit(RegisterState.error(
-        apiError.message ?? 'حدث خطأ أثناء التسجيل',
-      ));
+      emit(RegisterState.error(apiError.message));
     }
   }
 }

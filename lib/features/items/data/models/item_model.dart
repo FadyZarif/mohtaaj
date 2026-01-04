@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../core/theming/colors.dart';
@@ -8,7 +7,6 @@ import '../../../categories/data/models/category_model.dart';
 
 part 'item_model.freezed.dart';
 part 'item_model.g.dart';
-
 
 enum ItemCondition {
   @JsonValue("new")
@@ -45,7 +43,6 @@ extension ItemConditionX on ItemCondition {
 }
 
 enum ItemStatus {
-
   @JsonValue("pending")
   pending,
 
@@ -72,10 +69,11 @@ extension ItemStatusX on ItemStatus {
         return 'مبلغ عنه';
     }
   }
+
   Color get color {
     switch (this) {
       case ItemStatus.pending:
-        return ColorsManager.warning ?? Colors.orange;
+        return ColorsManager.warning;
       case ItemStatus.active:
         return ColorsManager.success;
       case ItemStatus.closed:
@@ -86,15 +84,14 @@ extension ItemStatusX on ItemStatus {
   }
 }
 
-
 @freezed
 abstract class ItemModel with _$ItemModel {
   const factory ItemModel({
     required String id,
-    String? ownerId,  // 👈 خليه optional
+    String? ownerId, // 👈 خليه optional
     required String title,
     required String description,
-    String? categoryId,  // 👈 خليه optional
+    String? categoryId, // 👈 خليه optional
     required CategoryModel category,
     ItemCondition? condition,
     required List<String> images,
@@ -109,7 +106,7 @@ abstract class ItemModel with _$ItemModel {
     required int favoritesCount,
     required DateTime createdAt,
     DateTime? closedAt,
-    ItemOwner? owner,  // 👈 خليه optional
+    ItemOwner? owner, // 👈 خليه optional
     @JsonKey(name: '_count') ItemCount? count,
     FavoriteInfo? favoriteInfo,
   }) = _ItemModel;
@@ -166,9 +163,7 @@ abstract class ItemCount with _$ItemCount {
 
 @freezed
 abstract class FavoriteInfo with _$FavoriteInfo {
-  const factory FavoriteInfo({
-    required DateTime favoritedAt,
-  }) = _FavoriteInfo;
+  const factory FavoriteInfo({required DateTime favoritedAt}) = _FavoriteInfo;
 
   factory FavoriteInfo.fromJson(Map<String, dynamic> json) =>
       _$FavoriteInfoFromJson(json);

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,19 +13,18 @@ import '../../logic/item_details_cubit/item_details_state.dart';
 import '../widgets/item_images_carousel.dart';
 import '../widgets/item_info_section.dart';
 import '../widgets/owner_section.dart';
+import '../widgets/similar_items_section.dart';
 
 class ItemDetailsScreen extends StatelessWidget {
   final String itemId;
 
-  const ItemDetailsScreen({
-    super.key,
-    required this.itemId,
-  });
+  const ItemDetailsScreen({super.key, required this.itemId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<ItemDetailsCubit>(param1: itemId)..getItemDetails(),
+      create: (context) =>
+          getIt<ItemDetailsCubit>(param1: itemId)..getItemDetails(),
       child: const _ItemDetailsBody(),
     );
   }
@@ -44,9 +42,7 @@ class _ItemDetailsBody extends StatelessWidget {
           return state.when(
             initial: () => const SizedBox.shrink(),
             loading: () => const Center(
-              child: CircularProgressIndicator(
-                color: ColorsManager.mainColor,
-              ),
+              child: CircularProgressIndicator(color: ColorsManager.mainColor),
             ),
             success: (item, similarItems, isFavorite) {
               return Stack(
@@ -71,6 +67,9 @@ class _ItemDetailsBody extends StatelessWidget {
                             );
                           },
                         ),
+                        verticalSpace(8),
+                        // Similar Items Section - الجديد
+                        SimilarItemsSection(similarItems: similarItems),
                         verticalSpace(80), // Space for bottom buttons
                       ],
                     ),
@@ -80,7 +79,11 @@ class _ItemDetailsBody extends StatelessWidget {
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    child: _buildActionButtons(context, item.owner!.id, isFavorite),
+                    child: _buildActionButtons(
+                      context,
+                      item.owner!.id,
+                      isFavorite,
+                    ),
                   ),
                 ],
               );
@@ -122,7 +125,11 @@ class _ItemDetailsBody extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtons(BuildContext context, String ownerId, bool isFavorite) {
+  Widget _buildActionButtons(
+    BuildContext context,
+    String ownerId,
+    bool isFavorite,
+  ) {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -142,7 +149,10 @@ class _ItemDetailsBody extends StatelessWidget {
             // Favorite Button
             GestureDetector(
               onTap: () {
-                getIt<AuthService>().requireAuth(context, ()=>context.read<ItemDetailsCubit>().toggleFavorite());
+                getIt<AuthService>().requireAuth(
+                  context,
+                  () => context.read<ItemDetailsCubit>().toggleFavorite(),
+                );
               },
               child: Container(
                 width: 48.w,
@@ -153,7 +163,9 @@ class _ItemDetailsBody extends StatelessWidget {
                 ),
                 child: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isFavorite ? ColorsManager.error : ColorsManager.iconSecondary,
+                  color: isFavorite
+                      ? ColorsManager.error
+                      : ColorsManager.iconSecondary,
                   size: 24.sp,
                 ),
               ),
@@ -162,7 +174,7 @@ class _ItemDetailsBody extends StatelessWidget {
             // Chat Button
             Expanded(
               child: GestureDetector(
-                onTap:()=> _createChat(context),
+                onTap: () => _createChat(context),
                 child: Container(
                   height: 48.h,
                   decoration: BoxDecoration(
@@ -178,10 +190,7 @@ class _ItemDetailsBody extends StatelessWidget {
                         size: 20.sp,
                       ),
                       SizedBox(width: 8.w),
-                      Text(
-                        'دردشة',
-                        style: TextStyles.font16WhiteSemiBold,
-                      ),
+                      Text('دردشة', style: TextStyles.font16WhiteSemiBold),
                     ],
                   ),
                 ),
@@ -203,18 +212,13 @@ class _ItemDetailsBody extends StatelessWidget {
                   color: ColorsManager.success,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
-                child: Icon(
-                  Icons.phone,
-                  color: Colors.white,
-                  size: 24.sp,
-                ),
+                child: Icon(Icons.phone, color: Colors.white, size: 24.sp),
               ),
             ),
           ],
         ),
       ),
     );
-
   }
   // TODO
   /*Future<void> _makePhoneCall(BuildContext context, String? phoneNumber) async {
@@ -266,10 +270,7 @@ class _ItemDetailsBody extends StatelessWidget {
         final chatId = await context.read<ItemDetailsCubit>().getOrCreateChat();
 
         if (chatId != null && context.mounted) {
-          context.pushNamed(
-            Routes.chatRoomScreen,
-            arguments: chatId,
-          );
+          context.pushNamed(Routes.chatRoomScreen, arguments: chatId);
         }
       } catch (e) {
         if (context.mounted) {
@@ -284,5 +285,3 @@ class _ItemDetailsBody extends StatelessWidget {
     });
   }
 }
-
-

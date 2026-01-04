@@ -1,6 +1,7 @@
 // lib/features/chats/logic/chats_list/chats_list_cubit.dart
 
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../data/models/chat_model.dart';
@@ -23,10 +24,10 @@ class ChatsListCubit extends Cubit<ChatsListState> {
   final Set<String> _processedMessageIds = {};
 
   ChatsListCubit(
-      this._apiService,
-      this._socketService, {
-        this.onTotalUnreadChanged,
-      }) : super(const ChatsListState.initial());
+    this._apiService,
+    this._socketService, {
+    this.onTotalUnreadChanged,
+  }) : super(const ChatsListState.initial());
 
   Future<void> loadChats({String? userId}) async {
     _currentUserId = userId;
@@ -40,7 +41,7 @@ class ChatsListCubit extends Cubit<ChatsListState> {
       _listenToSocketEvents();
     } catch (e) {
       final error = ApiErrorHandler.handle(e);
-      emit(ChatsListState.error(error.message ?? 'حدث خطأ'));
+      emit(ChatsListState.error(error.message));
     }
   }
 
@@ -50,31 +51,43 @@ class ChatsListCubit extends Cubit<ChatsListState> {
     _messagesReadSub?.cancel();
 
     // Listen to new message notifications
-    _messageNotificationSub = _socketService.messageNotificationStream.listen((data) {
+    _messageNotificationSub = _socketService.messageNotificationStream.listen((
+      data,
+    ) {
       try {
-        print('🔔 Message notification received: $data');
+        if (kDebugMode) {
+          print('🔔 Message notification received: $data');
+        }
 
         final chatId = data['chatId'] as String?;
         if (chatId == null) {
-          print('⚠️ chatId is null, skipping');
+          if (kDebugMode) {
+            print('⚠️ chatId is null, skipping');
+          }
           return;
         }
 
         final message = data['message'];
         if (message == null) {
-          print('⚠️ message is null, skipping');
+          if (kDebugMode) {
+            print('⚠️ message is null, skipping');
+          }
           return;
         }
 
         final messageId = message['id'] as String?;
         if (messageId == null) {
-          print('⚠️ messageId is null, skipping');
+          if (kDebugMode) {
+            print('⚠️ messageId is null, skipping');
+          }
           return;
         }
 
         // ✅ Check if already processed
         if (_processedMessageIds.contains(messageId)) {
-          print('⚠️ Message already processed: $messageId, skipping');
+          if (kDebugMode) {
+            print('⚠️ Message already processed: $messageId, skipping');
+          }
           return;
         }
 
@@ -96,7 +109,9 @@ class ChatsListCubit extends Cubit<ChatsListState> {
           final senderId = sender != null ? sender['id'] as String? : null;
 
           if (senderId == null) {
-            print('⚠️ senderId is null, skipping');
+            if (kDebugMode) {
+              print('⚠️ senderId is null, skipping');
+            }
             return;
           }
 
@@ -104,15 +119,17 @@ class ChatsListCubit extends Cubit<ChatsListState> {
           final isBuyer = chat.buyerId == _currentUserId;
 
           print('📊 Processing message: $messageId');
-          print('   Current user: $_currentUserId');
-          print('   Is buyer: $isBuyer');
-          print('   Sender: $senderId');
-          print('   Should increment: ${senderId != _currentUserId}');
+          if (kDebugMode) {
+            print('   Current user: $_currentUserId');
+            print('   Is buyer: $isBuyer');
+            print('   Sender: $senderId');
+            print('   Should increment: ${senderId != _currentUserId}');
+          }
 
           final updatedChat = chat.copyWith(
             lastMsg: message['body'] as String? ?? '',
             lastMsgType: MessageType.values.firstWhere(
-                  (e) => e.name == (message['type'] as String?),
+              (e) => e.name == (message['type'] as String?),
               orElse: () => MessageType.text,
             ),
             updatedAt: data['timestamp'] != null
@@ -132,16 +149,22 @@ class ChatsListCubit extends Cubit<ChatsListState> {
 
           _applyFilter();
 
-          print('✅ Unread count updated for chat: $chatId');
-          print('   Buyer unread: ${updatedChat.unreadCountBuyer}');
-          print('   Seller unread: ${updatedChat.unreadCountSeller}');
+          if (kDebugMode) {
+            print('✅ Unread count updated for chat: $chatId');
+            print('   Buyer unread: ${updatedChat.unreadCountBuyer}');
+            print('   Seller unread: ${updatedChat.unreadCountSeller}');
+          }
         } else {
-          print('⚠️ Chat not found: $chatId');
+          if (kDebugMode) {
+            print('⚠️ Chat not found: $chatId');
+          }
         }
       } catch (e, stackTrace) {
-        print('❌ Error in message notification listener: $e');
-        print('Stack trace: $stackTrace');
-        print('Data: $data');
+        if (kDebugMode) {
+          print('❌ Error in message notification listener: $e');
+          print('Stack trace: $stackTrace');
+          print('Data: $data');
+        }
       }
     });
 
@@ -150,11 +173,15 @@ class ChatsListCubit extends Cubit<ChatsListState> {
       try {
         final chatId = data['chatId'] as String?;
         if (chatId == null) {
-          print('⚠️ chatId is null in marked_read');
+          if (kDebugMode) {
+            print('⚠️ chatId is null in marked_read');
+          }
           return;
         }
 
-        print('📖 Messages marked as read for chat: $chatId');
+        if (kDebugMode) {
+          print('📖 Messages marked as read for chat: $chatId');
+        }
         markChatAsRead(chatId);
       } catch (e) {
         print('❌ Error in marked_read listener: $e');
@@ -179,18 +206,18 @@ class ChatsListCubit extends Cubit<ChatsListState> {
         filtered = _allChats.where((c) => c.buyerId == _currentUserId).toList();
         break;
       case ChatFilterType.selling:
-        filtered = _allChats.where((c) => c.sellerId == _currentUserId).toList();
+        filtered = _allChats
+            .where((c) => c.sellerId == _currentUserId)
+            .toList();
         break;
       case ChatFilterType.all:
-      default:
         filtered = _allChats;
     }
 
     // ✅ Always emit new list
-    emit(ChatsListState.success(
-      List<ChatModel>.from(filtered),
-      _currentFilter,
-    ));
+    emit(
+      ChatsListState.success(List<ChatModel>.from(filtered), _currentFilter),
+    );
 
     // Notify total unread
     _notifyTotalUnread();
@@ -205,7 +232,9 @@ class ChatsListCubit extends Cubit<ChatsListState> {
       });
 
       onTotalUnreadChanged!(total);
-      print('📊 Total unread: $total');
+      if (kDebugMode) {
+        print('📊 Total unread: $total');
+      }
     }
   }
 
@@ -216,7 +245,9 @@ class ChatsListCubit extends Cubit<ChatsListState> {
     }
 
     final filtered = _allChats.where((chat) {
-      final otherUser = chat.buyerId == _currentUserId ? chat.seller : chat.buyer;
+      final otherUser = chat.buyerId == _currentUserId
+          ? chat.seller
+          : chat.buyer;
       final itemTitle = chat.item?.title ?? '';
 
       return otherUser.name.toLowerCase().contains(query.toLowerCase()) ||

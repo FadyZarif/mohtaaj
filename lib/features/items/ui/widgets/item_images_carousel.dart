@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mohtaaj/core/services/auth_service.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/theming/colors.dart';
-import '../../../../core/theming/styles.dart';
 import '../../../reports/data/models/report_model.dart';
 import '../../../reports/ui/widgets/report_dialog.dart';
 import '../../data/models/item_model.dart';
@@ -111,7 +110,10 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
           left: 16.w,
           child: GestureDetector(
             onTap: () {
-              getIt<AuthService>().requireAuth(context,()=>_showReportDialog(context));
+              getIt<AuthService>().requireAuth(
+                context,
+                () => _showReportDialog(context),
+              );
             },
             child: Container(
               padding: EdgeInsets.all(8.r),
@@ -151,7 +153,8 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
   void _showReportDialog(BuildContext context) {
     // ✅ Check if item belongs to current user
     final currentUserId = getIt<String>(instanceName: 'userId');
-    final isOwnItem = widget.item.owner?.id == currentUserId; // Adjust based on your model
+    final isOwnItem =
+        widget.item.owner?.id == currentUserId; // Adjust based on your model
 
     showDialog(
       context: context,

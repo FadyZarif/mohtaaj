@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mohtaaj/core/helpers/cache_helper.dart';
 import 'package:mohtaaj/features/auth/data/models/user_model.dart';
 import '../../features/auth/data/models/refresh_token_request.dart';
@@ -20,7 +19,7 @@ class AuthService {
   Future<bool> refreshAccessToken() async {
     try {
       final refreshToken = await CacheHelper.getSecureData(key: 'refreshToken');
-      
+
       if (refreshToken == null || refreshToken.isEmpty) {
         return false;
       }
@@ -58,7 +57,10 @@ class AuthService {
 
   /// Save user Data
   Future<void> saveUserData(UserModel user) async {
-    await CacheHelper.saveSecureData(key: 'userData', value: jsonEncode(user.toJson()));
+    await CacheHelper.saveSecureData(
+      key: 'userData',
+      value: jsonEncode(user.toJson()),
+    );
   }
 
   /// Get access token
@@ -102,7 +104,9 @@ class AuthService {
   /// Auto-refreshes token if expired
   /// Returns true if user is authenticated, false otherwise
   Future<bool> requireAuth(
-      BuildContext context, VoidCallback? callFunction) async {
+    BuildContext context,
+    VoidCallback? callFunction,
+  ) async {
     try {
       final isLoggedIn = await getIt<AuthService>().isLoggedIn();
       if (isLoggedIn) {
@@ -110,14 +114,12 @@ class AuthService {
           callFunction();
         }
         return true;
-      }else {
+      } else {
         if (context.mounted) {
           AppDialogs.showLoginRequiredDialog(context);
         }
         return false;
       }
-
-
     } catch (e) {
       print('❌ Error in requireAuth: $e');
 

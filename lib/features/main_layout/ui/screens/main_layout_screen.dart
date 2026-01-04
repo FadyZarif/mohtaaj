@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mohtaaj/core/helpers/app_dialogs.dart';
 import '../../../../core/di/dependency_injection.dart';
-import '../../../chats/logic/chats_list/chats_list_cubit.dart';
 import '../../../home/ui/screens/home_screen.dart';
 import '../../../categories/ui/screens/categories_screen.dart';
 import '../../../items/ui/screens/create_item_screen.dart';
@@ -33,7 +32,7 @@ class _MainLayoutBody extends StatefulWidget {
 
 class _MainLayoutBodyState extends State<_MainLayoutBody> {
   // Screens list
-  final List<Widget> _screens =  const[
+  final List<Widget> _screens = const [
     HomeScreen(),
     CategoriesScreen(),
     CreateItemScreen(),
@@ -49,10 +48,7 @@ class _MainLayoutBodyState extends State<_MainLayoutBody> {
     return BlocBuilder<MainLayoutCubit, MainLayoutState>(
       builder: (context, state) {
         return Scaffold(
-          body: IndexedStack(
-            index: state.currentIndex,
-            children: _screens,
-          ),
+          body: IndexedStack(index: state.currentIndex, children: _screens),
           bottomNavigationBar: CustomBottomNav(
             currentIndex: state.currentIndex,
             unreadChatsCount: state.unreadChatsCount,
@@ -83,5 +79,4 @@ class _MainLayoutBodyState extends State<_MainLayoutBody> {
     // Change tab
     cubit.changeTab(index);
   }
-
 }

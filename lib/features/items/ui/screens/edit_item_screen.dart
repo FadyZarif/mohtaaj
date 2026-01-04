@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/helpers/spacing.dart';
-import '../../../../core/routing/routes.dart';
-import '../../../../core/helpers/extensions.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../../categories/logic/categories_cubit/categories_cubit.dart';
@@ -20,17 +18,16 @@ import '../widgets/price_input_widget.dart';
 class EditItemScreen extends StatelessWidget {
   final ItemModel item;
 
-  const EditItemScreen({
-    super.key,
-    required this.item,
-  });
+  const EditItemScreen({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => getIt<CreateItemCubit>()..initEditMode(item)..getCurrentLocation(),
+          create: (context) => getIt<CreateItemCubit>()
+            ..initEditMode(item)
+            ..getCurrentLocation(),
         ),
         BlocProvider(
           create: (context) => getIt<CategoriesCubit>()..getCategories(),
@@ -80,13 +77,13 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
           backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: ColorsManager.textPrimary),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: ColorsManager.textPrimary,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
-          title: Text(
-            'تعديل الإعلان',
-            style: TextStyles.font20BlackBold,
-          ),
+          title: Text('تعديل الإعلان', style: TextStyles.font20BlackBold),
           centerTitle: true,
         ),
         body: BlocConsumer<CreateItemCubit, CreateItemState>(
@@ -132,7 +129,8 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             itemCount: state.existingImageUrls.length,
-                            separatorBuilder: (context, index) => horizontalSpace(8),
+                            separatorBuilder: (context, index) =>
+                                horizontalSpace(8),
                             itemBuilder: (context, index) {
                               return Stack(
                                 children: [
@@ -188,7 +186,8 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             itemCount: state.selectedImages.length,
-                            separatorBuilder: (context, index) => horizontalSpace(8),
+                            separatorBuilder: (context, index) =>
+                                horizontalSpace(8),
                             itemBuilder: (context, index) {
                               return Stack(
                                 children: [
@@ -243,7 +242,9 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 12.h),
                                 decoration: BoxDecoration(
-                                  color: ColorsManager.mainColor.withOpacity(0.1),
+                                  color: ColorsManager.mainColor.withOpacity(
+                                    0.1,
+                                  ),
                                   borderRadius: BorderRadius.circular(8.r),
                                   border: Border.all(
                                     color: ColorsManager.mainColor,
@@ -260,9 +261,10 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                                     horizontalSpace(8),
                                     Text(
                                       'إضافة صور',
-                                      style: TextStyles.font14BlackMedium.copyWith(
-                                        color: ColorsManager.mainColor,
-                                      ),
+                                      style: TextStyles.font14BlackMedium
+                                          .copyWith(
+                                            color: ColorsManager.mainColor,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -273,12 +275,16 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                context.read<CreateItemCubit>().pickImageFromCamera();
+                                context
+                                    .read<CreateItemCubit>()
+                                    .pickImageFromCamera();
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 12.h),
                                 decoration: BoxDecoration(
-                                  color: ColorsManager.mainColor.withOpacity(0.1),
+                                  color: ColorsManager.mainColor.withOpacity(
+                                    0.1,
+                                  ),
                                   borderRadius: BorderRadius.circular(8.r),
                                   border: Border.all(
                                     color: ColorsManager.mainColor,
@@ -295,9 +301,10 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                                     horizontalSpace(8),
                                     Text(
                                       'التقاط صورة',
-                                      style: TextStyles.font14BlackMedium.copyWith(
-                                        color: ColorsManager.mainColor,
-                                      ),
+                                      style: TextStyles.font14BlackMedium
+                                          .copyWith(
+                                            color: ColorsManager.mainColor,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -309,10 +316,7 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                       verticalSpace(24),
 
                       // Title
-                      Text(
-                        'العنوان *',
-                        style: TextStyles.font16BlackSemiBold,
-                      ),
+                      Text('العنوان *', style: TextStyles.font16BlackSemiBold),
                       verticalSpace(8),
                       TextField(
                         controller: _titleController,
@@ -326,33 +330,40 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                           fillColor: ColorsManager.inputBackground,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: ColorsManager.borderColor),
+                            borderSide: BorderSide(
+                              color: ColorsManager.borderColor,
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: ColorsManager.borderColor),
+                            borderSide: BorderSide(
+                              color: ColorsManager.borderColor,
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
                             borderSide: BorderSide(
-                                color: ColorsManager.mainColor, width: 2),
+                              color: ColorsManager.mainColor,
+                              width: 2,
+                            ),
                           ),
                           contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16.w, vertical: 14.h),
+                            horizontal: 16.w,
+                            vertical: 14.h,
+                          ),
                         ),
                       ),
                       verticalSpace(24),
 
                       // Description
-                      Text(
-                        'الوصف *',
-                        style: TextStyles.font16BlackSemiBold,
-                      ),
+                      Text('الوصف *', style: TextStyles.font16BlackSemiBold),
                       verticalSpace(8),
                       TextField(
                         controller: _descriptionController,
                         onChanged: (value) {
-                          context.read<CreateItemCubit>().updateDescription(value);
+                          context.read<CreateItemCubit>().updateDescription(
+                            value,
+                          );
                         },
                         maxLines: 5,
                         decoration: InputDecoration(
@@ -362,19 +373,27 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                           fillColor: ColorsManager.inputBackground,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: ColorsManager.borderColor),
+                            borderSide: BorderSide(
+                              color: ColorsManager.borderColor,
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: ColorsManager.borderColor),
+                            borderSide: BorderSide(
+                              color: ColorsManager.borderColor,
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
                             borderSide: BorderSide(
-                                color: ColorsManager.mainColor, width: 2),
+                              color: ColorsManager.mainColor,
+                              width: 2,
+                            ),
                           ),
                           contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16.w, vertical: 14.h),
+                            horizontal: 16.w,
+                            vertical: 14.h,
+                          ),
                         ),
                       ),
                       verticalSpace(24),
@@ -393,7 +412,9 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                               categories: categories,
                               selectedCategoryId: state.categoryId,
                               onCategorySelected: (categoryId) {
-                                context.read<CreateItemCubit>().updateCategory(categoryId);
+                                context.read<CreateItemCubit>().updateCategory(
+                                  categoryId,
+                                );
                               },
                               onLoadCategories: () {
                                 context.read<CategoriesCubit>().getCategories();
@@ -418,16 +439,15 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                       ConditionSelector(
                         selectedCondition: state.condition,
                         onConditionSelected: (condition) {
-                          context.read<CreateItemCubit>().updateCondition(condition);
+                          context.read<CreateItemCubit>().updateCondition(
+                            condition,
+                          );
                         },
                       ),
                       verticalSpace(24),
 
                       // City
-                      Text(
-                        'المدينة *',
-                        style: TextStyles.font16BlackSemiBold,
-                      ),
+                      Text('المدينة *', style: TextStyles.font16BlackSemiBold),
                       verticalSpace(8),
                       TextField(
                         controller: _cityController,
@@ -441,19 +461,27 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                           fillColor: ColorsManager.inputBackground,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: ColorsManager.borderColor),
+                            borderSide: BorderSide(
+                              color: ColorsManager.borderColor,
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: ColorsManager.borderColor),
+                            borderSide: BorderSide(
+                              color: ColorsManager.borderColor,
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
                             borderSide: BorderSide(
-                                color: ColorsManager.mainColor, width: 2),
+                              color: ColorsManager.mainColor,
+                              width: 2,
+                            ),
                           ),
                           contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16.w, vertical: 14.h),
+                            horizontal: 16.w,
+                            vertical: 14.h,
+                          ),
                         ),
                       ),
                       verticalSpace(24),
@@ -461,10 +489,11 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                       // Get Location Button
                       BlocBuilder<CreateItemCubit, CreateItemState>(
                         buildWhen: (previous, current) =>
-                        previous.geoLat != current.geoLat ||
+                            previous.geoLat != current.geoLat ||
                             previous.geoLng != current.geoLng,
                         builder: (context, state) {
-                          final hasLocation = state.geoLat != null && state.geoLng != null;
+                          final hasLocation =
+                              state.geoLat != null && state.geoLng != null;
 
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -479,14 +508,19 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                                   ),
                                   child: Row(
                                     children: [
-                                      Icon(Icons.info_outline, color: Colors.orange, size: 20.sp),
+                                      Icon(
+                                        Icons.info_outline,
+                                        color: Colors.orange,
+                                        size: 20.sp,
+                                      ),
                                       horizontalSpace(8),
                                       Expanded(
                                         child: Text(
                                           'يُفضل تحديد موقعك لتحسين ظهور الإعلان',
-                                          style: TextStyles.font12BlackMedium.copyWith(
-                                            color: Colors.orange.shade700,
-                                          ),
+                                          style: TextStyles.font12BlackMedium
+                                              .copyWith(
+                                                color: Colors.orange.shade700,
+                                              ),
                                         ),
                                       ),
                                     ],
@@ -496,14 +530,21 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
 
                               GestureDetector(
                                 onTap: () {
-                                  context.read<CreateItemCubit>().getCurrentLocation();
+                                  context
+                                      .read<CreateItemCubit>()
+                                      .getCurrentLocation();
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 16.w,
+                                    vertical: 12.h,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: hasLocation
                                         ? ColorsManager.success.withOpacity(0.1)
-                                        : ColorsManager.mainColor.withOpacity(0.1),
+                                        : ColorsManager.mainColor.withOpacity(
+                                            0.1,
+                                          ),
                                     borderRadius: BorderRadius.circular(12.r),
                                     border: Border.all(
                                       color: hasLocation
@@ -515,7 +556,9 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        hasLocation ? Icons.check_circle : Icons.my_location,
+                                        hasLocation
+                                            ? Icons.check_circle
+                                            : Icons.my_location,
                                         size: 20.sp,
                                         color: hasLocation
                                             ? ColorsManager.success
@@ -523,12 +566,15 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                                       ),
                                       horizontalSpace(8),
                                       Text(
-                                        hasLocation ? 'تم تحديد الموقع ✓' : 'تحديد موقعي الحالي',
-                                        style: TextStyles.font14BlackMedium.copyWith(
-                                          color: hasLocation
-                                              ? ColorsManager.success
-                                              : ColorsManager.mainColor,
-                                        ),
+                                        hasLocation
+                                            ? 'تم تحديد الموقع ✓'
+                                            : 'تحديد موقعي الحالي',
+                                        style: TextStyles.font14BlackMedium
+                                            .copyWith(
+                                              color: hasLocation
+                                                  ? ColorsManager.success
+                                                  : ColorsManager.mainColor,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -579,8 +625,8 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                         onTap: state.isSubmitting || state.isUploadingImages
                             ? null
                             : () {
-                          context.read<CreateItemCubit>().updateItem();
-                        },
+                                context.read<CreateItemCubit>().updateItem();
+                              },
                         child: Container(
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(vertical: 16.h),
@@ -593,29 +639,29 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                           child: Center(
                             child: state.isSubmitting || state.isUploadingImages
                                 ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 20.w,
-                                  height: 20.h,
-                                  child: const CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
-                                  ),
-                                ),
-                                horizontalSpace(12),
-                                Text(
-                                  state.isUploadingImages
-                                      ? 'جاري رفع الصور...'
-                                      : 'جاري التحديث...',
-                                  style: TextStyles.font16WhiteSemiBold,
-                                ),
-                              ],
-                            )
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: 20.w,
+                                        height: 20.h,
+                                        child: const CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2,
+                                        ),
+                                      ),
+                                      horizontalSpace(12),
+                                      Text(
+                                        state.isUploadingImages
+                                            ? 'جاري رفع الصور...'
+                                            : 'جاري التحديث...',
+                                        style: TextStyles.font16WhiteSemiBold,
+                                      ),
+                                    ],
+                                  )
                                 : Text(
-                              'تحديث الإعلان',
-                              style: TextStyles.font16WhiteSemiBold,
-                            ),
+                                    'تحديث الإعلان',
+                                    style: TextStyles.font16WhiteSemiBold,
+                                  ),
                           ),
                         ),
                       ),

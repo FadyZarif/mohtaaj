@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import '../../../../core/helpers/extensions.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../data/models/chat_model.dart';
@@ -14,7 +12,6 @@ class MessageBubble extends StatelessWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
   final VoidCallback? onReport;
-
 
   const MessageBubble({
     super.key,
@@ -31,7 +28,8 @@ class MessageBubble extends StatelessWidget {
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: GestureDetector(
         onLongPress: () {
-          if (!message.isDeleted && (onEdit != null || onDelete != null || onReport != null)) {
+          if (!message.isDeleted &&
+              (onEdit != null || onDelete != null || onReport != null)) {
             _showOptionsBottomSheet(context);
           }
         },
@@ -49,10 +47,11 @@ class MessageBubble extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
           decoration: BoxDecoration(
             color: message.isDeleted
-                ? ColorsManager.backgroundColor // ✅ لون مختلف للمحذوفة
+                ? ColorsManager
+                      .backgroundColor // ✅ لون مختلف للمحذوفة
                 : isMe
                 ? ColorsManager.mainColor
-                : Colors.white ,
+                : Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(12.r),
               topRight: Radius.circular(12.r),
@@ -72,10 +71,7 @@ class MessageBubble extends StatelessWidget {
             children: [
               // Sender name (if not me)
               if (!isMe && message.sender != null) ...[
-                Text(
-                  message.sender!.name,
-                  style: TextStyles.font12BlackBold,
-                ),
+                Text(message.sender!.name, style: TextStyles.font12BlackBold),
                 SizedBox(height: 4.h),
               ],
 
@@ -102,7 +98,8 @@ class MessageBubble extends StatelessWidget {
                 ),
               ] else ...[
                 // Image message
-                if (message.type == MessageType.image && message.imageUrl != null)
+                if (message.type == MessageType.image &&
+                    message.imageUrl != null)
                   _buildImageMessage(),
 
                 // Text body
@@ -161,9 +158,7 @@ class MessageBubble extends StatelessWidget {
                   if (isMe && !message.isDeleted) ...[
                     SizedBox(width: 4.w),
                     Icon(
-                      message.readAt != null
-                          ? Icons.done_all
-                          : Icons.done,
+                      message.readAt != null ? Icons.done_all : Icons.done,
                       size: 14.sp,
                       color: message.readAt != null
                           ? Colors.blue
@@ -211,7 +206,7 @@ class MessageBubble extends StatelessWidget {
               child: CircularProgressIndicator(
                 value: loadingProgress.expectedTotalBytes != null
                     ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
+                          loadingProgress.expectedTotalBytes!
                     : null,
               ),
             ),
@@ -232,6 +227,7 @@ class MessageBubble extends StatelessWidget {
       ),
     );
   }
+
   // ✅ أضف Method - Show Image Viewer
   void _showImageViewer(BuildContext context) {
     Navigator.of(context).push(
@@ -243,9 +239,7 @@ class MessageBubble extends StatelessWidget {
             iconTheme: const IconThemeData(color: Colors.white),
           ),
           body: Center(
-            child: InteractiveViewer(
-              child: Image.network(message.imageUrl!),
-            ),
+            child: InteractiveViewer(child: Image.network(message.imageUrl!)),
           ),
         ),
       ),

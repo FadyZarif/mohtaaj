@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import '../../features/auth/logic/forgot_password_cubit/forgot_password_cubit.dart';
 import '../../features/chats/data/services/socket_service.dart';
 import '../../features/chats/logic/chat_room/chat_room_cubit.dart';
 import '../../features/chats/logic/chats_list/chats_list_cubit.dart';
@@ -51,13 +52,25 @@ Future<void> setupGetIt() async {
 
   // Register
   getIt.registerFactory<RegisterCubit>(
-    () => RegisterCubit(getIt<ApiService>(), getIt<AuthService>(), getIt<SocketService>(),)
+    () => RegisterCubit(
+      getIt<ApiService>(),
+      getIt<AuthService>(),
+      getIt<SocketService>(),
+    ),
+  );
+  // Forgot Password Cubit
+  getIt.registerFactory<ForgotPasswordCubit>(
+    () => ForgotPasswordCubit(getIt<ApiService>()),
   );
 
   // ========================== Main Layout ==========================
 
   getIt.registerFactory<MainLayoutCubit>(
-    () => MainLayoutCubit(getIt<AuthService>(), getIt<ApiService>(), getIt<SocketService>())
+    () => MainLayoutCubit(
+      getIt<AuthService>(),
+      getIt<ApiService>(),
+      getIt<SocketService>(),
+    ),
   );
 
   // ========================== Profile ==========================
@@ -116,7 +129,7 @@ Future<void> setupGetIt() async {
 
   // ========================== Chats Cubits ==========================
   getIt.registerFactoryParam<ChatsListCubit, Function(int)?, void>(
-        (callback, _) => ChatsListCubit(
+    (callback, _) => ChatsListCubit(
       getIt<ApiService>(),
       getIt<SocketService>(),
       onTotalUnreadChanged: callback,
@@ -129,8 +142,5 @@ Future<void> setupGetIt() async {
   );
 
   // ========================== Reports Cubits ==========================
-  getIt.registerFactory<ReportsCubit>(
-    () => ReportsCubit(getIt<ApiService>()),
-  );
-
+  getIt.registerFactory<ReportsCubit>(() => ReportsCubit(getIt<ApiService>()));
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mohtaaj/features/auth/ui/forgot_password_screen.dart';
+import 'package:mohtaaj/features/auth/ui/reset_password_screen.dart';
 import 'package:mohtaaj/features/categories/ui/screens/categories_screen.dart';
 import 'package:mohtaaj/features/reports/ui/screens/my_reports_screen.dart';
 import '../../features/auth/data/models/user_model.dart';
+import '../../features/auth/ui/verify_reset_code_screen.dart';
 import '../../features/categories/data/models/category_model.dart';
 import '../../features/chats/logic/chat_room/chat_room_cubit.dart';
 import '../../features/chats/logic/chats_list/chats_list_cubit.dart';
@@ -40,6 +43,21 @@ class AppRouter {
       case Routes.registerScreen:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
 
+      case Routes.forgotPasswordScreen:
+        return MaterialPageRoute(builder: (_) => const ForgotPasswordScreen());
+
+      case Routes.verifyResetCodeScreen:
+        final email = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => VerifyResetCodeScreen(email: email),
+        );
+
+      case Routes.resetPasswordScreen:
+        final data = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => ResetPasswordScreen(data: data),
+        );
+
       // TODO: Add forgot password screen
       // case Routes.forgotPasswordScreen:
       //   return MaterialPageRoute(
@@ -68,18 +86,14 @@ class AppRouter {
           builder: (_) => EditProfileScreen(user: user, cubit: cubit),
         );
 
-    // في app_router.dart:
+      // في app_router.dart:
       case Routes.editItemScreen:
         final item = settings.arguments as ItemModel;
-        return MaterialPageRoute(
-          builder: (_) => EditItemScreen(item: item),
-        );
+        return MaterialPageRoute(builder: (_) => EditItemScreen(item: item));
 
       // My Items Screen
       case Routes.myItemsScreen:
-        return MaterialPageRoute(
-          builder: (_) => const MyItemsScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const MyItemsScreen());
 
       // Item Details Screen
       case Routes.itemDetailsScreen:
@@ -90,21 +104,15 @@ class AppRouter {
 
       // Search Screen
       case Routes.searchScreen:
-        return MaterialPageRoute(
-          builder: (_) => const SearchScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const SearchScreen());
 
       // Favorites Screen
       case Routes.favoritesScreen:
-        return MaterialPageRoute(
-          builder: (_) => const FavoritesScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const FavoritesScreen());
 
       // Reports Screen
       case Routes.myReportsScreen:
-        return MaterialPageRoute(
-          builder: (_) => const MyReportsScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const MyReportsScreen());
 
       // User Profile Screen
       case Routes.userProfileScreen:
@@ -131,7 +139,7 @@ class AppRouter {
           ),
         );
 
-     // Chat Room Screen
+      // Chat Room Screen
       case Routes.chatRoomScreen:
         final chatId = settings.arguments as String;
         return MaterialPageRoute(

@@ -401,7 +401,7 @@ class _CreateItemScreenBodyState extends State<_CreateItemScreenBody> {
 
                       // City Section
                       _buildSectionHeader(
-                        title: 'المحافظة',
+                        title: 'المدينة',
                         icon: Icons.location_city_outlined,
                         isRequired: true,
                       ),

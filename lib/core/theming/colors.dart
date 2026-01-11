@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class ColorsManager {
   // ==================== Primary Colors ====================
   /// Main app color - Cyan/Turquoise
-  static const Color mainColor = Color(0xFF00D9D5);
-  static const Color mainColorLight = Color(0xFF33E3DF);
-  static const Color mainColorDark = Color(0xFF00ADA9);
+  static const Color mainColor       = Color(0xFF3E655D); // الأساسي
+  static const Color mainColorLight  = Color(0xFF6F8F88); // أفتح
+  static const Color mainColorDark   = Color(0xFF2A4742); // أغمق
 
   /// Secondary color - Orange
   static const Color secondaryColor = Color(0xFFFF9F43);

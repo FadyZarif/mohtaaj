@@ -12,6 +12,8 @@ import '../../features/auth/data/models/register_request.dart';
 import '../../features/auth/data/models/register_response.dart';
 import '../../features/auth/data/models/reset_password_request.dart';
 import '../../features/auth/data/models/reset_password_response.dart';
+import '../../features/auth/data/models/verify_email_request.dart';
+import '../../features/auth/data/models/verify_email_response.dart';
 import '../../features/categories/data/models/categories_response.dart';
 import '../../features/chats/data/models/chat_model.dart';
 import '../../features/favorites/data/models/add_favorite_response.dart';
@@ -72,9 +74,10 @@ abstract class ApiService {
     @Body() ResetPasswordRequest request,
   );
 
-  /// TODO
   @POST(ApiConstants.verifyEmail)
-  Future<dynamic> verifyEmail(@Body() Map<String, dynamic> verifyEmailRequest);
+  Future<VerifyEmailResponse> verifyEmail(
+      @Body() VerifyEmailRequest request,
+      );
 
   // ========================== Users ==========================
 

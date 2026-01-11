@@ -113,29 +113,32 @@ class _HomeScreenBody extends StatelessWidget {
                         },
                       ),
                       verticalSpace(12),
-                      SizedBox(
-                        height: 200.h,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          itemCount: state.featuredItems.length,
-                          separatorBuilder: (context, index) =>
-                              horizontalSpace(12),
-                          itemBuilder: (context, index) {
-                            return SizedBox(
-                              width: 160.w,
-                              child: ItemCard(
-                                item: state.featuredItems[index],
-                                onTap: () {
-                                  context.pushNamed(
-                                    Routes.itemDetailsScreen,
-                                    arguments: state.featuredItems[index].id,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        ),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          return SizedBox(
+                            height: constraints.maxWidth * 0.58, // نسبة انت تحددها
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                              itemCount: state.featuredItems.length,
+                              separatorBuilder: (context, index) => horizontalSpace(12),
+                              itemBuilder: (context, index) {
+                                return SizedBox(
+                                  width: 160.w,
+                                  child: ItemCard(
+                                    item: state.featuredItems[index],
+                                    onTap: () {
+                                      context.pushNamed(
+                                        Routes.itemDetailsScreen,
+                                        arguments: state.featuredItems[index].id,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
                       ),
                       verticalSpace(24),
                     ],
@@ -165,7 +168,7 @@ class _HomeScreenBody extends StatelessWidget {
                         crossAxisCount: 2,
                         crossAxisSpacing: 12.w,
                         mainAxisSpacing: 12.h,
-                        childAspectRatio: 0.75.r,
+                        childAspectRatio: 0.75,
                       ),
                       itemCount: state.items.length,
                       itemBuilder: (context, index) {

@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mohtaaj/core/helpers/app_dialogs.dart';
-import '../../../../core/di/dependency_injection.dart';
-import '../../../../core/helpers/extensions.dart';
-import '../../../../core/helpers/location_data.dart';
-import '../../../../core/helpers/spacing.dart';
-import '../../../../core/helpers/validators.dart';
-import '../../../../core/routing/routes.dart';
-import '../../../../core/theming/colors.dart';
-import '../../../../core/theming/styles.dart';
-import '../../../core/widgets/app_button.dart';
-import '../../../core/widgets/app_text_field.dart';
-import '../data/models/register_request.dart';
-import '../logic/register_cubit/register_cubit.dart';
-import '../logic/register_cubit/register_state.dart';
-import 'widgets/password_text_field.dart';
-import 'widgets/phone_text_field.dart';
-import 'widgets/searchable_dropdown.dart';
+import '../../../../../core/di/dependency_injection.dart';
+import '../../../../../core/helpers/extensions.dart';
+import '../../../../../core/helpers/location_data.dart';
+import '../../../../../core/helpers/spacing.dart';
+import '../../../../../core/helpers/validators.dart';
+import '../../../../../core/routing/routes.dart';
+import '../../../../../core/theming/colors.dart';
+import '../../../../../core/theming/styles.dart';
+import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_text_field.dart';
+import '../../data/models/register_request.dart';
+import '../../logic/register_cubit/register_cubit.dart';
+import '../../logic/register_cubit/register_state.dart';
+import '../widgets/password_text_field.dart';
+import '../widgets/phone_text_field.dart';
+import '../widgets/searchable_dropdown.dart';
 
 
 class RegisterScreen extends StatelessWidget {
@@ -102,51 +102,31 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
                 loading: () {
                   AppDialogs.showLoadingDialog(context);
                 },
-                detectingLocation: () {
-
-                },
-                locationDetected: (city, country, phoneCountryCode) {
-                  setState(() {
-                    _selectedCity = city;
-                    _selectedCountry = country;
-                    _initialCode = phoneCountryCode;
-                  });
-
-                  // Update phone field country code
-                  _phoneFieldKey.currentState?.updateCountryCode(phoneCountryCode);
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('تم تحديد موقعك: $city, $country'),
-                      backgroundColor: ColorsManager.success,
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                },
-                locationError: (error) {
-                  // Set default values
-                  setState(() {
-                    _selectedCity = 'القاهرة';
-                    _selectedCountry = 'مصر';
-                    _initialCode = 'EG';
-                  });
-                },
-                success: (message) {
-                  context.pop(); // Close loading dialog
+                detectingLocation: () {},
+                locationDetected: (city, country, phoneCode) {},
+                locationError: (error) {},
+                success: (email, message) {
+                  context.pop(); // Close loading
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(message),
                       backgroundColor: ColorsManager.success,
                     ),
                   );
-                  // Navigate to login
-                  context.pushReplacementNamed(Routes.loginScreen);
+                  // ✅ Navigate to email verification
+                  context.pushReplacementNamed(
+                    Routes.verifyEmailScreen,
+                    arguments: {
+                      'email': email,
+                      'fromRegister': true,
+                    },
+                  );
                 },
-                error: (error) {
-                  context.pop(); // Close loading dialog
+                error: (message) {
+                  context.pop(); // Close loading
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(error),
+                      content: Text(message),
                       backgroundColor: ColorsManager.error,
                     ),
                   );
@@ -154,8 +134,14 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
               );
             },
             builder: (context, state) {
-              final isDetectingLocation = state is DetectingLocation;
-              final isLoading = state is Loading;
+              final isDetectingLocation = state.maybeWhen(
+                detectingLocation: () => true,
+                orElse: () => false,
+              );
+              final isLoading = state.maybeWhen(
+                loading: () => true,
+                orElse: () => false,
+              );
 
               return SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),

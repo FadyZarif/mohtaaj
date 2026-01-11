@@ -26,14 +26,10 @@ void main() async {
   // ✅ سجل الـ userId إذا كان User مسجل دخول
   await _registerUserIdIfLoggedIn();
 
-
-  // Determine initial route
-  final initialRoute = await _determineInitialRoute();
-
   runApp(
     MohtaajApp(
       appRouter: AppRouter(),
-      initialRoute: initialRoute,
+      initialRoute: Routes.splashScreen,
     ),
   );
 
@@ -62,34 +58,5 @@ Future<void> _registerUserIdIfLoggedIn() async {
     }
   } catch (e) {
     print('❌ Error registering userId: $e');
-  }
-}
-
-Future<String> _determineInitialRoute() async {
-  // Check if user has seen onboarding
-  final hasSeenOnboarding = CacheHelper.getData(key: 'hasSeenOnboarding') ?? false;
-
-  if (!hasSeenOnboarding) {
-    return Routes.onboardingScreen;
-  }
-
-  // Check auto login
-  final authService = getIt<AuthService>();
-
-  final hasRefreshToken = await authService.hasRefreshToken();
-
-  if (!hasRefreshToken) {
-    return Routes.loginScreen;
-  }
-
-  // Try to refresh token
-  // Try to refresh access token
-  final success = await authService.refreshAccessToken();
-  if (success) {
-    return Routes.homeScreen;
-  } else {
-    // Token expired or invalid
-    await authService.logout();
-    return Routes.loginScreen;
   }
 }

@@ -34,29 +34,33 @@ class SimilarItemsSection extends StatelessWidget {
             ),
           ),
           verticalSpace(12),
-          SizedBox(
-            height: 200.h,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              itemCount: similarItems.length,
-              separatorBuilder: (context, index) => horizontalSpace(12),
-              itemBuilder: (context, index) {
-                return SizedBox(
-                  width: 160.w,
-                  child: ItemCard(
-                    item: similarItems[index],
-                    onTap: () {
-                      context.pushNamed(
-                        Routes.itemDetailsScreen,
-                        arguments: similarItems[index].id,
-                      );
-                    },
-                  ),
-                );
-                // return _SimilarItemCard(item: similarItems[index]);
-              },
-            ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return SizedBox(
+                height: constraints.maxWidth * 0.58, // نسبة انت تحددها
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  itemCount: similarItems.length,
+                  separatorBuilder: (context, index) => horizontalSpace(12),
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: 160.w,
+                      child: ItemCard(
+                        item: similarItems[index],
+                        onTap: () {
+                          context.pushNamed(
+                            Routes.itemDetailsScreen,
+                            arguments: similarItems[index].id,
+                          );
+                        },
+                      ),
+                    );
+                    // return _SimilarItemCard(item: similarItems[index]);
+                  },
+                ),
+              );
+            }
           ),
         ],
       ),

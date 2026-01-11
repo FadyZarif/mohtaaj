@@ -212,13 +212,12 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<dynamic> verifyEmail(Map<String, dynamic> verifyEmailRequest) async {
+  Future<VerifyEmailResponse> verifyEmail(VerifyEmailRequest request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(verifyEmailRequest);
-    final _options = _setStreamType<dynamic>(
+    final _data = request;
+    final _options = _setStreamType<VerifyEmailResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -228,8 +227,14 @@ class _ApiService implements ApiService {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late VerifyEmailResponse _value;
+    try {
+      _value = VerifyEmailResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 

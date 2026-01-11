@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mohtaaj/features/auth/ui/forgot_password_screen.dart';
-import 'package:mohtaaj/features/auth/ui/reset_password_screen.dart';
+import 'package:mohtaaj/features/auth/ui/screens/forgot_password_screen.dart';
+import 'package:mohtaaj/features/auth/ui/screens/reset_password_screen.dart';
 import 'package:mohtaaj/features/categories/ui/screens/categories_screen.dart';
 import 'package:mohtaaj/features/reports/ui/screens/my_reports_screen.dart';
+import '../../core/widgets/splash_screen.dart';
 import '../../features/auth/data/models/user_model.dart';
-import '../../features/auth/ui/verify_reset_code_screen.dart';
+import '../../features/auth/ui/screens/email_verification_screen.dart';
+import '../../features/auth/ui/screens/verify_reset_code_screen.dart';
 import '../../features/categories/data/models/category_model.dart';
 import '../../features/chats/logic/chat_room/chat_room_cubit.dart';
 import '../../features/chats/logic/chats_list/chats_list_cubit.dart';
@@ -25,12 +27,16 @@ import '../../features/search/ui/screens/search_screen.dart';
 import '../di/dependency_injection.dart';
 import 'routes.dart';
 import '../../features/onboarding/ui/screens/onboarding_screen.dart';
-import '../../features/auth/ui/login_screen.dart';
-import '../../features/auth/ui/register_screen.dart';
+import '../../features/auth/ui/screens/login_screen.dart';
+import '../../features/auth/ui/screens/register_screen.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      // Splash
+      case Routes.splashScreen:
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
+
       // Onboarding
       case Routes.onboardingScreen:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
@@ -58,11 +64,14 @@ class AppRouter {
           builder: (_) => ResetPasswordScreen(data: data),
         );
 
-      // TODO: Add forgot password screen
-      // case Routes.forgotPasswordScreen:
-      //   return MaterialPageRoute(
-      //     builder: (_) => const ForgotPasswordScreen(),
-      //   );
+      case Routes.verifyEmailScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => EmailVerificationScreen(
+            email: args['email'] as String,
+            fromRegister: args['fromRegister'] as bool? ?? true,
+          ),
+        );;
 
       // ========================== Main Layout ==========================
 

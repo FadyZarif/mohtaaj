@@ -1,5 +1,3 @@
-// lib/features/auth/ui/screens/verify_reset_code_screen.dart
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,33 +10,45 @@ import '../../../../core/routing/routes.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../../../core/widgets/app_button.dart';
-import '../logic/forgot_password_cubit/forgot_password_cubit.dart';
-import '../logic/forgot_password_cubit/forgot_password_state.dart';
+import '../../logic/email_verification_cubit/email_verification_cubit.dart';
+import '../../logic/email_verification_cubit/email_verification_state.dart';
 
-class VerifyResetCodeScreen extends StatelessWidget {
+class EmailVerificationScreen extends StatelessWidget {
   final String email;
+  final bool fromRegister; // true if from register, false if from login
 
-  const VerifyResetCodeScreen({super.key, required this.email});
+  const EmailVerificationScreen({
+    super.key,
+    required this.email,
+    this.fromRegister = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<ForgotPasswordCubit>(),
-      child: _VerifyResetCodeBody(email: email),
+      create: (context) => getIt<EmailVerificationCubit>(),
+      child: _EmailVerificationBody(
+        email: email,
+        fromRegister: fromRegister,
+      ),
     );
   }
 }
 
-class _VerifyResetCodeBody extends StatefulWidget {
+class _EmailVerificationBody extends StatefulWidget {
   final String email;
+  final bool fromRegister;
 
-  const _VerifyResetCodeBody({required this.email});
+  const _EmailVerificationBody({
+    required this.email,
+    required this.fromRegister,
+  });
 
   @override
-  State<_VerifyResetCodeBody> createState() => _VerifyResetCodeBodyState();
+  State<_EmailVerificationBody> createState() => _EmailVerificationBodyState();
 }
 
-class _VerifyResetCodeBodyState extends State<_VerifyResetCodeBody> {
+class _EmailVerificationBodyState extends State<_EmailVerificationBody> {
   final _pinController = TextEditingController();
   final _focusNode = FocusNode();
 
@@ -78,6 +88,19 @@ class _VerifyResetCodeBodyState extends State<_VerifyResetCodeBody> {
     super.dispose();
   }
 
+  String _maskEmail(String email) {
+    final parts = email.split('@');
+    if (parts.length != 2) return email;
+
+    final username = parts[0];
+    final domain = parts[1];
+
+    if (username.length <= 3) return email;
+
+    final visible = username.substring(0, 3);
+    return '$visible***@$domain';
+  }
+
   @override
   Widget build(BuildContext context) {
     // PIN theme
@@ -104,7 +127,7 @@ class _VerifyResetCodeBodyState extends State<_VerifyResetCodeBody> {
 
     final submittedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration!.copyWith(
-        color: ColorsManager.mainColor.withValues(alpha: 0.1),
+        color: ColorsManager.mainColor.withOpacity(0.1),
         border: Border.all(color: ColorsManager.mainColor),
       ),
     );
@@ -122,25 +145,27 @@ class _VerifyResetCodeBodyState extends State<_VerifyResetCodeBody> {
           ),
         ),
         body: SafeArea(
-          child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
+          child: BlocConsumer<EmailVerificationCubit, EmailVerificationState>(
             listener: (context, state) {
               state.maybeWhen(
-                codeVerified: (resetToken, email, name) {
+                verified: (message) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('تم التحقق من الرمز بنجاح'),
+                    SnackBar(
+                      content: Text(message),
                       backgroundColor: ColorsManager.success,
                     ),
                   );
-                  // Navigate to reset password screen
-                  context.pushReplacementNamed(
-                    Routes.resetPasswordScreen,
-                    arguments: {
-                      'resetToken': resetToken,
-                      'email': email,
-                      'name': name,
-                    },
+                  // Navigate to home
+                  context.pushReplacementNamed(Routes.homeScreen);
+                },
+                codeResent: (message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                      backgroundColor: ColorsManager.success,
+                    ),
                   );
+                  _pinController.clear();
                 },
                 error: (message) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -154,8 +179,12 @@ class _VerifyResetCodeBodyState extends State<_VerifyResetCodeBody> {
               );
             },
             builder: (context, state) {
-              final isLoading = state.maybeWhen(
-                verifyingCode: () => true,
+              final isVerifying = state.maybeWhen(
+                verifying: () => true,
+                orElse: () => false,
+              );
+              final isResending = state.maybeWhen(
+                resendingCode: () => true,
                 orElse: () => false,
               );
 
@@ -171,7 +200,7 @@ class _VerifyResetCodeBodyState extends State<_VerifyResetCodeBody> {
                       width: 100.w,
                       height: 100.w,
                       decoration: BoxDecoration(
-                        color: ColorsManager.mainColor.withValues(alpha: 0.1),
+                        color: ColorsManager.mainColor.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -184,7 +213,11 @@ class _VerifyResetCodeBodyState extends State<_VerifyResetCodeBody> {
                     verticalSpace(32),
 
                     // Title
-                    Text('تحقق من الرمز', style: TextStyles.font24BlackBold),
+                    Text(
+                      'تحقق من بريدك الإلكتروني',
+                      style: TextStyles.font24BlackBold,
+                      textAlign: TextAlign.center,
+                    ),
 
                     verticalSpace(12),
 
@@ -196,7 +229,7 @@ class _VerifyResetCodeBodyState extends State<_VerifyResetCodeBody> {
                     ),
                     verticalSpace(4),
                     Text(
-                      widget.email,
+                      _maskEmail(widget.email),
                       style: TextStyles.font14BlackSemiBold,
                       textAlign: TextAlign.center,
                     ),
@@ -215,9 +248,10 @@ class _VerifyResetCodeBodyState extends State<_VerifyResetCodeBody> {
                         submittedPinTheme: submittedPinTheme,
                         keyboardType: TextInputType.number,
                         autofocus: true,
+                        enabled: !isVerifying,
                         onCompleted: (pin) {
                           // Auto submit when 6 digits entered
-                          context.read<ForgotPasswordCubit>().verifyResetCode(
+                          context.read<EmailVerificationCubit>().verifyEmail(
                             widget.email,
                             pin,
                           );
@@ -230,10 +264,10 @@ class _VerifyResetCodeBodyState extends State<_VerifyResetCodeBody> {
                     // Verify Button
                     AppButton(
                       text: 'تحقق',
-                      isLoading: isLoading,
+                      isLoading: isVerifying,
                       onPressed: () {
                         if (_pinController.text.length == 6) {
-                          context.read<ForgotPasswordCubit>().verifyResetCode(
+                          context.read<EmailVerificationCubit>().verifyEmail(
                             widget.email,
                             _pinController.text,
                           );
@@ -251,36 +285,68 @@ class _VerifyResetCodeBodyState extends State<_VerifyResetCodeBody> {
                     verticalSpace(24),
 
                     // Resend Code
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'لم يصلك الرمز؟',
-                          style: TextStyles.font14GreyRegular,
-                        ),
-                        if (_canResend)
-                          TextButton(
-                            onPressed: () {
-                              context.read<ForgotPasswordCubit>().sendResetCode(
-                                widget.email,
-                              );
-                              _startTimer();
-                              _pinController.clear();
-                            },
-                            child: Text(
-                              'إعادة إرسال',
-                              style: TextStyles.font14CyanSemiBold,
+                    if (isResending)
+                      const CircularProgressIndicator()
+                    else
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'لم يصلك الرمز؟',
+                            style: TextStyles.font14GreyRegular,
+                          ),
+                          if (_canResend)
+                            TextButton(
+                              onPressed: () {
+                                context
+                                    .read<EmailVerificationCubit>()
+                                    .resendCode(widget.email);
+                                _startTimer();
+                              },
+                              child: Text(
+                                'إعادة إرسال',
+                                style: TextStyles.font14CyanSemiBold,
+                              ),
+                            )
+                          else
+                            Padding(
+                              padding: EdgeInsets.only(right: 4.w),
+                              child: Text(
+                                ' ($_remainingSeconds ثانية)',
+                                style: TextStyles.font14GreyRegular,
+                              ),
                             ),
-                          )
-                        else
-                          Padding(
-                            padding: EdgeInsets.only(right: 4.w),
+                        ],
+                      ),
+
+                    verticalSpace(24),
+
+                    // Info text
+                    Container(
+                      padding: EdgeInsets.all(16.w),
+                      decoration: BoxDecoration(
+                        color: ColorsManager.mainColor.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(
+                          color: ColorsManager.mainColor.withOpacity(0.2),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            color: ColorsManager.mainColor,
+                            size: 20.sp,
+                          ),
+                          horizontalSpace(12),
+                          Expanded(
                             child: Text(
-                              ' ($_remainingSeconds ثانية)',
-                              style: TextStyles.font14GreyRegular,
+                              'تحقق من صندوق البريد الوارد أو مجلد الرسائل غير المرغوب فيها',
+                              style: TextStyles.font12GreyRegular,
                             ),
                           ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),

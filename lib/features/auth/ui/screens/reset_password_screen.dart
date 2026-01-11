@@ -1,47 +1,73 @@
-// lib/features/auth/ui/screens/forgot_password_screen.dart
+// lib/features/auth/ui/screens/reset_password_screen.dart
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/di/dependency_injection.dart';
-import '../../../../core/helpers/extensions.dart';
-import '../../../../core/helpers/spacing.dart';
-import '../../../../core/helpers/validators.dart';
-import '../../../../core/routing/routes.dart';
-import '../../../../core/theming/colors.dart';
-import '../../../../core/theming/styles.dart';
-import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_text_field.dart';
-import '../logic/forgot_password_cubit/forgot_password_cubit.dart';
-import '../logic/forgot_password_cubit/forgot_password_state.dart';
+import '../../../../../core/di/dependency_injection.dart';
+import '../../../../../core/helpers/extensions.dart';
+import '../../../../../core/helpers/spacing.dart';
+import '../../../../../core/helpers/validators.dart';
+import '../../../../../core/routing/routes.dart';
+import '../../../../../core/theming/colors.dart';
+import '../../../../../core/theming/styles.dart';
+import '../../../../../core/widgets/app_button.dart';
+import '../../logic/forgot_password_cubit/forgot_password_cubit.dart';
+import '../../logic/forgot_password_cubit/forgot_password_state.dart';
+import '../widgets/password_text_field.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
-  const ForgotPasswordScreen({super.key});
+class ResetPasswordScreen extends StatelessWidget {
+  final Map<String, dynamic> data;
+
+  const ResetPasswordScreen({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<ForgotPasswordCubit>(),
-      child: const _ForgotPasswordBody(),
+      child: _ResetPasswordBody(
+        resetToken: data['resetToken'] as String,
+        email: data['email'] as String,
+        name: data['name'] as String,
+      ),
     );
   }
 }
 
-class _ForgotPasswordBody extends StatefulWidget {
-  const _ForgotPasswordBody();
+class _ResetPasswordBody extends StatefulWidget {
+  final String resetToken;
+  final String email;
+  final String name;
+
+  const _ResetPasswordBody({
+    required this.resetToken,
+    required this.email,
+    required this.name,
+  });
 
   @override
-  State<_ForgotPasswordBody> createState() => _ForgotPasswordBodyState();
+  State<_ResetPasswordBody> createState() => _ResetPasswordBodyState();
 }
 
-class _ForgotPasswordBodyState extends State<_ForgotPasswordBody> {
+class _ResetPasswordBodyState extends State<_ResetPasswordBody> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  String? _validateConfirmPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'الرجاء تأكيد كلمة المرور';
+    }
+    if (value != _passwordController.text) {
+      return 'كلمة المرور غير متطابقة';
+    }
+    return null;
   }
 
   @override
@@ -62,18 +88,15 @@ class _ForgotPasswordBodyState extends State<_ForgotPasswordBody> {
           child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
             listener: (context, state) {
               state.maybeWhen(
-                codeSent: (email, message) {
+                passwordReset: (message) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(message),
                       backgroundColor: ColorsManager.success,
                     ),
                   );
-                  // Navigate to verify code screen
-                  context.pushReplacementNamed(
-                    Routes.verifyResetCodeScreen,
-                    arguments: email,
-                  );
+                  // Navigate to login screen
+                  context.pushReplacementNamed(Routes.loginScreen);
                 },
                 error: (message) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -88,7 +111,7 @@ class _ForgotPasswordBodyState extends State<_ForgotPasswordBody> {
             },
             builder: (context, state) {
               final isLoading = state.maybeWhen(
-                sendingCode: () => true,
+                resettingPassword: () => true,
                 orElse: () => false,
               );
 
@@ -107,11 +130,13 @@ class _ForgotPasswordBodyState extends State<_ForgotPasswordBody> {
                           width: 100.w,
                           height: 100.w,
                           decoration: BoxDecoration(
-                            color: ColorsManager.mainColor.withOpacity(0.1),
+                            color: ColorsManager.mainColor.withValues(
+                              alpha: 0.1,
+                            ),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
-                            Icons.lock_reset,
+                            Icons.lock_outline,
                             size: 50.sp,
                             color: ColorsManager.mainColor,
                           ),
@@ -123,7 +148,7 @@ class _ForgotPasswordBodyState extends State<_ForgotPasswordBody> {
                       // Title
                       Center(
                         child: Text(
-                          'نسيت كلمة المرور؟',
+                          'كلمة مرور جديدة',
                           style: TextStyles.font24BlackBold,
                         ),
                       ),
@@ -133,7 +158,7 @@ class _ForgotPasswordBodyState extends State<_ForgotPasswordBody> {
                       // Subtitle
                       Center(
                         child: Text(
-                          'أدخل بريدك الإلكتروني وسنرسل لك\nرمز التحقق',
+                          'أدخل كلمة المرور الجديدة لحسابك',
                           style: TextStyles.font14GreyRegular,
                           textAlign: TextAlign.center,
                         ),
@@ -141,58 +166,50 @@ class _ForgotPasswordBodyState extends State<_ForgotPasswordBody> {
 
                       verticalSpace(40),
 
-                      // Email Field
+                      // Password Field
                       Text(
-                        'البريد الإلكتروني',
+                        'كلمة المرور الجديدة',
                         style: TextStyles.font14BlackSemiBold,
                       ),
                       verticalSpace(8),
-                      AppTextField(
-                        hintText: 'example@email.com',
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: AppValidators.validateEmail,
-                        prefixIcon: Icon(
-                          Icons.email_outlined,
-                          color: ColorsManager.textSecondary,
-                          size: 20.sp,
-                        ),
+                      PasswordTextField(
+                        hintText: '••••••••',
+                        controller: _passwordController,
+                        validator: AppValidators.validatePassword,
+                      ),
+
+                      verticalSpace(24),
+
+                      // Confirm Password Field
+                      Text(
+                        'تأكيد كلمة المرور',
+                        style: TextStyles.font14BlackSemiBold,
+                      ),
+                      verticalSpace(8),
+                      PasswordTextField(
+                        hintText: '••••••••',
+                        controller: _confirmPasswordController,
+                        validator: _validateConfirmPassword,
                       ),
 
                       verticalSpace(32),
 
-                      // Send Code Button
+                      // Reset Button
                       AppButton(
-                        text: 'إرسال الرمز',
+                        text: 'إعادة تعيين كلمة المرور',
                         isLoading: isLoading,
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            context.read<ForgotPasswordCubit>().sendResetCode(
-                              _emailController.text.trim(),
+                            context.read<ForgotPasswordCubit>().resetPassword(
+                              resetToken: widget.resetToken,
+                              password: _passwordController.text,
+                              passwordConfirm: _confirmPasswordController.text,
                             );
                           }
                         },
                       ),
 
                       verticalSpace(24),
-
-                      // Back to Login
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'تذكرت كلمة المرور؟',
-                            style: TextStyles.font14GreyRegular,
-                          ),
-                          TextButton(
-                            onPressed: () => context.pop(),
-                            child: Text(
-                              'تسجيل الدخول',
-                              style: TextStyles.font14CyanSemiBold,
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),

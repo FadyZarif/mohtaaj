@@ -23,8 +23,8 @@ Map<String, dynamic> _$RegisterResponseToJson(_RegisterResponse instance) =>
 _RegisterData _$RegisterDataFromJson(Map<String, dynamic> json) =>
     _RegisterData(
       user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
-      tokens: TokensModel.fromJson(json['tokens'] as Map<String, dynamic>),
+      message: json['message'] as String,
     );
 
 Map<String, dynamic> _$RegisterDataToJson(_RegisterData instance) =>
-    <String, dynamic>{'user': instance.user, 'tokens': instance.tokens};
+    <String, dynamic>{'user': instance.user, 'message': instance.message};

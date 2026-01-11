@@ -1,4 +1,7 @@
 class Routes {
+  // Splash
+  static const String splashScreen = '/';
+
   // Onboarding
   static const String onboardingScreen = '/onboarding';
 

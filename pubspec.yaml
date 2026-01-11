@@ -101,6 +101,7 @@ dev_dependencies:
   build_runner: ^2.10.3
   json_serializable: ^6.11.1
   freezed: ^3.2.3
+  flutter_launcher_icons: ^0.14.2
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -151,3 +152,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo_trans.png"
+  adaptive_icon_background: "#3E655D"
+  adaptive_icon_foreground: "assets/logo_trans.png"

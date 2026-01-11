@@ -70,7 +70,7 @@ class _ItemDetailsBody extends StatelessWidget {
                         verticalSpace(8),
                         // Similar Items Section - الجديد
                         SimilarItemsSection(similarItems: similarItems),
-                        verticalSpace(80), // Space for bottom buttons
+                        verticalSpace(110), // Space for bottom buttons
                       ],
                     ),
                   ),

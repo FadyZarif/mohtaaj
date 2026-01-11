@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import '../../features/auth/logic/email_verification_cubit/email_verification_cubit.dart';
 import '../../features/auth/logic/forgot_password_cubit/forgot_password_cubit.dart';
 import '../../features/chats/data/services/socket_service.dart';
 import '../../features/chats/logic/chat_room/chat_room_cubit.dart';
@@ -43,7 +44,7 @@ Future<void> setupGetIt() async {
 
   // Login
   getIt.registerFactory<LoginCubit>(
-    () => LoginCubit(
+        () => LoginCubit(
       getIt<ApiService>(),
       getIt<AuthService>(),
       getIt<SocketService>(),
@@ -52,15 +53,23 @@ Future<void> setupGetIt() async {
 
   // Register
   getIt.registerFactory<RegisterCubit>(
-    () => RegisterCubit(
+        () => RegisterCubit(
       getIt<ApiService>(),
-      getIt<AuthService>(),
-      getIt<SocketService>(),
+      // ❌ Remove: AuthService, SocketService
     ),
   );
   // Forgot Password Cubit
   getIt.registerFactory<ForgotPasswordCubit>(
     () => ForgotPasswordCubit(getIt<ApiService>()),
+  );
+
+  // Email Verification Cubit
+  getIt.registerFactory<EmailVerificationCubit>(
+        () => EmailVerificationCubit(
+      getIt<ApiService>(),
+      getIt<AuthService>(),
+      getIt<SocketService>(),
+    ),
   );
 
   // ========================== Main Layout ==========================

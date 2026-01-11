@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mohtaaj/core/helpers/spacing.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 
@@ -26,8 +27,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         children: [
           // Logo
+          Image.asset(
+            'assets/logo_trans.png',
+            height: 40.h,
+          ),
+          horizontalSpace(5),
           Text(
-            'Mohtaaj',
+            'محتاج',
             style: TextStyles.font20BlackBold.copyWith(
               color: ColorsManager.mainColor,
             ),

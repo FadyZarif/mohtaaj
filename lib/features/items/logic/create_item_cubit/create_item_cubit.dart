@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
+import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/location_service.dart';
 import '../../data/models/create_item_request.dart';
 import '../../data/models/item_model.dart';
@@ -14,10 +15,28 @@ import 'create_item_state.dart';
 class CreateItemCubit extends Cubit<CreateItemState> {
   final ApiService _apiService;
   final LocationService _locationService;
+  final AuthService _authService;
   final ImagePicker _imagePicker = ImagePicker();
 
-  CreateItemCubit(this._apiService, this._locationService)
-      : super(const CreateItemState());
+  CreateItemCubit(this._apiService, this._locationService, this._authService)
+      : super(const CreateItemState()) {
+    _loadUserLocation();
+  }
+
+  // Load user's country and city
+  Future<void> _loadUserLocation() async {
+    try {
+      final user = await _authService.getUserData();
+      if (user != null) {
+        emit(state.copyWith(
+          country: user.country,
+          city: user.city,
+        ));
+      }
+    } catch (e) {
+      // Silently fail - user can still select manually
+    }
+  }
   // Get current location
   Future<void> getCurrentLocation() async {
     emit(state.copyWith(error: null));

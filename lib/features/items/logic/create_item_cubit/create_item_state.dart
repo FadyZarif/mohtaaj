@@ -17,6 +17,7 @@ abstract class CreateItemState with _$CreateItemState {
     String? description,
     String? categoryId,
     ItemCondition? condition,
+    String? country,
     String? city,
     double? geoLat,
     double? geoLng,

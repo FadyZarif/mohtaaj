@@ -117,7 +117,11 @@ Future<void> setupGetIt() async {
   // ========================== Create Item ==========================
 
   getIt.registerFactory<CreateItemCubit>(
-    () => CreateItemCubit(getIt<ApiService>(), getIt<LocationService>()),
+    () => CreateItemCubit(
+      getIt<ApiService>(),
+      getIt<LocationService>(),
+      getIt<AuthService>(),
+    ),
   );
 
   // ========================== Search ==========================

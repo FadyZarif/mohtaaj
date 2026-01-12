@@ -9,9 +9,13 @@ import 'core/services/auth_service.dart';
 import 'features/chats/data/services/socket_service.dart';
 import 'mohtaaj_app.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // Preserve the native splash until we've finished initialization.
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   timeago.setLocaleMessages('ar', timeago.ArMessages());
   timeago.setLocaleMessages('ar_short', timeago.ArShortMessages());
@@ -33,8 +37,16 @@ void main() async {
     ),
   );
 
-  // Remove native splash
-  // FlutterNativeSplash.remove();
+  // Remove native splash after the first frame is rendered.
+  // Using addPostFrameCallback ensures Flutter has drawn its first frame.
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    try {
+      FlutterNativeSplash.remove();
+    } catch (e) {
+      // Ignore if splash removal fails for any reason.
+      debugPrint('Failed to remove native splash: $e');
+    }
+  });
 }
 
 Future<void> _registerUserIdIfLoggedIn() async {

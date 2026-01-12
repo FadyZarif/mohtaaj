@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- android12splash.xml
+     References the existing splash drawable (splash.png) so Android 12+ can use it
+     as the windowSplashScreenAnimatedIcon. This file intentionally uses a bitmap
+     so system will pick the correct density version from drawable-*/ folders.
+-->
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@drawable/splash"
+    android:gravity="center" />
+

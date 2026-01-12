@@ -211,7 +211,7 @@ class _ProfileScreenBody extends StatelessWidget {
                     );
                   },
                 ),
-                Divider(
+               /* Divider(
                   color: ColorsManager.borderColor,
                   height: 1,
                   indent: 56.w,
@@ -220,9 +220,8 @@ class _ProfileScreenBody extends StatelessWidget {
                   icon: Icons.settings_outlined,
                   title: 'الإعدادات',
                   onTap: () {
-                    // TODO: Navigate to Settings
                   },
-                ),
+                ),*/
               ],
             ),
           ),

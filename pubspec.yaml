@@ -156,6 +156,7 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/logo_trans.png"
-  adaptive_icon_background: "#3E655D"
-  adaptive_icon_foreground: "assets/logo_trans.png"
+  image_path: "assets/app_icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  #adaptive_icon_foreground: "assets/app_icon.png"
+

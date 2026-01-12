@@ -26,7 +26,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<RegisterCubit>(),
+      create: (context) => getIt<RegisterCubit>()..detectLocation(),
       child: const _RegisterScreenBody(),
     );
   }
@@ -53,15 +53,6 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
   String? _selectedCity;
   String _dial = '+20';
   String _initialCode = 'EG'; // Initial country code for phone picker
-
-  @override
-  void initState() {
-    super.initState();
-    // Auto-detect location when screen opens
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<RegisterCubit>().detectLocation();
-    });
-  }
 
   @override
   void dispose() {
@@ -103,8 +94,32 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
                   AppDialogs.showLoadingDialog(context);
                 },
                 detectingLocation: () {},
-                locationDetected: (city, country, phoneCode) {},
-                locationError: (error) {},
+                locationDetected: (city, country, phoneCountryCode) {
+                  setState(() {
+                    _selectedCity = city;
+                    _selectedCountry = country;
+                    _initialCode = phoneCountryCode;
+                  });
+
+                  // Update phone field country code
+                  _phoneFieldKey.currentState?.updateCountryCode(phoneCountryCode);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('تم تحديد موقعك: $city, $country'),
+                      backgroundColor: ColorsManager.success,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+                locationError: (error) {
+                  // Set default values
+                  setState(() {
+                    _selectedCity = 'القاهرة';
+                    _selectedCountry = 'مصر';
+                    _initialCode = 'EG';
+                  });
+                },
                 success: (email, message) {
                   context.pop(); // Close loading
                   ScaffoldMessenger.of(context).showSnackBar(

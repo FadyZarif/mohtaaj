@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mohtaaj/core/helpers/spacing.dart';
 import '../helpers/cache_helper.dart';
 import '../routing/routes.dart';
 import '../services/auth_service.dart';
@@ -109,13 +111,12 @@ class _SplashScreenState extends State<SplashScreen>
                 scale: _scaleAnimation,
                 child: Image.asset(
                   'assets/logo_trans.png',
-                  width: 200,
-                  height: 200,
+                  width: 200.w,
+                  height: 200.w,
                 ),
               ),
             ),
-            const SizedBox(height: 30),
-            // App Name
+            verticalSpace(30), // Tagline// App Name
             FadeTransition(
               opacity: _fadeAnimation,
               child: Text(
@@ -124,12 +125,11 @@ class _SplashScreenState extends State<SplashScreen>
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
                   color: ColorsManager.mainColor,
-                  letterSpacing: 2,
+                  letterSpacing: 1,
                 ),
               ),
             ),
-            const SizedBox(height: 10),
-            // Tagline
+            verticalSpace(10), // Tagline
             FadeTransition(
               opacity: _fadeAnimation,
               child: Text(
@@ -141,13 +141,13 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
               ),
             ),
-            const SizedBox(height: 50),
+            verticalSpace(50), // Tagline
             // Loading Indicator
             FadeTransition(
               opacity: _fadeAnimation,
-              child: const SizedBox(
-                width: 40,
-                height: 40,
+              child: SizedBox(
+                width: 40.w,
+                height: 40.w,
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(ColorsManager.mainColor),
                   strokeWidth: 3,

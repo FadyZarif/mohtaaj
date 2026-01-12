@@ -18,7 +18,7 @@ import '../widgets/image_picker_widget.dart';
 import '../widgets/category_selector.dart';
 import '../widgets/condition_selector.dart';
 import '../widgets/price_input_widget.dart';
-import '../widgets/governorate_selector.dart';
+import '../widgets/country_city_selector.dart';
 
 class CreateItemScreen extends StatelessWidget {
   const CreateItemScreen({super.key});
@@ -38,7 +38,7 @@ class CreateItemScreen extends StatelessWidget {
         }else {
           return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => getIt<CreateItemCubit>()..getCurrentLocation()),
+            BlocProvider(create: (context) => getIt<CreateItemCubit>()),
             BlocProvider(create: (context) => getIt<CategoriesCubit>()..getCategories()),
           ],
           child: const _CreateItemScreenBody(),
@@ -257,6 +257,10 @@ class _CreateItemScreenBodyState extends State<_CreateItemScreenBody> {
                   margin: EdgeInsets.all(16.w),
                 ),
               );
+
+              // Clear form fields
+              _titleController.clear();
+              _descriptionController.clear();
               context.read<CreateItemCubit>().reset();
 
               // Navigator.pop(context);
@@ -399,143 +403,25 @@ class _CreateItemScreenBodyState extends State<_CreateItemScreenBody> {
                       ),
                       verticalSpace(24),
 
-                      // City Section
+                      // Country and City Section
                       _buildSectionHeader(
-                        title: 'المدينة',
-                        icon: Icons.location_city_outlined,
+                        title: 'الدولة والمدينة',
+                        icon: Icons.location_on_outlined,
                         isRequired: true,
                       ),
                       verticalSpace(12),
-                      GovernorateSelector(
-                        country: state.country,
-                        selectedGovernorate: state.city,
-                        onGovernorateSelected: (governorate) {
-                          if (governorate != null) {
-                            context.read<CreateItemCubit>().updateCity(governorate);
+                      CountryCitySelector(
+                        selectedCountry: state.country,
+                        selectedCity: state.city,
+                        onCountrySelected: (country) {
+                          if (country != null) {
+                            context.read<CreateItemCubit>().updateCountry(country);
                           }
                         },
-                      ),
-                      verticalSpace(16),
-
-                      // Location Section
-                      BlocBuilder<CreateItemCubit, CreateItemState>(
-                        buildWhen: (previous, current) =>
-                        previous.geoLat != current.geoLat ||
-                            previous.geoLng != current.geoLng,
-                        builder: (context, state) {
-                          final hasLocation = state.geoLat != null && state.geoLng != null;
-
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(
-                                color: hasLocation
-                                    ? ColorsManager.success.withOpacity(0.3)
-                                    : ColorsManager.borderColor,
-                              ),
-                            ),
-                            padding: EdgeInsets.all(16.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.location_on_outlined,
-                                      color: ColorsManager.mainColor,
-                                      size: 20.sp,
-                                    ),
-                                    horizontalSpace(8),
-                                    Text(
-                                      'الموقع الجغرافي',
-                                      style: TextStyles.font14BlackSemiBold,
-                                    ),
-                                    if (!hasLocation) ...[
-                                      horizontalSpace(4),
-                                      Text(
-                                        '(اختياري)',
-                                        style: TextStyles.font12BlackMedium.copyWith(
-                                          color: ColorsManager.textSecondary,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                                if (!hasLocation) ...[
-                                  verticalSpace(8),
-                                  Container(
-                                    padding: EdgeInsets.all(10.w),
-                                    decoration: BoxDecoration(
-                                      color: ColorsManager.warning.withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.info_outline,
-                                          color: ColorsManager.warning,
-                                          size: 18.sp,
-                                        ),
-                                        horizontalSpace(8),
-                                        Expanded(
-                                          child: Text(
-                                            'يُفضل تحديد موقعك لزيادة ظهور إعلانك',
-                                            style: TextStyles.font12BlackMedium.copyWith(
-                                              color: ColorsManager.warning,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                                verticalSpace(12),
-                                GestureDetector(
-                                  onTap: () {
-                                    context.read<CreateItemCubit>().getCurrentLocation();
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16.w,
-                                      vertical: 14.h,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      gradient: hasLocation
-                                          ? null
-                                          : LinearGradient(
-                                              colors: [
-                                                ColorsManager.mainColor,
-                                                ColorsManager.mainColorLight,
-                                              ],
-                                            ),
-                                      color: hasLocation ? ColorsManager.success : null,
-                                      borderRadius: BorderRadius.circular(12.r),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          hasLocation
-                                              ? Icons.check_circle
-                                              : Icons.my_location,
-                                          size: 20.sp,
-                                          color: Colors.white,
-                                        ),
-                                        horizontalSpace(8),
-                                        Text(
-                                          hasLocation
-                                              ? 'تم تحديد الموقع بنجاح'
-                                              : 'تحديد موقعي الحالي',
-                                          style: TextStyles.font14WhiteSemiBold,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
+                        onCitySelected: (city) {
+                          if (city != null) {
+                            context.read<CreateItemCubit>().updateCity(city);
+                          }
                         },
                       ),
                       verticalSpace(24),

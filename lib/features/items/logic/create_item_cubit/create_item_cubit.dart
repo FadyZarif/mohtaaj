@@ -122,6 +122,10 @@ class CreateItemCubit extends Cubit<CreateItemState> {
     emit(state.copyWith(condition: condition, error: null));
   }
 
+  void updateCountry(String country) {
+    emit(state.copyWith(country: country, city: null, error: null));
+  }
+
   void updateCity(String city) {
     emit(state.copyWith(city: city, error: null));
   }

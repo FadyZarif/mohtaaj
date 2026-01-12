@@ -50,7 +50,6 @@ class PriceInputWidget extends StatelessWidget {
                 Switch(
                   value: isFree,
                   onChanged: onIsFreeChanged,
-                  activeColor: ColorsManager.mainColor,
                 ),
               ],
             ),

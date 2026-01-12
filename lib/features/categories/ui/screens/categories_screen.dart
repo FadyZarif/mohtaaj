@@ -39,22 +39,26 @@ class _CategoriesScreenBody extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: BlocBuilder<CategoriesCubit, CategoriesState>(
-        builder: (context, state) {
-          return state.when(
-            initial: () => const SizedBox.shrink(),
-            loading: () => const Center(
-              child: CircularProgressIndicator(
-                color: ColorsManager.mainColor,
+      body: RefreshIndicator(
+        color: ColorsManager.mainColor,
+        onRefresh: () => context.read<CategoriesCubit>().refresh(),
+        child: BlocBuilder<CategoriesCubit, CategoriesState>(
+          builder: (context, state) {
+            return state.when(
+              initial: () => const SizedBox.shrink(),
+              loading: () => const Center(
+                child: CircularProgressIndicator(
+                  color: ColorsManager.mainColor,
+                ),
               ),
-            ),
-            success: (categories) => _CategoriesGrid(categories: categories),
-            error: (message) => _ErrorWidget(
-              message: message,
-              onRetry: () => context.read<CategoriesCubit>().getCategories(),
-            ),
-          );
-        },
+              success: (categories) => _CategoriesGrid(categories: categories),
+              error: (message) => _ErrorWidget(
+                message: message,
+                onRetry: () => context.read<CategoriesCubit>().getCategories(),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -68,28 +72,37 @@ class _CategoriesGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (categories.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.category_outlined,
-              size: 80.sp,
-              color: ColorsManager.iconTertiary,
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.category_outlined,
+                    size: 80.sp,
+                    color: ColorsManager.iconTertiary,
+                  ),
+                  verticalSpace(16),
+                  Text(
+                    'لا توجد أقسام',
+                    style: TextStyles.font16GreyRegular,
+                  ),
+                ],
+              ),
             ),
-            verticalSpace(16),
-            Text(
-              'لا توجد أقسام',
-              style: TextStyles.font16GreyRegular,
-            ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 
     return Padding(
       padding: EdgeInsets.all(16.w),
       child: GridView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 12.w,
@@ -140,7 +153,7 @@ class _CategoryCard extends StatelessWidget {
               width: 60.w,
               height: 60.h,
               decoration: BoxDecoration(
-                color: ColorsManager.mainColor.withOpacity(0.1),
+                color: ColorsManager.mainColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: category.iconUrl != null
@@ -201,44 +214,52 @@ class _ErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(24.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.error_outline,
-              size: 60.sp,
-              color: ColorsManager.error,
-            ),
-            verticalSpace(16),
-            Text(
-              message,
-              style: TextStyles.font14GreyRegular,
-              textAlign: TextAlign.center,
-            ),
-            verticalSpace(24),
-            GestureDetector(
-              onTap: onRetry,
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 24.w,
-                  vertical: 12.h,
-                ),
-                decoration: BoxDecoration(
-                  color: ColorsManager.mainColor,
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: Text(
-                  'إعادة المحاولة',
-                  style: TextStyles.font14WhiteMedium,
-                ),
+    return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.all(24.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 60.sp,
+                    color: ColorsManager.error,
+                  ),
+                  verticalSpace(16),
+                  Text(
+                    message,
+                    style: TextStyles.font14GreyRegular,
+                    textAlign: TextAlign.center,
+                  ),
+                  verticalSpace(24),
+                  GestureDetector(
+                    onTap: onRetry,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24.w,
+                        vertical: 12.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: ColorsManager.mainColor,
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Text(
+                        'إعادة المحاولة',
+                        style: TextStyles.font14WhiteMedium,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

@@ -75,4 +75,9 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(const ProfileState.logoutSuccess());
     }
   }
+
+  // Refresh method for Pull-to-Refresh
+  Future<void> refresh() async {
+    await getProfile();
+  }
 }

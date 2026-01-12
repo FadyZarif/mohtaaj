@@ -47,6 +47,10 @@ class ItemPreviewCard extends StatelessWidget {
                 width: 60.w,
                 height: 60.w,
                 fit: BoxFit.cover,
+                fadeInDuration: Duration.zero,
+                fadeOutDuration: Duration.zero,
+                memCacheWidth: 180,
+                memCacheHeight: 180,
                 placeholder: (_, __) => Container(
                   color: ColorsManager.shimmerBase,
                 ),

@@ -168,6 +168,10 @@ class ChatItemCard extends StatelessWidget {
                     width: 70.w,
                     height: 70.w,
                     fit: BoxFit.cover,
+                    fadeInDuration: Duration.zero,
+                    fadeOutDuration: Duration.zero,
+                    memCacheWidth: 210,
+                    memCacheHeight: 210,
                     placeholder: (_, _) =>
                         Container(color: ColorsManager.shimmerBase),
                     errorWidget: (_, _, _) => Container(
@@ -207,6 +211,10 @@ class ChatItemCard extends StatelessWidget {
                             ? chat.seller.avatarUrl!
                             : chat.buyer.avatarUrl!,
                         fit: BoxFit.cover,
+                        fadeInDuration: Duration.zero,
+                        fadeOutDuration: Duration.zero,
+                        memCacheWidth: 72,
+                        memCacheHeight: 72,
                         errorWidget: (_, _, _) => _defaultAvatar(),
                       )
                     : _defaultAvatar(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/theming/colors.dart';
@@ -83,12 +84,23 @@ class ItemCard extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 1.35,
             child: item.images.isNotEmpty
-                ? Image.network(
-                    item.images.first,
+                ? CachedNetworkImage(
+                    imageUrl: item.images.first,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return _buildImagePlaceholder();
-                    },
+                    fadeInDuration: Duration.zero,
+                    fadeOutDuration: Duration.zero,
+                    memCacheWidth: 600,
+                    memCacheHeight: 600,
+                    placeholder: (context, url) => Container(
+                      color: ColorsManager.inputBackground,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: ColorsManager.mainColor,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => _buildImagePlaceholder(),
                   )
                 : _buildImagePlaceholder(),
           ),

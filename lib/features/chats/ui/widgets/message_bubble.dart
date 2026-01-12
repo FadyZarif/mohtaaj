@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:photo_view/photo_view.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../data/models/chat_model.dart';
@@ -192,27 +194,25 @@ class MessageBubble extends StatelessWidget {
   Widget _buildImageMessage() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.r),
-      child: Image.network(
-        message.imageUrl!,
+      child: CachedNetworkImage(
+        imageUrl: message.imageUrl!,
         width: 200.w,
         fit: BoxFit.cover,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return Container(
-            width: 200.w,
-            height: 200.h,
-            color: Colors.grey[300],
-            child: Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                    : null,
-              ),
+        fadeInDuration: Duration.zero,
+        fadeOutDuration: Duration.zero,
+        memCacheWidth: 600,
+        memCacheHeight: 600,
+        placeholder: (context, url) => Container(
+          width: 200.w,
+          height: 200.h,
+          color: Colors.grey[300],
+          child: Center(
+            child: CircularProgressIndicator(
+              color: ColorsManager.mainColor,
             ),
-          );
-        },
-        errorBuilder: (context, error, stackTrace) {
+          ),
+        ),
+        errorWidget: (context, url, error) {
           return Container(
             width: 200.w,
             height: 200.h,
@@ -238,8 +238,29 @@ class MessageBubble extends StatelessWidget {
             backgroundColor: Colors.black,
             iconTheme: const IconThemeData(color: Colors.white),
           ),
-          body: Center(
-            child: InteractiveViewer(child: Image.network(message.imageUrl!)),
+          body: PhotoView(
+            imageProvider: CachedNetworkImageProvider(message.imageUrl!),
+            minScale: PhotoViewComputedScale.contained,
+            maxScale: PhotoViewComputedScale.covered * 3,
+            initialScale: PhotoViewComputedScale.contained,
+            backgroundDecoration: const BoxDecoration(
+              color: Colors.black,
+            ),
+            loadingBuilder: (context, event) => Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                value: event == null
+                    ? 0
+                    : event.cumulativeBytesLoaded / (event.expectedTotalBytes ?? 1),
+              ),
+            ),
+            errorBuilder: (context, error, stackTrace) => Center(
+              child: Icon(
+                Icons.broken_image,
+                size: 100.sp,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),

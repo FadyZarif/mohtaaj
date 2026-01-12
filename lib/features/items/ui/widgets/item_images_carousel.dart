@@ -1,8 +1,13 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'package:mohtaaj/core/services/auth_service.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/theming/colors.dart';
+import '../../../../core/theming/styles.dart';
 import '../../../reports/data/models/report_model.dart';
 import '../../../reports/ui/widgets/report_dialog.dart';
 import '../../data/models/item_model.dart';
@@ -17,11 +22,38 @@ class ItemImagesCarousel extends StatefulWidget {
 }
 
 class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
-  final PageController _pageController = PageController();
+  late PageController _pageController;
   int _currentPage = 0;
+  Timer? _autoPlayTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with initial page to enable infinite scroll
+    _pageController = PageController(
+      initialPage: widget.item.images.isEmpty ? 0 : 1000,
+    );
+    _startAutoPlay();
+  }
+
+  void _startAutoPlay() {
+    if (widget.item.images.length > 1) {
+      _autoPlayTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+        if (_pageController.hasClients) {
+          final nextPage = _pageController.page!.toInt() + 1;
+          _pageController.animateToPage(
+            nextPage,
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+  }
 
   @override
   void dispose() {
+    _autoPlayTimer?.cancel();
     _pageController.dispose();
     super.dispose();
   }
@@ -42,17 +74,31 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
             controller: _pageController,
             onPageChanged: (index) {
               setState(() {
-                _currentPage = index;
+                _currentPage = index % images.length;
               });
             },
-            itemCount: images.length,
             itemBuilder: (context, index) {
-              return Image.network(
-                images[index],
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return _buildPlaceholder();
-                },
+              final imageIndex = index % images.length;
+              return GestureDetector(
+                onTap: () => _openImageViewer(context, imageIndex),
+                child: CachedNetworkImage(
+                  imageUrl: images[imageIndex],
+                  fit: BoxFit.cover,
+                  fadeInDuration: Duration.zero,
+                  fadeOutDuration: Duration.zero,
+                  memCacheWidth: 1080,
+                  memCacheHeight: 1080,
+                  placeholder: (context, url) => Container(
+                    color: ColorsManager.inputBackground,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: ColorsManager.mainColor,
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => _buildPlaceholder(),
+                ),
               );
             },
           ),
@@ -75,7 +121,7 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
                     shape: BoxShape.circle,
                     color: _currentPage == index
                         ? ColorsManager.mainColor
-                        : Colors.white.withOpacity(0.5),
+                        : Colors.white.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -150,6 +196,17 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
     );
   }
 
+  void _openImageViewer(BuildContext context, int initialIndex) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => _ImageViewerScreen(
+          images: widget.item.images,
+          initialIndex: initialIndex,
+        ),
+      ),
+    );
+  }
+
   void _showReportDialog(BuildContext context) {
     // ✅ Check if item belongs to current user
     final currentUserId = getIt<String>(instanceName: 'userId');
@@ -163,6 +220,121 @@ class _ItemImagesCarouselState extends State<ItemImagesCarousel> {
         targetId: widget.item.id,
         targetName: widget.item.title,
         isOwnContent: isOwnItem, // ✅ Pass ownership info
+      ),
+    );
+  }
+}
+
+// Image Viewer Screen with PhotoView Gallery
+class _ImageViewerScreen extends StatefulWidget {
+  final List<String> images;
+  final int initialIndex;
+
+  const _ImageViewerScreen({
+    required this.images,
+    required this.initialIndex,
+  });
+
+  @override
+  State<_ImageViewerScreen> createState() => _ImageViewerScreenState();
+}
+
+class _ImageViewerScreenState extends State<_ImageViewerScreen> {
+  late PageController _pageController;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+    _pageController = PageController(initialPage: widget.initialIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
+          '${_currentIndex + 1} / ${widget.images.length}',
+          style: TextStyles.font16WhiteSemiBold,
+        ),
+        centerTitle: true,
+      ),
+      body: Stack(
+        children: [
+          PhotoViewGallery.builder(
+            scrollPhysics: const BouncingScrollPhysics(),
+            builder: (BuildContext context, int index) {
+              return PhotoViewGalleryPageOptions(
+                imageProvider: CachedNetworkImageProvider(widget.images[index]),
+                minScale: PhotoViewComputedScale.contained,
+                maxScale: PhotoViewComputedScale.covered * 3,
+                initialScale: PhotoViewComputedScale.contained,
+                heroAttributes: PhotoViewHeroAttributes(tag: widget.images[index]),
+                errorBuilder: (context, error, stackTrace) {
+                  return Center(
+                    child: Icon(
+                      Icons.broken_image,
+                      size: 100.sp,
+                      color: Colors.white,
+                    ),
+                  );
+                },
+              );
+            },
+            itemCount: widget.images.length,
+            loadingBuilder: (context, event) => Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                value: event == null
+                    ? 0
+                    : event.cumulativeBytesLoaded / (event.expectedTotalBytes ?? 1),
+              ),
+            ),
+            backgroundDecoration: const BoxDecoration(
+              color: Colors.black,
+            ),
+            pageController: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+          // Indicator
+          if (widget.images.length > 1)
+            Positioned(
+              bottom: 40.h,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  widget.images.length,
+                  (index) => Container(
+                    width: 8.w,
+                    height: 8.h,
+                    margin: EdgeInsets.symmetric(horizontal: 4.w),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _currentIndex == index
+                          ? Colors.white
+                          : Colors.white.withValues(alpha: 0.4),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

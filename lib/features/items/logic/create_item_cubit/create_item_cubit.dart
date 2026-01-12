@@ -3,6 +3,9 @@
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../../../core/services/auth_service.dart';
@@ -17,6 +20,11 @@ class CreateItemCubit extends Cubit<CreateItemState> {
   final LocationService _locationService;
   final AuthService _authService;
   final ImagePicker _imagePicker = ImagePicker();
+
+  // Constants for image handling
+  static const int maxImages = 8;
+  static const int maxImageSizeInMB = 5; // 5 MB per image
+  static const int imageQuality = 85; // Compression quality (0-100)
 
   CreateItemCubit(this._apiService, this._locationService, this._authService)
       : super(const CreateItemState()) {
@@ -61,18 +69,91 @@ class CreateItemCubit extends Cubit<CreateItemState> {
     }
   }
 
+  // Compress image
+  Future<File?> _compressImage(File file) async {
+    try {
+      final dir = await getTemporaryDirectory();
+      final targetPath = path.join(
+        dir.path,
+        'compressed_${DateTime.now().millisecondsSinceEpoch}${path.extension(file.path)}',
+      );
+
+      final compressedFile = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path,
+        targetPath,
+        quality: imageQuality,
+        minWidth: 1920,
+        minHeight: 1080,
+      );
+
+      if (compressedFile == null) return null;
+
+      final compressedFileObj = File(compressedFile.path);
+
+      // Check file size (in MB)
+      final fileSizeInBytes = await compressedFileObj.length();
+      final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+
+      if (fileSizeInMB > maxImageSizeInMB) {
+        // If still too large, compress more aggressively
+        final moreCompressed = await FlutterImageCompress.compressAndGetFile(
+          file.absolute.path,
+          targetPath,
+          quality: 70,
+          minWidth: 1280,
+          minHeight: 720,
+        );
+
+        if (moreCompressed == null) return null;
+        return File(moreCompressed.path);
+      }
+
+      return compressedFileObj;
+    } catch (e) {
+      return null;
+    }
+  }
+
   // Pick Images
   Future<void> pickImages() async {
     try {
+      // Check if max images limit reached
+      if (state.selectedImages.length >= maxImages) {
+        emit(state.copyWith(error: 'لا يمكن إضافة أكثر من $maxImages صور'));
+        return;
+      }
+
       final List<XFile> images = await _imagePicker.pickMultiImage(
-        imageQuality: 80,
+        imageQuality: imageQuality,
       );
 
       if (images.isNotEmpty) {
-        final files = images.map((xFile) => File(xFile.path)).toList();
-        emit(state.copyWith(
-          selectedImages: [...state.selectedImages, ...files],
-        ));
+        final List<File> compressedFiles = [];
+
+        // Calculate how many images we can add
+        final availableSlots = maxImages - state.selectedImages.length;
+        final imagesToProcess = images.take(availableSlots).toList();
+
+        for (var xFile in imagesToProcess) {
+          final file = File(xFile.path);
+          final compressed = await _compressImage(file);
+
+          if (compressed != null) {
+            compressedFiles.add(compressed);
+          }
+        }
+
+        if (compressedFiles.isNotEmpty) {
+          emit(state.copyWith(
+            selectedImages: [...state.selectedImages, ...compressedFiles],
+          ));
+
+          if (images.length > availableSlots) {
+            emit(state.copyWith(
+              error: 'تم إضافة $availableSlots صور فقط. الحد الأقصى $maxImages صور',
+            ));
+          }
+        }
       }
     } catch (e) {
       emit(state.copyWith(error: 'فشل اختيار الصور'));
@@ -82,16 +163,28 @@ class CreateItemCubit extends Cubit<CreateItemState> {
   // Pick Single Image from Camera
   Future<void> pickImageFromCamera() async {
     try {
+      // Check if max images limit reached
+      if (state.selectedImages.length >= maxImages) {
+        emit(state.copyWith(error: 'لا يمكن إضافة أكثر من $maxImages صور'));
+        return;
+      }
+
       final XFile? image = await _imagePicker.pickImage(
         source: ImageSource.camera,
-        imageQuality: 80,
+        imageQuality: imageQuality,
       );
 
       if (image != null) {
         final file = File(image.path);
-        emit(state.copyWith(
-          selectedImages: [...state.selectedImages, file],
-        ));
+        final compressed = await _compressImage(file);
+
+        if (compressed != null) {
+          emit(state.copyWith(
+            selectedImages: [...state.selectedImages, compressed],
+          ));
+        } else {
+          emit(state.copyWith(error: 'فشل معالجة الصورة'));
+        }
       }
     } catch (e) {
       emit(state.copyWith(error: 'فشل التقاط الصورة'));

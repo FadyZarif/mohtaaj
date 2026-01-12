@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/theming/colors.dart';
@@ -136,11 +137,35 @@ class _EditItemScreenBodyState extends State<_EditItemScreenBody> {
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(8.r),
-                                    child: Image.network(
-                                      state.existingImageUrls[index],
+                                    child: CachedNetworkImage(
+                                      imageUrl: state.existingImageUrls[index],
                                       width: 100.w,
                                       height: 100.h,
                                       fit: BoxFit.cover,
+                                      fadeInDuration: Duration.zero,
+                                      fadeOutDuration: Duration.zero,
+                                      memCacheWidth: 300,
+                                      memCacheHeight: 300,
+                                      placeholder: (context, url) => Container(
+                                        width: 100.w,
+                                        height: 100.h,
+                                        color: ColorsManager.inputBackground,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            color: ColorsManager.mainColor,
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) => Container(
+                                        width: 100.w,
+                                        height: 100.h,
+                                        color: ColorsManager.inputBackground,
+                                        child: Icon(
+                                          Icons.broken_image,
+                                          color: ColorsManager.iconTertiary,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   Positioned(

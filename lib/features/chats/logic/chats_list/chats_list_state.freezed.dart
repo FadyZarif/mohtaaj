@@ -128,12 +128,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ChatModel> chats,  ChatFilterType currentFilter)?  success,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ChatModel> chats,  ChatFilterType currentFilter,  int currentPage,  bool hasMore,  bool isLoadingMore)?  success,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
-return success(_that.chats,_that.currentFilter);case _Error() when error != null:
+return success(_that.chats,_that.currentFilter,_that.currentPage,_that.hasMore,_that.isLoadingMore);case _Error() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -152,12 +152,12 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ChatModel> chats,  ChatFilterType currentFilter)  success,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ChatModel> chats,  ChatFilterType currentFilter,  int currentPage,  bool hasMore,  bool isLoadingMore)  success,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _Success():
-return success(_that.chats,_that.currentFilter);case _Error():
+return success(_that.chats,_that.currentFilter,_that.currentPage,_that.hasMore,_that.isLoadingMore);case _Error():
 return error(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +175,12 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ChatModel> chats,  ChatFilterType currentFilter)?  success,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ChatModel> chats,  ChatFilterType currentFilter,  int currentPage,  bool hasMore,  bool isLoadingMore)?  success,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
-return success(_that.chats,_that.currentFilter);case _Error() when error != null:
+return success(_that.chats,_that.currentFilter,_that.currentPage,_that.hasMore,_that.isLoadingMore);case _Error() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -257,7 +257,7 @@ String toString() {
 
 
 class _Success implements ChatsListState {
-  const _Success(final  List<ChatModel> chats, this.currentFilter): _chats = chats;
+  const _Success({required final  List<ChatModel> chats, required this.currentFilter, this.currentPage = 1, this.hasMore = true, this.isLoadingMore = false}): _chats = chats;
   
 
  final  List<ChatModel> _chats;
@@ -268,6 +268,9 @@ class _Success implements ChatsListState {
 }
 
  final  ChatFilterType currentFilter;
+@JsonKey() final  int currentPage;
+@JsonKey() final  bool hasMore;
+@JsonKey() final  bool isLoadingMore;
 
 /// Create a copy of ChatsListState
 /// with the given fields replaced by the non-null parameter values.
@@ -279,16 +282,16 @@ _$SuccessCopyWith<_Success> get copyWith => __$SuccessCopyWithImpl<_Success>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&const DeepCollectionEquality().equals(other._chats, _chats)&&(identical(other.currentFilter, currentFilter) || other.currentFilter == currentFilter));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&const DeepCollectionEquality().equals(other._chats, _chats)&&(identical(other.currentFilter, currentFilter) || other.currentFilter == currentFilter)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_chats),currentFilter);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_chats),currentFilter,currentPage,hasMore,isLoadingMore);
 
 @override
 String toString() {
-  return 'ChatsListState.success(chats: $chats, currentFilter: $currentFilter)';
+  return 'ChatsListState.success(chats: $chats, currentFilter: $currentFilter, currentPage: $currentPage, hasMore: $hasMore, isLoadingMore: $isLoadingMore)';
 }
 
 
@@ -299,7 +302,7 @@ abstract mixin class _$SuccessCopyWith<$Res> implements $ChatsListStateCopyWith<
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) = __$SuccessCopyWithImpl;
 @useResult
 $Res call({
- List<ChatModel> chats, ChatFilterType currentFilter
+ List<ChatModel> chats, ChatFilterType currentFilter, int currentPage, bool hasMore, bool isLoadingMore
 });
 
 
@@ -316,11 +319,14 @@ class __$SuccessCopyWithImpl<$Res>
 
 /// Create a copy of ChatsListState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? chats = null,Object? currentFilter = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? chats = null,Object? currentFilter = null,Object? currentPage = null,Object? hasMore = null,Object? isLoadingMore = null,}) {
   return _then(_Success(
-null == chats ? _self._chats : chats // ignore: cast_nullable_to_non_nullable
-as List<ChatModel>,null == currentFilter ? _self.currentFilter : currentFilter // ignore: cast_nullable_to_non_nullable
-as ChatFilterType,
+chats: null == chats ? _self._chats : chats // ignore: cast_nullable_to_non_nullable
+as List<ChatModel>,currentFilter: null == currentFilter ? _self.currentFilter : currentFilter // ignore: cast_nullable_to_non_nullable
+as ChatFilterType,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
+as int,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

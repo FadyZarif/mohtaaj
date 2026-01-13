@@ -105,10 +105,10 @@ abstract class ChatsResponse with _$ChatsResponse {
 @freezed
 abstract class PaginationModel with _$PaginationModel {
   const factory PaginationModel({
-    required int total,
-    required int page,
-    required int limit,
-    required int totalPages,
+    @Default(0) int total,
+    @Default(1) int page,
+    @Default(20) int limit,
+    @Default(1) int totalPages,
   }) = _PaginationModel;
 
   factory PaginationModel.fromJson(Map<String, dynamic> json) =>

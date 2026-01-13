@@ -77,7 +77,7 @@ class LoginCubit extends Cubit<LoginState> {
       }
     } catch (error) {
       final apiError = ApiErrorHandler.handle(error);
-      emit(LoginState.error(apiError.message ?? 'فشل تسجيل الدخول'));
+      emit(LoginState.error(apiError.message));
     }
   }
 }

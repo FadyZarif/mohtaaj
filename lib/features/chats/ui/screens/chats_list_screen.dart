@@ -65,6 +65,7 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final _searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   String? _currentUserId;
 
   @override
@@ -72,6 +73,7 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(_onTabChanged);
+    _scrollController.addListener(_onScroll);
 
     // ✅ جيب الـ userId من GetIt
     try {
@@ -80,6 +82,13 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
     } catch (e) {
       // User not logged in
       print('User not logged in: $e');
+    }
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.9) {
+      context.read<ChatsListCubit>().loadChats(userId: _currentUserId);
     }
   }
 
@@ -94,6 +103,7 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
   void dispose() {
     _tabController.dispose();
     _searchController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -139,9 +149,9 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
           return state.when(
             initial: () => const SizedBox(),
             loading: () => const Center(child: CircularProgressIndicator()),
-            success: (chats, filter) {
+            success: (chats, filter, currentPage, hasMore, isLoadingMore) {
               print('✅ Success state - Chats count: ${chats.length}');
-              return _buildChatsList(chats);
+              return _buildChatsList(chats, hasMore, isLoadingMore);
             },
             error: (message) => Center(
               child: Text(message, style: TextStyles.font16GreyRegular),
@@ -152,7 +162,7 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
     );
   }
 
-  Widget _buildChatsList(List<ChatModel> chats) {
+  Widget _buildChatsList(List<ChatModel> chats, bool hasMore, bool isLoadingMore) {
     if (chats.isEmpty) {
       return Center(
         child: Column(
@@ -179,21 +189,43 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
         }
       },
       child: ListView.separated(
+        controller: _scrollController,
         padding: EdgeInsets.symmetric(vertical: 8.h),
-        itemCount: chats.length,
+        itemCount: chats.length + (isLoadingMore ? 1 : 0) + (!hasMore && chats.isNotEmpty ? 1 : 0),
         separatorBuilder: (_, __) =>
             Divider(height: 1, color: ColorsManager.dividerColor),
         itemBuilder: (context, index) {
-          return ChatItemCard(
-            chat: chats[index],
-            currentUserId: _currentUserId ?? '',
-            onTap: () {
-              context.pushNamed(
-                Routes.chatRoomScreen,
-                arguments: chats[index].id,
-              );
-            },
-          );
+          if (index < chats.length) {
+            return ChatItemCard(
+              chat: chats[index],
+              currentUserId: _currentUserId ?? '',
+              onTap: () {
+                context.pushNamed(
+                  Routes.chatRoomScreen,
+                  arguments: chats[index].id,
+                );
+              },
+            );
+          } else if (isLoadingMore) {
+            return Padding(
+              padding: EdgeInsets.all(16.h),
+              child: const Center(
+                child: CircularProgressIndicator(
+                  color: ColorsManager.mainColor,
+                ),
+              ),
+            );
+          } else {
+            return Padding(
+              padding: EdgeInsets.all(16.h),
+              child: Center(
+                child: Text(
+                  'لا توجد محادثات أخرى',
+                  style: TextStyles.font14GreyRegular,
+                ),
+              ),
+            );
+          }
         },
       ),
     );

@@ -23,25 +23,53 @@ class ChatsListCubit extends Cubit<ChatsListState> {
   // ✅ أضف set للـ de-duplication
   final Set<String> _processedMessageIds = {};
 
+  // Pagination
+  int _currentPage = 1;
+  bool _hasMore = true;
+  final int _limit = 20;
+
   ChatsListCubit(
     this._apiService,
     this._socketService, {
     this.onTotalUnreadChanged,
   }) : super(const ChatsListState.initial());
 
-  Future<void> loadChats({String? userId}) async {
+  Future<void> loadChats({String? userId, bool loadMore = false}) async {
     _currentUserId = userId;
-    emit(const ChatsListState.loading());
+
+    if (!loadMore) {
+      _currentPage = 1;
+      _hasMore = true;
+      emit(const ChatsListState.loading());
+    } else {
+      if (!_hasMore) return;
+      _updateLoadingMore(true);
+    }
 
     try {
-      final response = await _apiService.getChats(page: 1, limit: 100);
-      _allChats = List<ChatModel>.from(response.data);
+      final page = loadMore ? _currentPage + 1 : 1;
+      final response = await _apiService.getChats(page: page, limit: _limit);
+
+      final newChats = response.data;
+      _hasMore = page < response.pagination.totalPages;
+
+      if (loadMore) {
+        _allChats = [..._allChats, ...newChats];
+        _currentPage = page;
+      } else {
+        _allChats = List<ChatModel>.from(newChats);
+        _currentPage = page;
+        _listenToSocketEvents();
+      }
 
       _applyFilter();
-      _listenToSocketEvents();
     } catch (e) {
       final error = ApiErrorHandler.handle(e);
-      emit(ChatsListState.error(error.message));
+      if (!loadMore) {
+        emit(ChatsListState.error(error.message));
+      } else {
+        _updateLoadingMore(false);
+      }
     }
   }
 
@@ -194,9 +222,29 @@ class ChatsListCubit extends Cubit<ChatsListState> {
     _applyFilter();
   }
 
+  void _updateLoadingMore(bool loading) {
+    state.whenOrNull(
+      success: (chats, filter, currentPage, hasMore, _) {
+        emit(ChatsListState.success(
+          chats: chats,
+          currentFilter: filter,
+          currentPage: currentPage,
+          hasMore: hasMore,
+          isLoadingMore: loading,
+        ));
+      },
+    );
+  }
+
   void _applyFilter() {
     if (_currentUserId == null) {
-      emit(ChatsListState.success(_allChats, _currentFilter));
+      emit(ChatsListState.success(
+        chats: _allChats,
+        currentFilter: _currentFilter,
+        currentPage: _currentPage,
+        hasMore: _hasMore,
+        isLoadingMore: false,
+      ));
       return;
     }
 
@@ -216,7 +264,13 @@ class ChatsListCubit extends Cubit<ChatsListState> {
 
     // ✅ Always emit new list
     emit(
-      ChatsListState.success(List<ChatModel>.from(filtered), _currentFilter),
+      ChatsListState.success(
+        chats: List<ChatModel>.from(filtered),
+        currentFilter: _currentFilter,
+        currentPage: _currentPage,
+        hasMore: _hasMore,
+        isLoadingMore: false,
+      ),
     );
 
     // Notify total unread
@@ -254,7 +308,13 @@ class ChatsListCubit extends Cubit<ChatsListState> {
           itemTitle.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
-    emit(ChatsListState.success(filtered, _currentFilter));
+    emit(ChatsListState.success(
+      chats: filtered,
+      currentFilter: _currentFilter,
+      currentPage: _currentPage,
+      hasMore: _hasMore,
+      isLoadingMore: false,
+    ));
   }
 
   void markChatAsRead(String chatId) {

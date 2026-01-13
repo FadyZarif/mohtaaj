@@ -158,10 +158,10 @@ Map<String, dynamic> _$ChatsResponseToJson(_ChatsResponse instance) =>
 
 _PaginationModel _$PaginationModelFromJson(Map<String, dynamic> json) =>
     _PaginationModel(
-      total: (json['total'] as num).toInt(),
-      page: (json['page'] as num).toInt(),
-      limit: (json['limit'] as num).toInt(),
-      totalPages: (json['totalPages'] as num).toInt(),
+      total: (json['total'] as num?)?.toInt() ?? 0,
+      page: (json['page'] as num?)?.toInt() ?? 1,
+      limit: (json['limit'] as num?)?.toInt() ?? 20,
+      totalPages: (json['totalPages'] as num?)?.toInt() ?? 1,
     );
 
 Map<String, dynamic> _$PaginationModelToJson(_PaginationModel instance) =>

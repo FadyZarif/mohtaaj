@@ -27,8 +27,48 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _HomeScreenBody extends StatelessWidget {
+class _HomeScreenBody extends StatefulWidget {
   const _HomeScreenBody();
+
+  @override
+  State<_HomeScreenBody> createState() => _HomeScreenBodyState();
+}
+
+class _HomeScreenBodyState extends State<_HomeScreenBody> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isLoadingMore) return;
+
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    final delta = maxScroll - currentScroll;
+
+    // Load more when 200 pixels from bottom
+    if (delta <= 200) {
+      final cubit = context.read<HomeCubit>();
+      if (cubit.state.hasMoreItems && !cubit.state.isItemsLoading) {
+        setState(() => _isLoadingMore = true);
+        cubit.getItems(loadMore: true).then((_) {
+          if (mounted) setState(() => _isLoadingMore = false);
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +88,7 @@ class _HomeScreenBody extends StatelessWidget {
         color: ColorsManager.mainColor,
         onRefresh: () => context.read<HomeCubit>().refresh(),
         child: SingleChildScrollView(
+          controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,7 +192,8 @@ class _HomeScreenBody extends StatelessWidget {
               BlocBuilder<HomeCubit, HomeState>(
                 buildWhen: (previous, current) =>
                     previous.items != current.items ||
-                    previous.isItemsLoading != current.isItemsLoading,
+                    previous.isItemsLoading != current.isItemsLoading ||
+                    previous.hasMoreItems != current.hasMoreItems,
                 builder: (context, state) {
                   if (state.isItemsLoading && state.items.isEmpty) {
                     return _buildLoadingSection();
@@ -159,30 +201,55 @@ class _HomeScreenBody extends StatelessWidget {
                   if (state.items.isEmpty) {
                     return _buildEmptyItems();
                   }
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 12.w,
-                        mainAxisSpacing: 12.h,
-                        childAspectRatio: 0.75,
-                      ),
-                      itemCount: state.items.length,
-                      itemBuilder: (context, index) {
-                        return ItemCard(
-                          item: state.items[index],
-                          onTap: () {
-                            context.pushNamed(
-                              Routes.itemDetailsScreen,
-                              arguments: state.items[index].id,
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12.w,
+                            mainAxisSpacing: 12.h,
+                            childAspectRatio: 0.75,
+                          ),
+                          itemCount: state.items.length,
+                          itemBuilder: (context, index) {
+                            return ItemCard(
+                              item: state.items[index],
+                              onTap: () {
+                                context.pushNamed(
+                                  Routes.itemDetailsScreen,
+                                  arguments: state.items[index].id,
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                      // Loading more indicator
+                      if (_isLoadingMore)
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: ColorsManager.mainColor,
+                            ),
+                          ),
+                        ),
+                      // End of list indicator
+                      if (!state.hasMoreItems && state.items.isNotEmpty)
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                          child: Center(
+                            child: Text(
+                              'لا توجد إعلانات أخرى',
+                              style: TextStyles.font14GreyRegular,
+                            ),
+                          ),
+                        ),
+                    ],
                   );
                 },
               ),

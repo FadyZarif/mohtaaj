@@ -2015,13 +2015,13 @@ return $default(_that.total,_that.page,_that.limit,_that.totalPages);case _:
 @JsonSerializable()
 
 class _PaginationModel implements PaginationModel {
-  const _PaginationModel({required this.total, required this.page, required this.limit, required this.totalPages});
+  const _PaginationModel({this.total = 0, this.page = 1, this.limit = 20, this.totalPages = 1});
   factory _PaginationModel.fromJson(Map<String, dynamic> json) => _$PaginationModelFromJson(json);
 
-@override final  int total;
-@override final  int page;
-@override final  int limit;
-@override final  int totalPages;
+@override@JsonKey() final  int total;
+@override@JsonKey() final  int page;
+@override@JsonKey() final  int limit;
+@override@JsonKey() final  int totalPages;
 
 /// Create a copy of PaginationModel
 /// with the given fields replaced by the non-null parameter values.

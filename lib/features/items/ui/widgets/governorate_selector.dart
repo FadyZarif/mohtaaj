@@ -37,7 +37,7 @@ class GovernorateSelector extends StatelessWidget {
             SizedBox(width: 12.w),
             Expanded(
               child: Text(
-                'لا يمكن تحديد المحافظة. يرجى تحديث بيانات ملفك الشخصي أولاً',
+                'لا يمكن تحديد المدينة. يرجى تحديث بيانات ملفك الشخصي أولاً',
                 style: TextStyles.font14BlackMedium.copyWith(
                   color: ColorsManager.warning,
                 ),

@@ -10,7 +10,7 @@ import '../theming/styles.dart';
 import '../../features/items/logic/items_list_cubit/items_list_cubit.dart';
 import '../../features/items/logic/items_list_cubit/items_list_state.dart';
 import '../../features/items/data/models/items_queries.dart';
-import 'items_grid.dart';
+import '../../features/home/ui/widgets/item_card.dart';
 import 'items_filters_sheet.dart';
 
 class ItemsListScreen extends StatefulWidget {
@@ -91,21 +91,139 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
           Expanded(
             child: BlocBuilder<ItemsListCubit, ItemsListState>(
               builder: (context, state) {
-                return Padding(
-                  padding: EdgeInsets.all(16.w),
-                  child: ItemsGrid(
-                    items: state.items,
-                    isLoading: state.isLoading || state.isLoadingMore,
-                    error: state.error,
-                    onRetry: () => context.read<ItemsListCubit>().refresh(),
-                    onItemTap: (item) {
-                      context.pushNamed(
-                        Routes.itemDetailsScreen,
-                        arguments: item.id,
-                      );
-                    },
-                    resultCountText: 'النتائج (${state.items.length})',
-                    emptyMessage: 'لا توجد إعلانات',
+                if (state.isLoading && state.items.isEmpty) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: ColorsManager.mainColor,
+                    ),
+                  );
+                }
+
+                if (state.error != null && state.items.isEmpty) {
+                  return _buildErrorState(state.error!);
+                }
+
+                if (state.items.isEmpty) {
+                  return _buildEmptyState();
+                }
+
+                return RefreshIndicator(
+                  color: ColorsManager.mainColor,
+                  onRefresh: () async {
+                    context.read<ItemsListCubit>().refresh();
+                    // Wait for the refresh to complete
+                    await Future.delayed(const Duration(milliseconds: 500));
+                  },
+                  child: ListView(
+                    controller: _scrollController,
+                    padding: EdgeInsets.all(16.w),
+                    children: [
+                      // Results count
+                      Text(
+                        'النتائج (${state.items.length})',
+                        style: TextStyles.font14GreyMedium,
+                      ),
+                      verticalSpace(12),
+                      // Items Grid
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12.w,
+                          mainAxisSpacing: 12.h,
+                          childAspectRatio: 0.65,
+                        ),
+                        itemCount: state.items.length,
+                        itemBuilder: (context, index) {
+                          return ItemCard(
+                            item: state.items[index],
+                            onTap: () {
+                              context.pushNamed(
+                                Routes.itemDetailsScreen,
+                                arguments: state.items[index].id,
+                              );
+                            },
+                            showStatus: true,
+                          );
+                        },
+                      ),
+                      // Loading indicator for pagination
+                      if (state.isLoadingMore) ...[
+                        verticalSpace(16),
+                        Center(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(24.r),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.08),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 16.w,
+                                  height: 16.h,
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: ColorsManager.mainColor,
+                                  ),
+                                ),
+                                horizontalSpace(12),
+                                Text(
+                                  'جاري تحميل المزيد...',
+                                  style: TextStyles.font14BlackMedium.copyWith(
+                                    color: ColorsManager.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        verticalSpace(16),
+                      ],
+                      // No more items indicator
+                      if (!state.hasMoreItems && !state.isLoadingMore && state.items.length >= 10) ...[
+                        verticalSpace(16),
+                        Center(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                            decoration: BoxDecoration(
+                              color: ColorsManager.backgroundColor,
+                              borderRadius: BorderRadius.circular(20.r),
+                              border: Border.all(
+                                color: ColorsManager.borderColor,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.check_circle_outline,
+                                  size: 18.sp,
+                                  color: ColorsManager.textSecondary,
+                                ),
+                                horizontalSpace(8),
+                                Text(
+                                  'لا يوجد المزيد من النتائج',
+                                  style: TextStyles.font12BlackMedium.copyWith(
+                                    color: ColorsManager.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        verticalSpace(16),
+                      ],
+                    ],
                   ),
                 );
               },
@@ -151,7 +269,11 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
   Widget _buildActiveFilters() {
     return BlocBuilder<ItemsListCubit, ItemsListState>(
       buildWhen: (previous, current) =>
-      previous.selectedCity != current.selectedCity ||
+      previous.selectedCountry != current.selectedCountry ||
+          previous.selectedCity != current.selectedCity ||
+          previous.latitude != current.latitude ||
+          previous.longitude != current.longitude ||
+          previous.radiusKm != current.radiusKm ||
           previous.condition != current.condition ||
           previous.isFreeOnly != current.isFreeOnly ||
           previous.minPrice != current.minPrice ||
@@ -159,7 +281,9 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
           previous.sortBy != current.sortBy ||
           previous.sortOrder != current.sortOrder,
       builder: (context, state) {
-        final hasFilters = state.selectedCity != null ||
+        final hasFilters = state.selectedCountry != null ||
+            state.selectedCity != null ||
+            (state.latitude != null && state.longitude != null) ||
             state.condition != null ||
             state.isFreeOnly ||
             (state.minPrice != null && state.minPrice!.isNotEmpty) ||
@@ -198,10 +322,20 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
                 spacing: 8.w,
                 runSpacing: 8.h,
                 children: [
+                  if (state.selectedCountry != null)
+                    _buildFilterChip(
+                      'الدولة: ${state.selectedCountry}',
+                          () => context.read<ItemsListCubit>().updateCountry(null),
+                    ),
                   if (state.selectedCity != null)
                     _buildFilterChip(
                       'المدينة: ${state.selectedCity}',
                           () => context.read<ItemsListCubit>().updateCity(null),
+                    ),
+                  if (state.latitude != null && state.longitude != null)
+                    _buildFilterChip(
+                      'الموقع: ${state.radiusKm.toStringAsFixed(1)} كم',
+                          () => context.read<ItemsListCubit>().clearLocation(),
                     ),
                   if (state.condition != null)
                     _buildFilterChip(
@@ -241,7 +375,7 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: ColorsManager.mainColor.withOpacity(0.1),
+        color: ColorsManager.mainColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(
@@ -279,6 +413,81 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
       '${SortBy.price.name}-${SortOrder.desc.name}': 'الأعلى سعرًا',
     };
     return labels[key] ?? 'الأحدث';
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.inventory_2_outlined,
+            size: 80.sp,
+            color: ColorsManager.iconTertiary,
+          ),
+          verticalSpace(20),
+          Text(
+            'لا توجد إعلانات',
+            style: TextStyles.font18BlackSemiBold.copyWith(
+              color: ColorsManager.textSecondary,
+            ),
+          ),
+          verticalSpace(8),
+          Text(
+            'جرب تعديل الفلاتر أو البحث بكلمات أخرى',
+            style: TextStyles.font14GreyRegular,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(String error) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(24.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 80.sp,
+              color: ColorsManager.error,
+            ),
+            verticalSpace(20),
+            Text(
+              'حدث خطأ',
+              style: TextStyles.font18BlackSemiBold.copyWith(
+                color: ColorsManager.error,
+              ),
+            ),
+            verticalSpace(8),
+            Text(
+              error,
+              style: TextStyles.font14GreyRegular,
+              textAlign: TextAlign.center,
+            ),
+            verticalSpace(24),
+            ElevatedButton.icon(
+              onPressed: () => context.read<ItemsListCubit>().refresh(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorsManager.mainColor,
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+              ),
+              icon: const Icon(Icons.refresh, color: Colors.white),
+              label: Text(
+                'إعادة المحاولة',
+                style: TextStyles.font14WhiteMedium,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _showFiltersSheet(BuildContext context) {

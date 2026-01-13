@@ -16,8 +16,9 @@ mixin _$ItemsListState {
 
  String get searchQuery; List<ItemModel> get items; bool get isLoading; bool get isLoadingMore; String? get error; int get currentPage; bool get hasMoreItems;// Filters
  String? get categoryId;// ده الفرق الوحيد - عشان الـ category items
- String? get selectedCity; String? get minPrice; String? get maxPrice; ItemCondition? get condition;// ✅ enum مش String
- bool get isFreeOnly; SortBy get sortBy; SortOrder get sortOrder;
+ String? get selectedCountry; String? get selectedCity; String? get minPrice; String? get maxPrice; ItemCondition? get condition;// ✅ enum مش String
+ bool get isFreeOnly; SortBy get sortBy; SortOrder get sortOrder;// Location-based search
+ double? get latitude; double? get longitude; double get radiusKm;
 /// Create a copy of ItemsListState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +29,16 @@ $ItemsListStateCopyWith<ItemsListState> get copyWith => _$ItemsListStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemsListState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.error, error) || other.error == error)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMoreItems, hasMoreItems) || other.hasMoreItems == hasMoreItems)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.selectedCity, selectedCity) || other.selectedCity == selectedCity)&&(identical(other.minPrice, minPrice) || other.minPrice == minPrice)&&(identical(other.maxPrice, maxPrice) || other.maxPrice == maxPrice)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.isFreeOnly, isFreeOnly) || other.isFreeOnly == isFreeOnly)&&(identical(other.sortBy, sortBy) || other.sortBy == sortBy)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemsListState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.error, error) || other.error == error)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMoreItems, hasMoreItems) || other.hasMoreItems == hasMoreItems)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.selectedCountry, selectedCountry) || other.selectedCountry == selectedCountry)&&(identical(other.selectedCity, selectedCity) || other.selectedCity == selectedCity)&&(identical(other.minPrice, minPrice) || other.minPrice == minPrice)&&(identical(other.maxPrice, maxPrice) || other.maxPrice == maxPrice)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.isFreeOnly, isFreeOnly) || other.isFreeOnly == isFreeOnly)&&(identical(other.sortBy, sortBy) || other.sortBy == sortBy)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.radiusKm, radiusKm) || other.radiusKm == radiusKm));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,searchQuery,const DeepCollectionEquality().hash(items),isLoading,isLoadingMore,error,currentPage,hasMoreItems,categoryId,selectedCity,minPrice,maxPrice,condition,isFreeOnly,sortBy,sortOrder);
+int get hashCode => Object.hashAll([runtimeType,searchQuery,const DeepCollectionEquality().hash(items),isLoading,isLoadingMore,error,currentPage,hasMoreItems,categoryId,selectedCountry,selectedCity,minPrice,maxPrice,condition,isFreeOnly,sortBy,sortOrder,latitude,longitude,radiusKm]);
 
 @override
 String toString() {
-  return 'ItemsListState(searchQuery: $searchQuery, items: $items, isLoading: $isLoading, isLoadingMore: $isLoadingMore, error: $error, currentPage: $currentPage, hasMoreItems: $hasMoreItems, categoryId: $categoryId, selectedCity: $selectedCity, minPrice: $minPrice, maxPrice: $maxPrice, condition: $condition, isFreeOnly: $isFreeOnly, sortBy: $sortBy, sortOrder: $sortOrder)';
+  return 'ItemsListState(searchQuery: $searchQuery, items: $items, isLoading: $isLoading, isLoadingMore: $isLoadingMore, error: $error, currentPage: $currentPage, hasMoreItems: $hasMoreItems, categoryId: $categoryId, selectedCountry: $selectedCountry, selectedCity: $selectedCity, minPrice: $minPrice, maxPrice: $maxPrice, condition: $condition, isFreeOnly: $isFreeOnly, sortBy: $sortBy, sortOrder: $sortOrder, latitude: $latitude, longitude: $longitude, radiusKm: $radiusKm)';
 }
 
 
@@ -48,7 +49,7 @@ abstract mixin class $ItemsListStateCopyWith<$Res>  {
   factory $ItemsListStateCopyWith(ItemsListState value, $Res Function(ItemsListState) _then) = _$ItemsListStateCopyWithImpl;
 @useResult
 $Res call({
- String searchQuery, List<ItemModel> items, bool isLoading, bool isLoadingMore, String? error, int currentPage, bool hasMoreItems, String? categoryId, String? selectedCity, String? minPrice, String? maxPrice, ItemCondition? condition, bool isFreeOnly, SortBy sortBy, SortOrder sortOrder
+ String searchQuery, List<ItemModel> items, bool isLoading, bool isLoadingMore, String? error, int currentPage, bool hasMoreItems, String? categoryId, String? selectedCountry, String? selectedCity, String? minPrice, String? maxPrice, ItemCondition? condition, bool isFreeOnly, SortBy sortBy, SortOrder sortOrder, double? latitude, double? longitude, double radiusKm
 });
 
 
@@ -65,7 +66,7 @@ class _$ItemsListStateCopyWithImpl<$Res>
 
 /// Create a copy of ItemsListState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? searchQuery = null,Object? items = null,Object? isLoading = null,Object? isLoadingMore = null,Object? error = freezed,Object? currentPage = null,Object? hasMoreItems = null,Object? categoryId = freezed,Object? selectedCity = freezed,Object? minPrice = freezed,Object? maxPrice = freezed,Object? condition = freezed,Object? isFreeOnly = null,Object? sortBy = null,Object? sortOrder = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? searchQuery = null,Object? items = null,Object? isLoading = null,Object? isLoadingMore = null,Object? error = freezed,Object? currentPage = null,Object? hasMoreItems = null,Object? categoryId = freezed,Object? selectedCountry = freezed,Object? selectedCity = freezed,Object? minPrice = freezed,Object? maxPrice = freezed,Object? condition = freezed,Object? isFreeOnly = null,Object? sortBy = null,Object? sortOrder = null,Object? latitude = freezed,Object? longitude = freezed,Object? radiusKm = null,}) {
   return _then(_self.copyWith(
 searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
 as String,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
@@ -75,6 +76,7 @@ as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_t
 as String?,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,hasMoreItems: null == hasMoreItems ? _self.hasMoreItems : hasMoreItems // ignore: cast_nullable_to_non_nullable
 as bool,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as String?,selectedCountry: freezed == selectedCountry ? _self.selectedCountry : selectedCountry // ignore: cast_nullable_to_non_nullable
 as String?,selectedCity: freezed == selectedCity ? _self.selectedCity : selectedCity // ignore: cast_nullable_to_non_nullable
 as String?,minPrice: freezed == minPrice ? _self.minPrice : minPrice // ignore: cast_nullable_to_non_nullable
 as String?,maxPrice: freezed == maxPrice ? _self.maxPrice : maxPrice // ignore: cast_nullable_to_non_nullable
@@ -82,7 +84,10 @@ as String?,condition: freezed == condition ? _self.condition : condition // igno
 as ItemCondition?,isFreeOnly: null == isFreeOnly ? _self.isFreeOnly : isFreeOnly // ignore: cast_nullable_to_non_nullable
 as bool,sortBy: null == sortBy ? _self.sortBy : sortBy // ignore: cast_nullable_to_non_nullable
 as SortBy,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
-as SortOrder,
+as SortOrder,latitude: freezed == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
+as double?,longitude: freezed == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
+as double?,radiusKm: null == radiusKm ? _self.radiusKm : radiusKm // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 
@@ -167,10 +172,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  bool isLoadingMore,  String? error,  int currentPage,  bool hasMoreItems,  String? categoryId,  String? selectedCity,  String? minPrice,  String? maxPrice,  ItemCondition? condition,  bool isFreeOnly,  SortBy sortBy,  SortOrder sortOrder)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  bool isLoadingMore,  String? error,  int currentPage,  bool hasMoreItems,  String? categoryId,  String? selectedCountry,  String? selectedCity,  String? minPrice,  String? maxPrice,  ItemCondition? condition,  bool isFreeOnly,  SortBy sortBy,  SortOrder sortOrder,  double? latitude,  double? longitude,  double radiusKm)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ItemsListState() when $default != null:
-return $default(_that.searchQuery,_that.items,_that.isLoading,_that.isLoadingMore,_that.error,_that.currentPage,_that.hasMoreItems,_that.categoryId,_that.selectedCity,_that.minPrice,_that.maxPrice,_that.condition,_that.isFreeOnly,_that.sortBy,_that.sortOrder);case _:
+return $default(_that.searchQuery,_that.items,_that.isLoading,_that.isLoadingMore,_that.error,_that.currentPage,_that.hasMoreItems,_that.categoryId,_that.selectedCountry,_that.selectedCity,_that.minPrice,_that.maxPrice,_that.condition,_that.isFreeOnly,_that.sortBy,_that.sortOrder,_that.latitude,_that.longitude,_that.radiusKm);case _:
   return orElse();
 
 }
@@ -188,10 +193,10 @@ return $default(_that.searchQuery,_that.items,_that.isLoading,_that.isLoadingMor
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  bool isLoadingMore,  String? error,  int currentPage,  bool hasMoreItems,  String? categoryId,  String? selectedCity,  String? minPrice,  String? maxPrice,  ItemCondition? condition,  bool isFreeOnly,  SortBy sortBy,  SortOrder sortOrder)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  bool isLoadingMore,  String? error,  int currentPage,  bool hasMoreItems,  String? categoryId,  String? selectedCountry,  String? selectedCity,  String? minPrice,  String? maxPrice,  ItemCondition? condition,  bool isFreeOnly,  SortBy sortBy,  SortOrder sortOrder,  double? latitude,  double? longitude,  double radiusKm)  $default,) {final _that = this;
 switch (_that) {
 case _ItemsListState():
-return $default(_that.searchQuery,_that.items,_that.isLoading,_that.isLoadingMore,_that.error,_that.currentPage,_that.hasMoreItems,_that.categoryId,_that.selectedCity,_that.minPrice,_that.maxPrice,_that.condition,_that.isFreeOnly,_that.sortBy,_that.sortOrder);case _:
+return $default(_that.searchQuery,_that.items,_that.isLoading,_that.isLoadingMore,_that.error,_that.currentPage,_that.hasMoreItems,_that.categoryId,_that.selectedCountry,_that.selectedCity,_that.minPrice,_that.maxPrice,_that.condition,_that.isFreeOnly,_that.sortBy,_that.sortOrder,_that.latitude,_that.longitude,_that.radiusKm);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -208,10 +213,10 @@ return $default(_that.searchQuery,_that.items,_that.isLoading,_that.isLoadingMor
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  bool isLoadingMore,  String? error,  int currentPage,  bool hasMoreItems,  String? categoryId,  String? selectedCity,  String? minPrice,  String? maxPrice,  ItemCondition? condition,  bool isFreeOnly,  SortBy sortBy,  SortOrder sortOrder)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String searchQuery,  List<ItemModel> items,  bool isLoading,  bool isLoadingMore,  String? error,  int currentPage,  bool hasMoreItems,  String? categoryId,  String? selectedCountry,  String? selectedCity,  String? minPrice,  String? maxPrice,  ItemCondition? condition,  bool isFreeOnly,  SortBy sortBy,  SortOrder sortOrder,  double? latitude,  double? longitude,  double radiusKm)?  $default,) {final _that = this;
 switch (_that) {
 case _ItemsListState() when $default != null:
-return $default(_that.searchQuery,_that.items,_that.isLoading,_that.isLoadingMore,_that.error,_that.currentPage,_that.hasMoreItems,_that.categoryId,_that.selectedCity,_that.minPrice,_that.maxPrice,_that.condition,_that.isFreeOnly,_that.sortBy,_that.sortOrder);case _:
+return $default(_that.searchQuery,_that.items,_that.isLoading,_that.isLoadingMore,_that.error,_that.currentPage,_that.hasMoreItems,_that.categoryId,_that.selectedCountry,_that.selectedCity,_that.minPrice,_that.maxPrice,_that.condition,_that.isFreeOnly,_that.sortBy,_that.sortOrder,_that.latitude,_that.longitude,_that.radiusKm);case _:
   return null;
 
 }
@@ -223,7 +228,7 @@ return $default(_that.searchQuery,_that.items,_that.isLoading,_that.isLoadingMor
 
 
 class _ItemsListState implements ItemsListState {
-  const _ItemsListState({this.searchQuery = '', final  List<ItemModel> items = const [], this.isLoading = false, this.isLoadingMore = false, this.error, this.currentPage = 1, this.hasMoreItems = false, this.categoryId, this.selectedCity, this.minPrice, this.maxPrice, this.condition, this.isFreeOnly = false, this.sortBy = SortBy.createdAt, this.sortOrder = SortOrder.desc}): _items = items;
+  const _ItemsListState({this.searchQuery = '', final  List<ItemModel> items = const [], this.isLoading = false, this.isLoadingMore = false, this.error, this.currentPage = 1, this.hasMoreItems = false, this.categoryId, this.selectedCountry, this.selectedCity, this.minPrice, this.maxPrice, this.condition, this.isFreeOnly = false, this.sortBy = SortBy.createdAt, this.sortOrder = SortOrder.desc, this.latitude, this.longitude, this.radiusKm = 5.0}): _items = items;
   
 
 @override@JsonKey() final  String searchQuery;
@@ -242,6 +247,7 @@ class _ItemsListState implements ItemsListState {
 // Filters
 @override final  String? categoryId;
 // ده الفرق الوحيد - عشان الـ category items
+@override final  String? selectedCountry;
 @override final  String? selectedCity;
 @override final  String? minPrice;
 @override final  String? maxPrice;
@@ -250,6 +256,10 @@ class _ItemsListState implements ItemsListState {
 @override@JsonKey() final  bool isFreeOnly;
 @override@JsonKey() final  SortBy sortBy;
 @override@JsonKey() final  SortOrder sortOrder;
+// Location-based search
+@override final  double? latitude;
+@override final  double? longitude;
+@override@JsonKey() final  double radiusKm;
 
 /// Create a copy of ItemsListState
 /// with the given fields replaced by the non-null parameter values.
@@ -261,16 +271,16 @@ _$ItemsListStateCopyWith<_ItemsListState> get copyWith => __$ItemsListStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemsListState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.error, error) || other.error == error)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMoreItems, hasMoreItems) || other.hasMoreItems == hasMoreItems)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.selectedCity, selectedCity) || other.selectedCity == selectedCity)&&(identical(other.minPrice, minPrice) || other.minPrice == minPrice)&&(identical(other.maxPrice, maxPrice) || other.maxPrice == maxPrice)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.isFreeOnly, isFreeOnly) || other.isFreeOnly == isFreeOnly)&&(identical(other.sortBy, sortBy) || other.sortBy == sortBy)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemsListState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.error, error) || other.error == error)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMoreItems, hasMoreItems) || other.hasMoreItems == hasMoreItems)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.selectedCountry, selectedCountry) || other.selectedCountry == selectedCountry)&&(identical(other.selectedCity, selectedCity) || other.selectedCity == selectedCity)&&(identical(other.minPrice, minPrice) || other.minPrice == minPrice)&&(identical(other.maxPrice, maxPrice) || other.maxPrice == maxPrice)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.isFreeOnly, isFreeOnly) || other.isFreeOnly == isFreeOnly)&&(identical(other.sortBy, sortBy) || other.sortBy == sortBy)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.radiusKm, radiusKm) || other.radiusKm == radiusKm));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,searchQuery,const DeepCollectionEquality().hash(_items),isLoading,isLoadingMore,error,currentPage,hasMoreItems,categoryId,selectedCity,minPrice,maxPrice,condition,isFreeOnly,sortBy,sortOrder);
+int get hashCode => Object.hashAll([runtimeType,searchQuery,const DeepCollectionEquality().hash(_items),isLoading,isLoadingMore,error,currentPage,hasMoreItems,categoryId,selectedCountry,selectedCity,minPrice,maxPrice,condition,isFreeOnly,sortBy,sortOrder,latitude,longitude,radiusKm]);
 
 @override
 String toString() {
-  return 'ItemsListState(searchQuery: $searchQuery, items: $items, isLoading: $isLoading, isLoadingMore: $isLoadingMore, error: $error, currentPage: $currentPage, hasMoreItems: $hasMoreItems, categoryId: $categoryId, selectedCity: $selectedCity, minPrice: $minPrice, maxPrice: $maxPrice, condition: $condition, isFreeOnly: $isFreeOnly, sortBy: $sortBy, sortOrder: $sortOrder)';
+  return 'ItemsListState(searchQuery: $searchQuery, items: $items, isLoading: $isLoading, isLoadingMore: $isLoadingMore, error: $error, currentPage: $currentPage, hasMoreItems: $hasMoreItems, categoryId: $categoryId, selectedCountry: $selectedCountry, selectedCity: $selectedCity, minPrice: $minPrice, maxPrice: $maxPrice, condition: $condition, isFreeOnly: $isFreeOnly, sortBy: $sortBy, sortOrder: $sortOrder, latitude: $latitude, longitude: $longitude, radiusKm: $radiusKm)';
 }
 
 
@@ -281,7 +291,7 @@ abstract mixin class _$ItemsListStateCopyWith<$Res> implements $ItemsListStateCo
   factory _$ItemsListStateCopyWith(_ItemsListState value, $Res Function(_ItemsListState) _then) = __$ItemsListStateCopyWithImpl;
 @override @useResult
 $Res call({
- String searchQuery, List<ItemModel> items, bool isLoading, bool isLoadingMore, String? error, int currentPage, bool hasMoreItems, String? categoryId, String? selectedCity, String? minPrice, String? maxPrice, ItemCondition? condition, bool isFreeOnly, SortBy sortBy, SortOrder sortOrder
+ String searchQuery, List<ItemModel> items, bool isLoading, bool isLoadingMore, String? error, int currentPage, bool hasMoreItems, String? categoryId, String? selectedCountry, String? selectedCity, String? minPrice, String? maxPrice, ItemCondition? condition, bool isFreeOnly, SortBy sortBy, SortOrder sortOrder, double? latitude, double? longitude, double radiusKm
 });
 
 
@@ -298,7 +308,7 @@ class __$ItemsListStateCopyWithImpl<$Res>
 
 /// Create a copy of ItemsListState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? searchQuery = null,Object? items = null,Object? isLoading = null,Object? isLoadingMore = null,Object? error = freezed,Object? currentPage = null,Object? hasMoreItems = null,Object? categoryId = freezed,Object? selectedCity = freezed,Object? minPrice = freezed,Object? maxPrice = freezed,Object? condition = freezed,Object? isFreeOnly = null,Object? sortBy = null,Object? sortOrder = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? searchQuery = null,Object? items = null,Object? isLoading = null,Object? isLoadingMore = null,Object? error = freezed,Object? currentPage = null,Object? hasMoreItems = null,Object? categoryId = freezed,Object? selectedCountry = freezed,Object? selectedCity = freezed,Object? minPrice = freezed,Object? maxPrice = freezed,Object? condition = freezed,Object? isFreeOnly = null,Object? sortBy = null,Object? sortOrder = null,Object? latitude = freezed,Object? longitude = freezed,Object? radiusKm = null,}) {
   return _then(_ItemsListState(
 searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
 as String,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
@@ -308,6 +318,7 @@ as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_t
 as String?,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,hasMoreItems: null == hasMoreItems ? _self.hasMoreItems : hasMoreItems // ignore: cast_nullable_to_non_nullable
 as bool,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as String?,selectedCountry: freezed == selectedCountry ? _self.selectedCountry : selectedCountry // ignore: cast_nullable_to_non_nullable
 as String?,selectedCity: freezed == selectedCity ? _self.selectedCity : selectedCity // ignore: cast_nullable_to_non_nullable
 as String?,minPrice: freezed == minPrice ? _self.minPrice : minPrice // ignore: cast_nullable_to_non_nullable
 as String?,maxPrice: freezed == maxPrice ? _self.maxPrice : maxPrice // ignore: cast_nullable_to_non_nullable
@@ -315,7 +326,10 @@ as String?,condition: freezed == condition ? _self.condition : condition // igno
 as ItemCondition?,isFreeOnly: null == isFreeOnly ? _self.isFreeOnly : isFreeOnly // ignore: cast_nullable_to_non_nullable
 as bool,sortBy: null == sortBy ? _self.sortBy : sortBy // ignore: cast_nullable_to_non_nullable
 as SortBy,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
-as SortOrder,
+as SortOrder,latitude: freezed == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
+as double?,longitude: freezed == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
+as double?,radiusKm: null == radiusKm ? _self.radiusKm : radiusKm // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 

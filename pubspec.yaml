@@ -72,6 +72,8 @@ dependencies:
   geocoding: ^4.0.0
   # 🗺️ Maps (اختياري - إذا هتعرض خريطة)
   #google_maps_flutter: ^2.14.0
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
   # ⭐ Rating Widget
   flutter_rating_bar: ^4.0.1
   # 🔄 Pull to Refresh

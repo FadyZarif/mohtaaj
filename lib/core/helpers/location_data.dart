@@ -1170,7 +1170,7 @@ class LocationData {
   }
 
   /// Get the administrative division type name for a country
-  /// Returns the Arabic name (e.g., "محافظة", "ولاية", "إمارة")
+  /// Returns the Arabic name (e.g., "مدينة", "ولاية", "إمارة")
   static String getAdministrativeDivisionType(String arabicCountry) {
     switch (arabicCountry) {
       case 'مصر':
@@ -1183,7 +1183,7 @@ class LocationData {
       case 'البحرين':
       case 'العراق':
       case 'فلسطين':
-        return 'محافظة';
+        return 'مدينة';
 
       case 'السعودية':
         return 'منطقة';

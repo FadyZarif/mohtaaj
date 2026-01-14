@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
@@ -14,7 +14,7 @@ class UserProfileCubit extends Cubit<UserProfileState> {
   final String userId;
 
   UserProfileCubit(this._apiService, this.userId)
-    : super(const UserProfileState.initial());
+      : super(const UserProfileState.initial());
 
   Future<void> loadUserProfile() async {
     emit(const UserProfileState.loading());
@@ -25,35 +25,36 @@ class UserProfileCubit extends Cubit<UserProfileState> {
       // Get user items
       final itemsFuture = _apiService.getUserItems(
         userId,
-        ItemsQueries(page: 1, limit: 20, status: ItemStatus.active),
+        ItemsQueries(
+          page: 1,
+          limit: 20,
+          status: ItemStatus.active,
+        ),
       );
 
       // Get user ratings
       final ratingsFuture = _apiService.getUserRatings(userId, 1, 10);
 
-      final results = await Future.wait([itemsFuture, ratingsFuture]);
+      final results = await Future.wait([
+        itemsFuture,
+        ratingsFuture,
+      ]);
 
       final ItemsResponse itemsResponse = results[0] as ItemsResponse;
-      final UserRatingsResponse ratingsResponse =
-          results[1] as UserRatingsResponse;
+      final UserRatingsResponse ratingsResponse = results[1] as UserRatingsResponse;
 
-      emit(
-        UserProfileState.success(
-          user: userResponse.data,
-          items: itemsResponse.data.items,
-          itemsPage: 1,
-          hasMoreItems: 1 < itemsResponse.data.meta.totalPages,
-          ratings: ratingsResponse.data.ratings,
-          ratingsPage: 1,
-          hasMoreRatings: 1 < ratingsResponse.data.meta.totalPages,
-        ),
-      );
-    } catch (error, s) {
-      if (kDebugMode) {
-        print(error);
-        print(s);
-      }
-
+      emit(UserProfileState.success(
+        user: userResponse.data,
+        items: itemsResponse.data.items,
+        itemsPage: 1,
+        hasMoreItems: 1 < itemsResponse.data.meta.totalPages,
+        ratings: ratingsResponse.data.ratings,
+        ratingsPage: 1,
+        hasMoreRatings: 1 < ratingsResponse.data.meta.totalPages,
+      ));
+    } catch (error,s) {
+      print(error);
+      print(s);
       final errorMessage = ApiErrorHandler.handle(error).message;
       emit(UserProfileState.error(errorMessage));
     }
@@ -61,76 +62,59 @@ class UserProfileCubit extends Cubit<UserProfileState> {
 
   Future<void> loadMoreItems() async {
     state.maybeWhen(
-      success:
-          (
-            user,
-            items,
-            ratings,
-            itemsPage,
-            hasMoreItems,
-            isLoadingItems,
-            ratingsPage,
-            hasMoreRatings,
-            isLoadingRatings,
-          ) async {
-            if (!hasMoreItems || isLoadingItems) return;
+      success: (user, items, ratings, itemsPage, hasMoreItems, isLoadingItems, ratingsPage, hasMoreRatings, isLoadingRatings) async {
+        if (!hasMoreItems || isLoadingItems) return;
 
-            emit(
-              UserProfileState.success(
-                user: user,
-                items: items,
-                ratings: ratings,
-                itemsPage: itemsPage,
-                hasMoreItems: hasMoreItems,
-                isLoadingItems: true,
-                ratingsPage: ratingsPage,
-                hasMoreRatings: hasMoreRatings,
-                isLoadingRatings: isLoadingRatings,
-              ),
-            );
+        emit(UserProfileState.success(
+          user: user,
+          items: items,
+          ratings: ratings,
+          itemsPage: itemsPage,
+          hasMoreItems: hasMoreItems,
+          isLoadingItems: true,
+          ratingsPage: ratingsPage,
+          hasMoreRatings: hasMoreRatings,
+          isLoadingRatings: isLoadingRatings,
+        ));
 
-            try {
-              final response = await _apiService.getUserItems(
-                userId,
-                ItemsQueries(
-                  page: itemsPage + 1,
-                  limit: 20,
-                  status: ItemStatus.active,
-                ),
-              );
+        try {
+          final response = await _apiService.getUserItems(
+            userId,
+            ItemsQueries(
+              page: itemsPage + 1,
+              limit: 20,
+              status: ItemStatus.active,
+            ),
+          );
 
-              final newItems = response.data.items;
-              final hasMore = (itemsPage + 1) < response.data.meta.totalPages;
+          final newItems = response.data.items;
+          final hasMore = (itemsPage + 1) < response.data.meta.totalPages;
 
-              emit(
-                UserProfileState.success(
-                  user: user,
-                  items: [...items, ...newItems],
-                  ratings: ratings,
-                  itemsPage: itemsPage + 1,
-                  hasMoreItems: hasMore,
-                  isLoadingItems: false,
-                  ratingsPage: ratingsPage,
-                  hasMoreRatings: hasMoreRatings,
-                  isLoadingRatings: isLoadingRatings,
-                ),
-              );
-            } catch (error) {
-              emit(
-                UserProfileState.success(
-                  user: user,
-                  items: items,
-                  ratings: ratings,
-                  itemsPage: itemsPage,
-                  hasMoreItems: hasMoreItems,
-                  isLoadingItems: false,
-                  ratingsPage: ratingsPage,
-                  hasMoreRatings: hasMoreRatings,
-                  isLoadingRatings: isLoadingRatings,
-                ),
-              );
-            }
-          },
+          emit(UserProfileState.success(
+            user: user,
+            items: [...items, ...newItems],
+            ratings: ratings,
+            itemsPage: itemsPage + 1,
+            hasMoreItems: hasMore,
+            isLoadingItems: false,
+            ratingsPage: ratingsPage,
+            hasMoreRatings: hasMoreRatings,
+            isLoadingRatings: isLoadingRatings,
+          ));
+        } catch (error) {
+          emit(UserProfileState.success(
+            user: user,
+            items: items,
+            ratings: ratings,
+            itemsPage: itemsPage,
+            hasMoreItems: hasMoreItems,
+            isLoadingItems: false,
+            ratingsPage: ratingsPage,
+            hasMoreRatings: hasMoreRatings,
+            isLoadingRatings: isLoadingRatings,
+          ));
+        }
+      },
       orElse: () {},
     );
   }
@@ -139,15 +123,18 @@ class UserProfileCubit extends Cubit<UserProfileState> {
     try {
       await _apiService.rateUser(
         userId,
-        RateUserRequest(rating: rating, comment: comment, itemId: itemId),
+        RateUserRequest(
+          rating: rating,
+          comment: comment,
+          itemId: itemId,
+        ),
       );
 
       // Reload profile to get updated ratings
       await loadUserProfile();
     } catch (error) {
       final errorMessage = ApiErrorHandler.handle(error).message;
-
-      /// TODO Handle error - show snackbar or dialog
+      // Handle error - show snackbar or dialog
     }
   }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
@@ -40,26 +39,22 @@ class _CategoriesScreenBody extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: RefreshIndicator(
-        color: ColorsManager.mainColor,
-        onRefresh: () => context.read<CategoriesCubit>().refresh(),
-        child: BlocBuilder<CategoriesCubit, CategoriesState>(
-          builder: (context, state) {
-            return state.when(
-              initial: () => const SizedBox.shrink(),
-              loading: () => const Center(
-                child: CircularProgressIndicator(
-                  color: ColorsManager.mainColor,
-                ),
+      body: BlocBuilder<CategoriesCubit, CategoriesState>(
+        builder: (context, state) {
+          return state.when(
+            initial: () => const SizedBox.shrink(),
+            loading: () => const Center(
+              child: CircularProgressIndicator(
+                color: ColorsManager.mainColor,
               ),
-              success: (categories) => _CategoriesGrid(categories: categories),
-              error: (message) => _ErrorWidget(
-                message: message,
-                onRetry: () => context.read<CategoriesCubit>().getCategories(),
-              ),
-            );
-          },
-        ),
+            ),
+            success: (categories) => _CategoriesGrid(categories: categories),
+            error: (message) => _ErrorWidget(
+              message: message,
+              onRetry: () => context.read<CategoriesCubit>().getCategories(),
+            ),
+          );
+        },
       ),
     );
   }
@@ -73,37 +68,28 @@ class _CategoriesGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (categories.isEmpty) {
-      return ListView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.category_outlined,
-                    size: 80.sp,
-                    color: ColorsManager.iconTertiary,
-                  ),
-                  verticalSpace(16),
-                  Text(
-                    'لا توجد أقسام',
-                    style: TextStyles.font16GreyRegular,
-                  ),
-                ],
-              ),
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.category_outlined,
+              size: 80.sp,
+              color: ColorsManager.iconTertiary,
             ),
-          ),
-        ],
+            verticalSpace(16),
+            Text(
+              'لا توجد أقسام',
+              style: TextStyles.font16GreyRegular,
+            ),
+          ],
+        ),
       );
     }
 
     return Padding(
       padding: EdgeInsets.all(16.w),
       child: GridView.builder(
-        physics: const AlwaysScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 12.w,
@@ -154,26 +140,18 @@ class _CategoryCard extends StatelessWidget {
               width: 60.w,
               height: 60.h,
               decoration: BoxDecoration(
-                color: ColorsManager.mainColor.withValues(alpha: 0.1),
+                color: ColorsManager.mainColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: category.iconUrl != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(12.r),
-                      child: CachedNetworkImage(
-                        imageUrl: category.iconUrl!,
+                      child: Image.network(
+                        category.iconUrl!,
                         fit: BoxFit.cover,
-                        fadeInDuration: Duration.zero,
-                        fadeOutDuration: Duration.zero,
-                        memCacheWidth: 200,
-                        memCacheHeight: 200,
-                        placeholder: (context, url) => Center(
-                          child: CircularProgressIndicator(
-                            color: ColorsManager.mainColor,
-                            strokeWidth: 2,
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => _buildDefaultIcon(),
+                        errorBuilder: (context, error, stackTrace) {
+                          return _buildDefaultIcon();
+                        },
                       ),
                     )
                   : _buildDefaultIcon(),
@@ -223,52 +201,44 @@ class _ErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.6,
-          child: Center(
-            child: Padding(
-              padding: EdgeInsets.all(24.w),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 60.sp,
-                    color: ColorsManager.error,
-                  ),
-                  verticalSpace(16),
-                  Text(
-                    message,
-                    style: TextStyles.font14GreyRegular,
-                    textAlign: TextAlign.center,
-                  ),
-                  verticalSpace(24),
-                  GestureDetector(
-                    onTap: onRetry,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24.w,
-                        vertical: 12.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: ColorsManager.mainColor,
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Text(
-                        'إعادة المحاولة',
-                        style: TextStyles.font14WhiteMedium,
-                      ),
-                    ),
-                  ),
-                ],
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(24.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 60.sp,
+              color: ColorsManager.error,
+            ),
+            verticalSpace(16),
+            Text(
+              message,
+              style: TextStyles.font14GreyRegular,
+              textAlign: TextAlign.center,
+            ),
+            verticalSpace(24),
+            GestureDetector(
+              onTap: onRetry,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 24.w,
+                  vertical: 12.h,
+                ),
+                decoration: BoxDecoration(
+                  color: ColorsManager.mainColor,
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Text(
+                  'إعادة المحاولة',
+                  style: TextStyles.font14WhiteMedium,
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -299,8 +299,7 @@ $LoginDataCopyWith<$Res> get data {
 /// @nodoc
 mixin _$LoginData {
 
- UserModel get user; TokensModel? get tokens;// ✅ Optional - موجود بس لو verified
- bool? get requiresVerification;
+ UserModel get user; TokensModel get tokens;
 /// Create a copy of LoginData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -313,16 +312,16 @@ $LoginDataCopyWith<LoginData> get copyWith => _$LoginDataCopyWithImpl<LoginData>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginData&&(identical(other.user, user) || other.user == user)&&(identical(other.tokens, tokens) || other.tokens == tokens)&&(identical(other.requiresVerification, requiresVerification) || other.requiresVerification == requiresVerification));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginData&&(identical(other.user, user) || other.user == user)&&(identical(other.tokens, tokens) || other.tokens == tokens));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,user,tokens,requiresVerification);
+int get hashCode => Object.hash(runtimeType,user,tokens);
 
 @override
 String toString() {
-  return 'LoginData(user: $user, tokens: $tokens, requiresVerification: $requiresVerification)';
+  return 'LoginData(user: $user, tokens: $tokens)';
 }
 
 
@@ -333,11 +332,11 @@ abstract mixin class $LoginDataCopyWith<$Res>  {
   factory $LoginDataCopyWith(LoginData value, $Res Function(LoginData) _then) = _$LoginDataCopyWithImpl;
 @useResult
 $Res call({
- UserModel user, TokensModel? tokens, bool? requiresVerification
+ UserModel user, TokensModel tokens
 });
 
 
-$UserModelCopyWith<$Res> get user;$TokensModelCopyWith<$Res>? get tokens;
+$UserModelCopyWith<$Res> get user;$TokensModelCopyWith<$Res> get tokens;
 
 }
 /// @nodoc
@@ -350,12 +349,11 @@ class _$LoginDataCopyWithImpl<$Res>
 
 /// Create a copy of LoginData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? user = null,Object? tokens = freezed,Object? requiresVerification = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? user = null,Object? tokens = null,}) {
   return _then(_self.copyWith(
 user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserModel,tokens: freezed == tokens ? _self.tokens : tokens // ignore: cast_nullable_to_non_nullable
-as TokensModel?,requiresVerification: freezed == requiresVerification ? _self.requiresVerification : requiresVerification // ignore: cast_nullable_to_non_nullable
-as bool?,
+as UserModel,tokens: null == tokens ? _self.tokens : tokens // ignore: cast_nullable_to_non_nullable
+as TokensModel,
   ));
 }
 /// Create a copy of LoginData
@@ -371,12 +369,9 @@ $UserModelCopyWith<$Res> get user {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$TokensModelCopyWith<$Res>? get tokens {
-    if (_self.tokens == null) {
-    return null;
-  }
-
-  return $TokensModelCopyWith<$Res>(_self.tokens!, (value) {
+$TokensModelCopyWith<$Res> get tokens {
+  
+  return $TokensModelCopyWith<$Res>(_self.tokens, (value) {
     return _then(_self.copyWith(tokens: value));
   });
 }
@@ -461,10 +456,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserModel user,  TokensModel? tokens,  bool? requiresVerification)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserModel user,  TokensModel tokens)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoginData() when $default != null:
-return $default(_that.user,_that.tokens,_that.requiresVerification);case _:
+return $default(_that.user,_that.tokens);case _:
   return orElse();
 
 }
@@ -482,10 +477,10 @@ return $default(_that.user,_that.tokens,_that.requiresVerification);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserModel user,  TokensModel? tokens,  bool? requiresVerification)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserModel user,  TokensModel tokens)  $default,) {final _that = this;
 switch (_that) {
 case _LoginData():
-return $default(_that.user,_that.tokens,_that.requiresVerification);case _:
+return $default(_that.user,_that.tokens);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -502,10 +497,10 @@ return $default(_that.user,_that.tokens,_that.requiresVerification);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserModel user,  TokensModel? tokens,  bool? requiresVerification)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserModel user,  TokensModel tokens)?  $default,) {final _that = this;
 switch (_that) {
 case _LoginData() when $default != null:
-return $default(_that.user,_that.tokens,_that.requiresVerification);case _:
+return $default(_that.user,_that.tokens);case _:
   return null;
 
 }
@@ -517,13 +512,11 @@ return $default(_that.user,_that.tokens,_that.requiresVerification);case _:
 @JsonSerializable()
 
 class _LoginData implements LoginData {
-  const _LoginData({required this.user, this.tokens, this.requiresVerification});
+  const _LoginData({required this.user, required this.tokens});
   factory _LoginData.fromJson(Map<String, dynamic> json) => _$LoginDataFromJson(json);
 
 @override final  UserModel user;
-@override final  TokensModel? tokens;
-// ✅ Optional - موجود بس لو verified
-@override final  bool? requiresVerification;
+@override final  TokensModel tokens;
 
 /// Create a copy of LoginData
 /// with the given fields replaced by the non-null parameter values.
@@ -538,16 +531,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginData&&(identical(other.user, user) || other.user == user)&&(identical(other.tokens, tokens) || other.tokens == tokens)&&(identical(other.requiresVerification, requiresVerification) || other.requiresVerification == requiresVerification));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginData&&(identical(other.user, user) || other.user == user)&&(identical(other.tokens, tokens) || other.tokens == tokens));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,user,tokens,requiresVerification);
+int get hashCode => Object.hash(runtimeType,user,tokens);
 
 @override
 String toString() {
-  return 'LoginData(user: $user, tokens: $tokens, requiresVerification: $requiresVerification)';
+  return 'LoginData(user: $user, tokens: $tokens)';
 }
 
 
@@ -558,11 +551,11 @@ abstract mixin class _$LoginDataCopyWith<$Res> implements $LoginDataCopyWith<$Re
   factory _$LoginDataCopyWith(_LoginData value, $Res Function(_LoginData) _then) = __$LoginDataCopyWithImpl;
 @override @useResult
 $Res call({
- UserModel user, TokensModel? tokens, bool? requiresVerification
+ UserModel user, TokensModel tokens
 });
 
 
-@override $UserModelCopyWith<$Res> get user;@override $TokensModelCopyWith<$Res>? get tokens;
+@override $UserModelCopyWith<$Res> get user;@override $TokensModelCopyWith<$Res> get tokens;
 
 }
 /// @nodoc
@@ -575,12 +568,11 @@ class __$LoginDataCopyWithImpl<$Res>
 
 /// Create a copy of LoginData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = null,Object? tokens = freezed,Object? requiresVerification = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? user = null,Object? tokens = null,}) {
   return _then(_LoginData(
 user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserModel,tokens: freezed == tokens ? _self.tokens : tokens // ignore: cast_nullable_to_non_nullable
-as TokensModel?,requiresVerification: freezed == requiresVerification ? _self.requiresVerification : requiresVerification // ignore: cast_nullable_to_non_nullable
-as bool?,
+as UserModel,tokens: null == tokens ? _self.tokens : tokens // ignore: cast_nullable_to_non_nullable
+as TokensModel,
   ));
 }
 
@@ -597,12 +589,9 @@ $UserModelCopyWith<$Res> get user {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$TokensModelCopyWith<$Res>? get tokens {
-    if (_self.tokens == null) {
-    return null;
-  }
-
-  return $TokensModelCopyWith<$Res>(_self.tokens!, (value) {
+$TokensModelCopyWith<$Res> get tokens {
+  
+  return $TokensModelCopyWith<$Res>(_self.tokens, (value) {
     return _then(_self.copyWith(tokens: value));
   });
 }

@@ -1,18 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mohtaaj/features/auth/ui/screens/forgot_password_screen.dart';
-import 'package:mohtaaj/features/auth/ui/screens/reset_password_screen.dart';
 import 'package:mohtaaj/features/categories/ui/screens/categories_screen.dart';
-import 'package:mohtaaj/features/reports/ui/screens/my_reports_screen.dart';
-import '../../core/widgets/splash_screen.dart';
 import '../../features/auth/data/models/user_model.dart';
-import '../../features/auth/ui/screens/email_verification_screen.dart';
-import '../../features/auth/ui/screens/verify_reset_code_screen.dart';
 import '../../features/categories/data/models/category_model.dart';
-import '../../features/chats/logic/chat_room/chat_room_cubit.dart';
-import '../../features/chats/logic/chats_list/chats_list_cubit.dart';
-import '../../features/chats/ui/screens/chat_room_screen.dart';
-import '../../features/chats/ui/screens/chats_list_screen.dart';
 import '../../features/favorites/ui/screens/favorites_screen.dart';
 import '../../features/items/data/models/item_model.dart';
 import '../../features/items/ui/screens/category_items_screen.dart';
@@ -24,19 +13,14 @@ import '../../features/profile/ui/screens/edit_profile_screen.dart';
 import '../../features/profile/ui/screens/my_items_screen.dart';
 import '../../features/profile/ui/screens/user_profile_screen.dart';
 import '../../features/search/ui/screens/search_screen.dart';
-import '../di/dependency_injection.dart';
 import 'routes.dart';
 import '../../features/onboarding/ui/screens/onboarding_screen.dart';
-import '../../features/auth/ui/screens/login_screen.dart';
-import '../../features/auth/ui/screens/register_screen.dart';
+import '../../features/auth/ui/login_screen.dart';
+import '../../features/auth/ui/register_screen.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // Splash
-      case Routes.splashScreen:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
-
       // Onboarding
       case Routes.onboardingScreen:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
@@ -49,29 +33,11 @@ class AppRouter {
       case Routes.registerScreen:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
 
-      case Routes.forgotPasswordScreen:
-        return MaterialPageRoute(builder: (_) => const ForgotPasswordScreen());
-
-      case Routes.verifyResetCodeScreen:
-        final email = settings.arguments as String;
-        return MaterialPageRoute(
-          builder: (_) => VerifyResetCodeScreen(email: email),
-        );
-
-      case Routes.resetPasswordScreen:
-        final data = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
-          builder: (_) => ResetPasswordScreen(data: data),
-        );
-
-      case Routes.verifyEmailScreen:
-        final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
-          builder: (_) => EmailVerificationScreen(
-            email: args['email'] as String,
-            fromRegister: args['fromRegister'] as bool? ?? true,
-          ),
-        );;
+      // TODO: Add forgot password screen
+      // case Routes.forgotPasswordScreen:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const ForgotPasswordScreen(),
+      //   );
 
       // ========================== Main Layout ==========================
 
@@ -95,14 +61,18 @@ class AppRouter {
           builder: (_) => EditProfileScreen(user: user, cubit: cubit),
         );
 
-      // في app_router.dart:
+    // في app_router.dart:
       case Routes.editItemScreen:
         final item = settings.arguments as ItemModel;
-        return MaterialPageRoute(builder: (_) => EditItemScreen(item: item));
+        return MaterialPageRoute(
+          builder: (_) => EditItemScreen(item: item),
+        );
 
       // My Items Screen
       case Routes.myItemsScreen:
-        return MaterialPageRoute(builder: (_) => const MyItemsScreen());
+        return MaterialPageRoute(
+          builder: (_) => const MyItemsScreen(),
+        );
 
       // Item Details Screen
       case Routes.itemDetailsScreen:
@@ -113,15 +83,15 @@ class AppRouter {
 
       // Search Screen
       case Routes.searchScreen:
-        return MaterialPageRoute(builder: (_) => const SearchScreen());
+        return MaterialPageRoute(
+          builder: (_) => const SearchScreen(),
+        );
 
       // Favorites Screen
       case Routes.favoritesScreen:
-        return MaterialPageRoute(builder: (_) => const FavoritesScreen());
-
-      // Reports Screen
-      case Routes.myReportsScreen:
-        return MaterialPageRoute(builder: (_) => const MyReportsScreen());
+        return MaterialPageRoute(
+          builder: (_) => const FavoritesScreen(),
+        );
 
       // User Profile Screen
       case Routes.userProfileScreen:
@@ -139,24 +109,6 @@ class AppRouter {
           builder: (_) => CategoryItemsScreen(category: category),
         );
 
-      // Chats List Screen
-      case Routes.chatsListScreen:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<ChatsListCubit>(),
-            child: const ChatsListScreen(),
-          ),
-        );
-
-      // Chat Room Screen
-      case Routes.chatRoomScreen:
-        final chatId = settings.arguments as String;
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<ChatRoomCubit>(param1: chatId),
-            child: ChatRoomScreen(chatId: chatId),
-          ),
-        );
       default:
         return null;
     }

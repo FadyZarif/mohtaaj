@@ -17,7 +17,6 @@ abstract class ItemsListState with _$ItemsListState {
     @Default(false) bool hasMoreItems,
     // Filters
     String? categoryId, // ده الفرق الوحيد - عشان الـ category items
-    String? selectedCountry,
     String? selectedCity,
     String? minPrice,
     String? maxPrice,
@@ -25,9 +24,5 @@ abstract class ItemsListState with _$ItemsListState {
     @Default(false) bool isFreeOnly,
     @Default(SortBy.createdAt) SortBy sortBy,
     @Default(SortOrder.desc) SortOrder sortOrder,
-    // Location-based search
-    double? latitude,
-    double? longitude,
-    @Default(1.0) double radiusKm, // Default 5km radius
   }) = _ItemsListState;
 }

@@ -219,7 +219,7 @@ return $default(_that.categories,_that.isCategoriesLoading,_that.categoriesError
 
 
 class _HomeState implements HomeState {
-  const _HomeState({final  List<CategoryModel> categories = const [], this.isCategoriesLoading = false, this.categoriesError, final  List<ItemModel> featuredItems = const [], this.isFeaturedLoading = false, this.featuredError, final  List<ItemModel> items = const [], this.isItemsLoading = false, this.itemsError, this.currentPage = 1, this.hasMoreItems = true}): _categories = categories,_featuredItems = featuredItems,_items = items;
+  const _HomeState({final  List<CategoryModel> categories = const [], this.isCategoriesLoading = false, this.categoriesError, final  List<ItemModel> featuredItems = const [], this.isFeaturedLoading = false, this.featuredError, final  List<ItemModel> items = const [], this.isItemsLoading = false, this.itemsError, this.currentPage = 1, this.hasMoreItems = false}): _categories = categories,_featuredItems = featuredItems,_items = items;
   
 
 // Categories

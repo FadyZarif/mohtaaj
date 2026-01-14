@@ -27,48 +27,8 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _HomeScreenBody extends StatefulWidget {
+class _HomeScreenBody extends StatelessWidget {
   const _HomeScreenBody();
-
-  @override
-  State<_HomeScreenBody> createState() => _HomeScreenBodyState();
-}
-
-class _HomeScreenBodyState extends State<_HomeScreenBody> {
-  final ScrollController _scrollController = ScrollController();
-  bool _isLoadingMore = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_isLoadingMore) return;
-
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    final delta = maxScroll - currentScroll;
-
-    // Load more when 200 pixels from bottom
-    if (delta <= 200) {
-      final cubit = context.read<HomeCubit>();
-      if (cubit.state.hasMoreItems && !cubit.state.isItemsLoading) {
-        setState(() => _isLoadingMore = true);
-        cubit.getItems(loadMore: true).then((_) {
-          if (mounted) setState(() => _isLoadingMore = false);
-        });
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +48,6 @@ class _HomeScreenBodyState extends State<_HomeScreenBody> {
         color: ColorsManager.mainColor,
         onRefresh: () => context.read<HomeCubit>().refresh(),
         child: SingleChildScrollView(
-          controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,6 +74,7 @@ class _HomeScreenBodyState extends State<_HomeScreenBody> {
               verticalSpace(12),
               BlocBuilder<HomeCubit, HomeState>(
                 buildWhen: (previous, current) =>
+
                     previous.categories != current.categories ||
                     previous.isCategoriesLoading != current.isCategoriesLoading,
                 builder: (context, state) {
@@ -122,6 +82,7 @@ class _HomeScreenBodyState extends State<_HomeScreenBody> {
                     categories: state.categories,
                     isLoading: state.isCategoriesLoading,
                     onCategoryTap: (category) {
+                      // TODO: Navigate to category items
                       context.pushNamed(
                         Routes.categoryItemsScreen,
                         arguments: category,
@@ -154,32 +115,29 @@ class _HomeScreenBodyState extends State<_HomeScreenBody> {
                         },
                       ),
                       verticalSpace(12),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          return SizedBox(
-                            height: constraints.maxWidth * 0.58, // نسبة انت تحددها
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.symmetric(horizontal: 16.w),
-                              itemCount: state.featuredItems.length,
-                              separatorBuilder: (context, index) => horizontalSpace(12),
-                              itemBuilder: (context, index) {
-                                return SizedBox(
-                                  width: 160.w,
-                                  child: ItemCard(
-                                    item: state.featuredItems[index],
-                                    onTap: () {
-                                      context.pushNamed(
-                                        Routes.itemDetailsScreen,
-                                        arguments: state.featuredItems[index].id,
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
+                      SizedBox(
+                        height: 220.h,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          itemCount: state.featuredItems.length,
+                          separatorBuilder: (context, index) =>
+                              SizedBox(width: 12.w),
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              width: 160.w,
+                              child: ItemCard(
+                                item: state.featuredItems[index],
+                                onTap: () {
+                                  context.pushNamed(
+                                    Routes.itemDetailsScreen,
+                                    arguments: state.featuredItems[index].id,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       verticalSpace(24),
                     ],
@@ -192,8 +150,7 @@ class _HomeScreenBodyState extends State<_HomeScreenBody> {
               BlocBuilder<HomeCubit, HomeState>(
                 buildWhen: (previous, current) =>
                     previous.items != current.items ||
-                    previous.isItemsLoading != current.isItemsLoading ||
-                    previous.hasMoreItems != current.hasMoreItems,
+                    previous.isItemsLoading != current.isItemsLoading,
                 builder: (context, state) {
                   if (state.isItemsLoading && state.items.isEmpty) {
                     return _buildLoadingSection();
@@ -201,55 +158,30 @@ class _HomeScreenBodyState extends State<_HomeScreenBody> {
                   if (state.items.isEmpty) {
                     return _buildEmptyItems();
                   }
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 12.w,
-                            mainAxisSpacing: 12.h,
-                            childAspectRatio: 0.75,
-                          ),
-                          itemCount: state.items.length,
-                          itemBuilder: (context, index) {
-                            return ItemCard(
-                              item: state.items[index],
-                              onTap: () {
-                                context.pushNamed(
-                                  Routes.itemDetailsScreen,
-                                  arguments: state.items[index].id,
-                                );
-                              },
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 12.w,
+                        mainAxisSpacing: 12.h,
+                        childAspectRatio: 0.7,
+                      ),
+                      itemCount: state.items.length,
+                      itemBuilder: (context, index) {
+                        return ItemCard(
+                          item: state.items[index],
+                          onTap: () {
+                            context.pushNamed(
+                              Routes.itemDetailsScreen,
+                              arguments: state.items[index].id,
                             );
                           },
-                        ),
-                      ),
-                      // Loading more indicator
-                      if (_isLoadingMore)
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16.h),
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: ColorsManager.mainColor,
-                            ),
-                          ),
-                        ),
-                      // End of list indicator
-                      if (!state.hasMoreItems && state.items.isNotEmpty)
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16.h),
-                          child: Center(
-                            child: Text(
-                              'لا توجد إعلانات أخرى',
-                              style: TextStyles.font14GreyRegular,
-                            ),
-                          ),
-                        ),
-                    ],
+                        );
+                      },
+                    ),
                   );
                 },
               ),
@@ -265,7 +197,9 @@ class _HomeScreenBodyState extends State<_HomeScreenBody> {
     return SizedBox(
       height: 100.h,
       child: const Center(
-        child: CircularProgressIndicator(color: ColorsManager.mainColor),
+        child: CircularProgressIndicator(
+          color: ColorsManager.mainColor,
+        ),
       ),
     );
   }
@@ -282,7 +216,10 @@ class _HomeScreenBodyState extends State<_HomeScreenBody> {
               color: ColorsManager.iconTertiary,
             ),
             verticalSpace(12),
-            Text('لا توجد إعلانات حالياً', style: TextStyles.font14GreyRegular),
+            Text(
+              'لا توجد إعلانات حالياً',
+              style: TextStyles.font14GreyRegular,
+            ),
           ],
         ),
       ),

@@ -3,10 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-<<<<<<< HEAD
 import 'package:image_picker/image_picker.dart';
-=======
->>>>>>> development
 import '../../../../core/helpers/app_dialogs.dart';
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/location_data.dart';
@@ -27,7 +24,11 @@ class EditProfileScreen extends StatefulWidget {
   final UserModel user;
   final ProfileCubit cubit;
 
-  const EditProfileScreen({super.key, required this.user, required this.cubit});
+  const EditProfileScreen({
+    super.key,
+    required this.user,
+    required this.cubit,
+  });
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -57,9 +58,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     print(_dial);
     print(widget.user.phone.replaceFirst(_dial, ''));
 
-    _phoneController = TextEditingController(
-      text: widget.user.phone.replaceFirst(_dial, ''),
-    );
+    _phoneController = TextEditingController(text: widget.user.phone.replaceFirst(_dial, ''));
     _selectedCountry = widget.user.country;
     _selectedCity = widget.user.city;
   }
@@ -170,7 +169,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: widget.cubit,
+      value:  widget.cubit,
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
@@ -185,7 +184,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               onPressed: () => context.pop(),
             ),
-            title: Text('تعديل الحساب', style: TextStyles.font20BlackBold),
+            title: Text(
+              'تعديل الحساب',
+              style: TextStyles.font20BlackBold,
+            ),
             centerTitle: true,
           ),
           body: SafeArea(
@@ -239,7 +241,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 radius: 50.r,
                                 backgroundColor: ColorsManager.mainColor
                                     .withOpacity(0.1),
-<<<<<<< HEAD
                                 backgroundImage: _selectedImage != null
                                     ? FileImage(_selectedImage!)
                                     : (widget.user.avatarUrl != null
@@ -248,17 +249,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         : null),
                                 child: _selectedImage == null &&
                                         widget.user.avatarUrl == null
-=======
-                                backgroundImage: widget.user.avatarUrl != null
-                                    ? NetworkImage(widget.user.avatarUrl!)
-                                    : null,
-                                child: widget.user.avatarUrl == null
->>>>>>> development
                                     ? Icon(
-                                        Icons.person,
-                                        size: 50.sp,
-                                        color: ColorsManager.mainColor,
-                                      )
+                                  Icons.person,
+                                  size: 50.sp,
+                                  color: ColorsManager.mainColor,
+                                )
                                     : null,
                               ),
                               Positioned(
@@ -325,10 +320,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             _dial = code;
                           },
                         ),*/
+
                         verticalSpace(20),
 
                         // Country Dropdown
-                        Text('الدولة', style: TextStyles.font14BlackSemiBold),
+                        Text(
+                          'الدولة',
+                          style: TextStyles.font14BlackSemiBold,
+                        ),
                         verticalSpace(8),
                         SearchableDropdown(
                           hintText: 'اختر الدولة',
@@ -341,30 +340,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               _selectedCity = null;
                               // Update phone country code when country changes
                               if (value != null) {
-                                final newCode = LocationData.getCodeByCountry(
-                                  value,
-                                );
-                                _phoneFieldKey.currentState?.updateCountryCode(
-                                  newCode,
-                                );
+                                final newCode = LocationData.getCodeByCountry(value);
+                                _phoneFieldKey.currentState?.updateCountryCode(newCode);
                               }
                             });
                           },
                           validator: (value) =>
-                              value == null ? 'الرجاء اختيار الدولة' : null,
+                          value == null ? 'الرجاء اختيار الدولة' : null,
                         ),
 
                         verticalSpace(20),
 
                         // City Dropdown
-                        Text('المدينة', style: TextStyles.font14BlackSemiBold),
+                        Text(
+                          'المدينة',
+                          style: TextStyles.font14BlackSemiBold,
+                        ),
                         verticalSpace(8),
                         SearchableDropdown(
                           hintText: 'اختر المدينة',
                           items: _selectedCountry != null
-                              ? LocationData.getCitiesByCountry(
-                                  _selectedCountry!,
-                                )
+                              ? LocationData.getCitiesByCountry(_selectedCountry!)
                               : LocationData.egyptianCities,
                           selectedItem: _selectedCity,
                           onChanged: (value) {
@@ -373,7 +369,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             });
                           },
                           validator: (value) =>
-                              value == null ? 'الرجاء اختيار المدينة' : null,
+                          value == null ? 'الرجاء اختيار المدينة' : null,
                         ),
 
                         verticalSpace(32),
@@ -407,16 +403,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 country: _selectedCountry!,
                                 avatarUrl: avatarUrl,
                               );
-<<<<<<< HEAD
                               context.read<ProfileCubit>().updateProfile(
                                     request,
                                   );
-=======
-
-                              context.read<ProfileCubit>().updateProfile(
-                                request,
-                              );
->>>>>>> development
                             }
                           },
                         ),

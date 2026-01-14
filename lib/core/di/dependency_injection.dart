@@ -1,11 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import '../../features/auth/logic/email_verification_cubit/email_verification_cubit.dart';
-import '../../features/auth/logic/forgot_password_cubit/forgot_password_cubit.dart';
-import '../../features/chats/data/services/socket_service.dart';
-import '../../features/chats/logic/chat_room/chat_room_cubit.dart';
-import '../../features/chats/logic/chats_list/chats_list_cubit.dart';
-import '../../features/chats/logic/socket/socket_cubit.dart';
 import '../../features/favorites/logic/favorites_cubit/favorites_cubit.dart';
 import '../../features/items/logic/create_item_cubit/create_item_cubit.dart';
 import '../../features/items/logic/item_details_cubit/item_details_cubit.dart';
@@ -16,7 +10,6 @@ import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/categories/logic/categories_cubit/categories_cubit.dart';
 import '../../features/home/logic/home_cubit/home_cubit.dart';
 import '../../features/profile/logic/user_profile_cubit/user_profile_cubit.dart';
-import '../../features/reports/logic/reports_cubit/reports_cubit.dart';
 import '../networking/api_service.dart';
 import '../networking/dio_factory.dart';
 import '../../features/auth/logic/login_cubit/login_cubit.dart';
@@ -35,125 +28,80 @@ Future<void> setupGetIt() async {
 
   // AuthService - Singleton لإدارة الـ Tokens
   getIt.registerLazySingleton<AuthService>(
-    () => AuthService(getIt<ApiService>()),
+        () => AuthService(getIt<ApiService>()),
   );
 
   getIt.registerLazySingleton<LocationService>(() => LocationService());
+
 
   // ========================== Auth ==========================
 
   // Login
   getIt.registerFactory<LoginCubit>(
-        () => LoginCubit(
-      getIt<ApiService>(),
-      getIt<AuthService>(),
-      getIt<SocketService>(),
-    ),
+        () => LoginCubit(getIt<ApiService>(),getIt<AuthService>()),
   );
 
   // Register
   getIt.registerFactory<RegisterCubit>(
-        () => RegisterCubit(
-      getIt<ApiService>(),
-      // ❌ Remove: AuthService, SocketService
-    ),
-  );
-  // Forgot Password Cubit
-  getIt.registerFactory<ForgotPasswordCubit>(
-    () => ForgotPasswordCubit(getIt<ApiService>()),
-  );
-
-  // Email Verification Cubit
-  getIt.registerFactory<EmailVerificationCubit>(
-        () => EmailVerificationCubit(
-      getIt<ApiService>(),
-      getIt<AuthService>(),
-      getIt<SocketService>(),
-    ),
+        () => RegisterCubit(getIt<ApiService>(),getIt<AuthService>()),
   );
 
   // ========================== Main Layout ==========================
 
   getIt.registerFactory<MainLayoutCubit>(
-    () => MainLayoutCubit(
-      getIt<AuthService>(),
-      getIt<ApiService>(),
-      getIt<SocketService>(),
-    ),
+        () => MainLayoutCubit(getIt<AuthService>()),
   );
 
   // ========================== Profile ==========================
 
   getIt.registerFactory<ProfileCubit>(
-    () => ProfileCubit(
-      getIt<ApiService>(),
-      getIt<AuthService>(),
-      getIt<SocketService>(),
-    ),
-  );
+          () => ProfileCubit(
+        getIt<ApiService>(),
+        getIt<AuthService>(),
+      ));
 
   getIt.registerFactoryParam<UserProfileCubit, String, void>(
-    (userId, _) => UserProfileCubit(getIt<ApiService>(), userId),
+        (userId, _) => UserProfileCubit(getIt<ApiService>(), userId),
   );
 
-  getIt.registerFactory<MyItemsCubit>(() => MyItemsCubit(getIt(), getIt()));
+  getIt.registerFactory<MyItemsCubit>(
+        () => MyItemsCubit(getIt(), getIt()),
+  );
 
   // ========================== Categories ==========================
 
   getIt.registerFactory<CategoriesCubit>(
-    () => CategoriesCubit(getIt<ApiService>()),
+        () => CategoriesCubit(getIt<ApiService>()),
   );
 
   // ========================== Home ==========================
 
-  getIt.registerFactory<HomeCubit>(() => HomeCubit(getIt<ApiService>()));
+  getIt.registerFactory<HomeCubit>(
+        () => HomeCubit(getIt<ApiService>()),
+  );
+
 
   // ========================== Items ==========================
 
   getIt.registerFactoryParam<ItemDetailsCubit, String, void>(
-    (itemId, _) => ItemDetailsCubit(getIt<ApiService>(), itemId),
+        (itemId, _) => ItemDetailsCubit(getIt<ApiService>(), itemId),
   );
 
   // ========================== Create Item ==========================
 
   getIt.registerFactory<CreateItemCubit>(
-    () => CreateItemCubit(
-      getIt<ApiService>(),
-      getIt<LocationService>(),
-      getIt<AuthService>(),
-    ),
+        () => CreateItemCubit(getIt<ApiService>(), getIt<LocationService>()),
   );
 
   // ========================== Search ==========================
 
-  getIt.registerFactory<ItemsListCubit>(() => ItemsListCubit(getIt()));
+  getIt.registerFactory<ItemsListCubit>(
+        () => ItemsListCubit(getIt()),
+  );
 
   // ========================== Favorites ==========================
 
   getIt.registerFactory<FavoritesCubit>(
-    () => FavoritesCubit(getIt<ApiService>()),
+        () => FavoritesCubit(getIt<ApiService>()),
   );
-
-  // ========================== Socket Service ==========================
-  getIt.registerLazySingleton<SocketService>(() => SocketService());
-
-  // ========================== Socket Cubit ==========================
-  getIt.registerFactory<SocketCubit>(() => SocketCubit(getIt<SocketService>()));
-
-  // ========================== Chats Cubits ==========================
-  getIt.registerFactoryParam<ChatsListCubit, Function(int)?, void>(
-    (callback, _) => ChatsListCubit(
-      getIt<ApiService>(),
-      getIt<SocketService>(),
-      onTotalUnreadChanged: callback,
-    ),
-  );
-
-  getIt.registerFactoryParam<ChatRoomCubit, String, void>(
-    (chatId, _) =>
-        ChatRoomCubit(getIt<ApiService>(), getIt<SocketService>(), chatId),
-  );
-
-  // ========================== Reports Cubits ==========================
-  getIt.registerFactory<ReportsCubit>(() => ReportsCubit(getIt<ApiService>()));
 }

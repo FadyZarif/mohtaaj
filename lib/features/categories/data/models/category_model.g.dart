@@ -14,14 +14,10 @@ _CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String?,
       iconUrl: json['iconUrl'] as String?,
       parentId: json['parentId'] as String?,
-      isActive: json['isActive'] as bool?,
-      sortOrder: (json['sortOrder'] as num?)?.toInt(),
-      createdAt: json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
+      isActive: json['isActive'] as bool,
+      sortOrder: (json['sortOrder'] as num).toInt(),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updatedAt: DateTime.parse(json['updatedAt'] as String),
       parent: json['parent'] == null
           ? null
           : CategoryParent.fromJson(json['parent'] as Map<String, dynamic>),
@@ -43,8 +39,8 @@ Map<String, dynamic> _$CategoryModelToJson(_CategoryModel instance) =>
       'parentId': instance.parentId,
       'isActive': instance.isActive,
       'sortOrder': instance.sortOrder,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updatedAt': instance.updatedAt.toIso8601String(),
       'parent': instance.parent,
       'children': instance.children,
       '_count': instance.count,

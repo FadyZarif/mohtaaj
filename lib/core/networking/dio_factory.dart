@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mohtaaj/core/helpers/cache_helper.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'api_constants.dart';
@@ -63,10 +64,8 @@ class DioFactory {
           // Handle 401 Unauthorized - Token expired
           if (error.response?.statusCode == 401) {
             // Try to refresh token
-            final refreshToken = await CacheHelper.getSecureData(
-              key: 'refreshToken',
-            );
-
+            final refreshToken = await CacheHelper.getSecureData(key: 'refreshToken');
+            
             if (refreshToken != null) {
               try {
                 // Call refresh token API
@@ -79,24 +78,17 @@ class DioFactory {
                   // Save new tokens
                   final newAccessToken = response.data['data']['accessToken'];
                   final newRefreshToken = response.data['data']['refreshToken'];
-
-                  await CacheHelper.saveSecureData(
-                    key: 'accessToken',
-                    value: newAccessToken,
-                  );
-                  await CacheHelper.saveSecureData(
-                    key: 'refreshToken',
-                    value: newRefreshToken,
-                  );
+                  
+                  await CacheHelper.saveSecureData(key: 'accessToken', value: newAccessToken);
+                  await CacheHelper.saveSecureData(key: 'refreshToken', value: newRefreshToken);
 
                   // Retry the original request
-                  error.requestOptions.headers['Authorization'] =
-                      'Bearer $newAccessToken';
+                  error.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
                   final opts = Options(
                     method: error.requestOptions.method,
                     headers: error.requestOptions.headers,
                   );
-
+                  
                   final cloneReq = await dio!.request(
                     error.requestOptions.path,
                     options: opts,

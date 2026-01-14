@@ -1,11 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mohtaaj/core/helpers/cache_helper.dart';
 import 'package:mohtaaj/features/auth/data/models/user_model.dart';
 import '../../features/auth/data/models/refresh_token_request.dart';
-import '../di/dependency_injection.dart';
-import '../helpers/app_dialogs.dart';
 import '../networking/api_service.dart';
 
 class AuthService {
@@ -19,7 +17,7 @@ class AuthService {
   Future<bool> refreshAccessToken() async {
     try {
       final refreshToken = await CacheHelper.getSecureData(key: 'refreshToken');
-
+      
       if (refreshToken == null || refreshToken.isEmpty) {
         return false;
       }
@@ -57,10 +55,7 @@ class AuthService {
 
   /// Save user Data
   Future<void> saveUserData(UserModel user) async {
-    await CacheHelper.saveSecureData(
-      key: 'userData',
-      value: jsonEncode(user.toJson()),
-    );
+    await CacheHelper.saveSecureData(key: 'userData', value: jsonEncode(user.toJson()));
   }
 
   /// Get access token
@@ -98,37 +93,6 @@ class AuthService {
   Future<bool> isLoggedIn() async {
     final accessToken = await CacheHelper.getSecureData(key: 'accessToken');
     return accessToken != null && accessToken.isNotEmpty;
-  }
-
-  /// Check if user is logged in and token is valid
-  /// Auto-refreshes token if expired
-  /// Returns true if user is authenticated, false otherwise
-  Future<bool> requireAuth(
-    BuildContext context,
-    VoidCallback? callFunction,
-  ) async {
-    try {
-      final isLoggedIn = await getIt<AuthService>().isLoggedIn();
-      if (isLoggedIn) {
-        if (callFunction != null) {
-          callFunction();
-        }
-        return true;
-      } else {
-        if (context.mounted) {
-          AppDialogs.showLoginRequiredDialog(context);
-        }
-        return false;
-      }
-    } catch (e) {
-      print('❌ Error in requireAuth: $e');
-
-      // On error, prompt login
-      if (context.mounted) {
-        AppDialogs.showLoginRequiredDialog(context);
-      }
-      return false;
-    }
   }
 
   // ===================== Logout =====================

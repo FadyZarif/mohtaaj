@@ -1,12 +1,12 @@
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../core/theming/colors.dart';
 import 'package:flutter/material.dart';
 
-import '../../../categories/data/models/category_model.dart';
-
 part 'item_model.freezed.dart';
 part 'item_model.g.dart';
+
 
 enum ItemCondition {
   @JsonValue("new")
@@ -43,6 +43,7 @@ extension ItemConditionX on ItemCondition {
 }
 
 enum ItemStatus {
+
   @JsonValue("pending")
   pending,
 
@@ -69,11 +70,10 @@ extension ItemStatusX on ItemStatus {
         return 'مبلغ عنه';
     }
   }
-
   Color get color {
     switch (this) {
       case ItemStatus.pending:
-        return ColorsManager.warning;
+        return ColorsManager.warning ?? Colors.orange;
       case ItemStatus.active:
         return ColorsManager.success;
       case ItemStatus.closed:
@@ -84,19 +84,17 @@ extension ItemStatusX on ItemStatus {
   }
 }
 
+
 @freezed
 abstract class ItemModel with _$ItemModel {
   const factory ItemModel({
     required String id,
     String? ownerId, // 👈 خليه optional
-<<<<<<< HEAD
     String? buyerId,
-=======
->>>>>>> development
     required String title,
     required String description,
-    String? categoryId, // 👈 خليه optional
-    required CategoryModel category,
+    String? categoryId,  // 👈 خليه optional
+    required ItemCategory category,
     ItemCondition? condition,
     required List<String> images,
     required String city,
@@ -110,7 +108,7 @@ abstract class ItemModel with _$ItemModel {
     required int favoritesCount,
     required DateTime createdAt,
     DateTime? closedAt,
-    ItemOwner? owner, // 👈 خليه optional
+    ItemOwner? owner,  // 👈 خليه optional
     @JsonKey(name: '_count') ItemCount? count,
     FavoriteInfo? favoriteInfo,
   }) = _ItemModel;
@@ -118,7 +116,7 @@ abstract class ItemModel with _$ItemModel {
   factory ItemModel.fromJson(Map<String, dynamic> json) =>
       _$ItemModelFromJson(json);
 }
-/*
+
 @freezed
 abstract class ItemCategory with _$ItemCategory {
   const factory ItemCategory({
@@ -137,7 +135,6 @@ abstract class ItemCategory with _$ItemCategory {
   factory ItemCategory.fromJson(Map<String, dynamic> json) =>
       _$ItemCategoryFromJson(json);
 }
-*/
 
 @freezed
 abstract class ItemOwner with _$ItemOwner {
@@ -167,7 +164,9 @@ abstract class ItemCount with _$ItemCount {
 
 @freezed
 abstract class FavoriteInfo with _$FavoriteInfo {
-  const factory FavoriteInfo({required DateTime favoritedAt}) = _FavoriteInfo;
+  const factory FavoriteInfo({
+    required DateTime favoritedAt,
+  }) = _FavoriteInfo;
 
   factory FavoriteInfo.fromJson(Map<String, dynamic> json) =>
       _$FavoriteInfoFromJson(json);

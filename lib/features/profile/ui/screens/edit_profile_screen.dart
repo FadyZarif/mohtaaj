@@ -44,6 +44,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   // Image picker
   File? _selectedImage;
   final ImagePicker _imagePicker = ImagePicker();
+  bool _shouldRemoveAvatar = false;
 
   @override
   void initState() {
@@ -80,6 +81,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (pickedFile != null) {
         setState(() {
           _selectedImage = File(pickedFile.path);
+          _shouldRemoveAvatar = false;
         });
       }
     } catch (e) {
@@ -139,7 +141,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 _pickImage(ImageSource.gallery);
               },
             ),
-            if (_selectedImage != null || widget.user.avatarUrl != null)
+            if (_selectedImage != null ||
+                (!_shouldRemoveAvatar && widget.user.avatarUrl != null))
               ListTile(
                 leading: Icon(
                   Icons.delete,
@@ -155,6 +158,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   context.pop();
                   setState(() {
                     _selectedImage = null;
+                    _shouldRemoveAvatar = true;
                   });
                 },
               ),
@@ -235,15 +239,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               CircleAvatar(
                                 radius: 50.r,
                                 backgroundColor: ColorsManager.mainColor
-                                    .withOpacity(0.1),
+                                    .withValues(alpha: 0.1),
                                 backgroundImage: _selectedImage != null
                                     ? FileImage(_selectedImage!)
-                                    : (widget.user.avatarUrl != null
+                                    : (!_shouldRemoveAvatar &&
+                                            widget.user.avatarUrl != null
                                         ? CachedNetworkImageProvider(
                                             widget.user.avatarUrl!)
                                         : null),
                                 child: _selectedImage == null &&
-                                        widget.user.avatarUrl == null
+                                        (_shouldRemoveAvatar ||
+                                            widget.user.avatarUrl == null)
                                     ? Icon(
                                         Icons.person,
                                         size: 50.sp,
@@ -389,6 +395,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   return;
                                 }
                                 avatarUrl = uploadedUrl;
+                              } else if (_shouldRemoveAvatar) {
+                                // User wants to remove avatar from server
+                                avatarUrl = null;
                               }
 
                               final request = UpdateProfileRequest(

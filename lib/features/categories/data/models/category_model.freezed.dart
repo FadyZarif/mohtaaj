@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CategoryModel {
 
- String get id; String get name; String get slug; String? get description; String? get iconUrl; String? get parentId; bool? get isActive; int? get sortOrder; DateTime? get createdAt; DateTime? get updatedAt; CategoryParent? get parent; List<CategoryModel>? get children;@JsonKey(name: '_count') CategoryCount? get count;
+ String get id; String get name; String get slug; String? get description; String? get iconUrl; String? get parentId; bool get isActive; int get sortOrder; DateTime get createdAt; DateTime get updatedAt; CategoryParent? get parent; List<CategoryModel>? get children;@JsonKey(name: '_count') CategoryCount? get count;
 /// Create a copy of CategoryModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $CategoryModelCopyWith<$Res>  {
   factory $CategoryModelCopyWith(CategoryModel value, $Res Function(CategoryModel) _then) = _$CategoryModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String slug, String? description, String? iconUrl, String? parentId, bool? isActive, int? sortOrder, DateTime? createdAt, DateTime? updatedAt, CategoryParent? parent, List<CategoryModel>? children,@JsonKey(name: '_count') CategoryCount? count
+ String id, String name, String slug, String? description, String? iconUrl, String? parentId, bool isActive, int sortOrder, DateTime createdAt, DateTime updatedAt, CategoryParent? parent, List<CategoryModel>? children,@JsonKey(name: '_count') CategoryCount? count
 });
 
 
@@ -65,7 +65,7 @@ class _$CategoryModelCopyWithImpl<$Res>
 
 /// Create a copy of CategoryModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? slug = null,Object? description = freezed,Object? iconUrl = freezed,Object? parentId = freezed,Object? isActive = freezed,Object? sortOrder = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? parent = freezed,Object? children = freezed,Object? count = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? slug = null,Object? description = freezed,Object? iconUrl = freezed,Object? parentId = freezed,Object? isActive = null,Object? sortOrder = null,Object? createdAt = null,Object? updatedAt = null,Object? parent = freezed,Object? children = freezed,Object? count = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -73,11 +73,11 @@ as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,iconUrl: freezed == iconUrl ? _self.iconUrl : iconUrl // ignore: cast_nullable_to_non_nullable
 as String?,parentId: freezed == parentId ? _self.parentId : parentId // ignore: cast_nullable_to_non_nullable
-as String?,isActive: freezed == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool?,sortOrder: freezed == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
-as int?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,parent: freezed == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
+as String?,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
+as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime,parent: freezed == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
 as CategoryParent?,children: freezed == children ? _self.children : children // ignore: cast_nullable_to_non_nullable
 as List<CategoryModel>?,count: freezed == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
 as CategoryCount?,
@@ -189,7 +189,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String slug,  String? description,  String? iconUrl,  String? parentId,  bool? isActive,  int? sortOrder,  DateTime? createdAt,  DateTime? updatedAt,  CategoryParent? parent,  List<CategoryModel>? children, @JsonKey(name: '_count')  CategoryCount? count)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String slug,  String? description,  String? iconUrl,  String? parentId,  bool isActive,  int sortOrder,  DateTime createdAt,  DateTime updatedAt,  CategoryParent? parent,  List<CategoryModel>? children, @JsonKey(name: '_count')  CategoryCount? count)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CategoryModel() when $default != null:
 return $default(_that.id,_that.name,_that.slug,_that.description,_that.iconUrl,_that.parentId,_that.isActive,_that.sortOrder,_that.createdAt,_that.updatedAt,_that.parent,_that.children,_that.count);case _:
@@ -210,7 +210,7 @@ return $default(_that.id,_that.name,_that.slug,_that.description,_that.iconUrl,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String slug,  String? description,  String? iconUrl,  String? parentId,  bool? isActive,  int? sortOrder,  DateTime? createdAt,  DateTime? updatedAt,  CategoryParent? parent,  List<CategoryModel>? children, @JsonKey(name: '_count')  CategoryCount? count)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String slug,  String? description,  String? iconUrl,  String? parentId,  bool isActive,  int sortOrder,  DateTime createdAt,  DateTime updatedAt,  CategoryParent? parent,  List<CategoryModel>? children, @JsonKey(name: '_count')  CategoryCount? count)  $default,) {final _that = this;
 switch (_that) {
 case _CategoryModel():
 return $default(_that.id,_that.name,_that.slug,_that.description,_that.iconUrl,_that.parentId,_that.isActive,_that.sortOrder,_that.createdAt,_that.updatedAt,_that.parent,_that.children,_that.count);case _:
@@ -230,7 +230,7 @@ return $default(_that.id,_that.name,_that.slug,_that.description,_that.iconUrl,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String slug,  String? description,  String? iconUrl,  String? parentId,  bool? isActive,  int? sortOrder,  DateTime? createdAt,  DateTime? updatedAt,  CategoryParent? parent,  List<CategoryModel>? children, @JsonKey(name: '_count')  CategoryCount? count)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String slug,  String? description,  String? iconUrl,  String? parentId,  bool isActive,  int sortOrder,  DateTime createdAt,  DateTime updatedAt,  CategoryParent? parent,  List<CategoryModel>? children, @JsonKey(name: '_count')  CategoryCount? count)?  $default,) {final _that = this;
 switch (_that) {
 case _CategoryModel() when $default != null:
 return $default(_that.id,_that.name,_that.slug,_that.description,_that.iconUrl,_that.parentId,_that.isActive,_that.sortOrder,_that.createdAt,_that.updatedAt,_that.parent,_that.children,_that.count);case _:
@@ -245,7 +245,7 @@ return $default(_that.id,_that.name,_that.slug,_that.description,_that.iconUrl,_
 @JsonSerializable()
 
 class _CategoryModel implements CategoryModel {
-  const _CategoryModel({required this.id, required this.name, required this.slug, this.description, this.iconUrl, this.parentId, this.isActive, this.sortOrder, this.createdAt, this.updatedAt, this.parent, final  List<CategoryModel>? children, @JsonKey(name: '_count') this.count}): _children = children;
+  const _CategoryModel({required this.id, required this.name, required this.slug, this.description, this.iconUrl, this.parentId, required this.isActive, required this.sortOrder, required this.createdAt, required this.updatedAt, this.parent, final  List<CategoryModel>? children, @JsonKey(name: '_count') this.count}): _children = children;
   factory _CategoryModel.fromJson(Map<String, dynamic> json) => _$CategoryModelFromJson(json);
 
 @override final  String id;
@@ -254,10 +254,10 @@ class _CategoryModel implements CategoryModel {
 @override final  String? description;
 @override final  String? iconUrl;
 @override final  String? parentId;
-@override final  bool? isActive;
-@override final  int? sortOrder;
-@override final  DateTime? createdAt;
-@override final  DateTime? updatedAt;
+@override final  bool isActive;
+@override final  int sortOrder;
+@override final  DateTime createdAt;
+@override final  DateTime updatedAt;
 @override final  CategoryParent? parent;
  final  List<CategoryModel>? _children;
 @override List<CategoryModel>? get children {
@@ -303,7 +303,7 @@ abstract mixin class _$CategoryModelCopyWith<$Res> implements $CategoryModelCopy
   factory _$CategoryModelCopyWith(_CategoryModel value, $Res Function(_CategoryModel) _then) = __$CategoryModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String slug, String? description, String? iconUrl, String? parentId, bool? isActive, int? sortOrder, DateTime? createdAt, DateTime? updatedAt, CategoryParent? parent, List<CategoryModel>? children,@JsonKey(name: '_count') CategoryCount? count
+ String id, String name, String slug, String? description, String? iconUrl, String? parentId, bool isActive, int sortOrder, DateTime createdAt, DateTime updatedAt, CategoryParent? parent, List<CategoryModel>? children,@JsonKey(name: '_count') CategoryCount? count
 });
 
 
@@ -320,7 +320,7 @@ class __$CategoryModelCopyWithImpl<$Res>
 
 /// Create a copy of CategoryModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? slug = null,Object? description = freezed,Object? iconUrl = freezed,Object? parentId = freezed,Object? isActive = freezed,Object? sortOrder = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? parent = freezed,Object? children = freezed,Object? count = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? slug = null,Object? description = freezed,Object? iconUrl = freezed,Object? parentId = freezed,Object? isActive = null,Object? sortOrder = null,Object? createdAt = null,Object? updatedAt = null,Object? parent = freezed,Object? children = freezed,Object? count = freezed,}) {
   return _then(_CategoryModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -328,11 +328,11 @@ as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,iconUrl: freezed == iconUrl ? _self.iconUrl : iconUrl // ignore: cast_nullable_to_non_nullable
 as String?,parentId: freezed == parentId ? _self.parentId : parentId // ignore: cast_nullable_to_non_nullable
-as String?,isActive: freezed == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool?,sortOrder: freezed == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
-as int?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,parent: freezed == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
+as String?,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
+as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime,parent: freezed == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
 as CategoryParent?,children: freezed == children ? _self._children : children // ignore: cast_nullable_to_non_nullable
 as List<CategoryModel>?,count: freezed == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
 as CategoryCount?,

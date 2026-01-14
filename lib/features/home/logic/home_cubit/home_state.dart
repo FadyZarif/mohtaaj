@@ -22,6 +22,6 @@ abstract class HomeState with _$HomeState {
     @Default(false) bool isItemsLoading,
     String? itemsError,
     @Default(1) int currentPage,
-    @Default(true) bool hasMoreItems,
+    @Default(false) bool hasMoreItems,
   }) = _HomeState;
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mohtaaj/core/helpers/spacing.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 
@@ -27,79 +26,73 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         children: [
           // Logo
-          Image.asset(
-            'assets/logo_trans.png',
-            height: 40.h,
-          ),
-          horizontalSpace(5),
           Text(
-            'محتاج',
+            'Mohtaaj',
             style: TextStyles.font20BlackBold.copyWith(
               color: ColorsManager.mainColor,
             ),
           ),
         ],
       ),
-      // TODO: Enable actions when needed
-      // actions: [
-      //   // Location
-      //   GestureDetector(
-      //     onTap: onLocationTap,
-      //     child: Row(
-      //       children: [
-      //         Text(
-      //           location,
-      //           style: TextStyles.font14BlackMedium,
-      //         ),
-      //         SizedBox(width: 4.w),
-      //         Icon(
-      //           Icons.keyboard_arrow_down,
-      //           size: 20.sp,
-      //           color: ColorsManager.textPrimary,
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      //   SizedBox(width: 12.w),
-      //   // Notifications
-      //   GestureDetector(
-      //     onTap: onNotificationTap,
-      //     child: Stack(
-      //       children: [
-      //         Icon(
-      //           Icons.notifications_outlined,
-      //           size: 24.sp,
-      //           color: ColorsManager.textPrimary,
-      //         ),
-      //         if (notificationCount > 0)
-      //           Positioned(
-      //             right: 0,
-      //             top: 0,
-      //             child: Container(
-      //               padding: EdgeInsets.all(4.r),
-      //               decoration: const BoxDecoration(
-      //                 color: ColorsManager.error,
-      //                 shape: BoxShape.circle,
-      //               ),
-      //               constraints: BoxConstraints(
-      //                 minWidth: 16.w,
-      //                 minHeight: 16.h,
-      //               ),
-      //               child: Text(
-      //                 notificationCount > 9 ? '9+' : '$notificationCount',
-      //                 style: TextStyles.font10GreyMedium.copyWith(
-      //                   color: Colors.white,
-      //                   fontSize: 8.sp,
-      //                 ),
-      //                 textAlign: TextAlign.center,
-      //               ),
-      //             ),
-      //           ),
-      //       ],
-      //     ),
-      //   ),
-      //   SizedBox(width: 16.w),
-      // ],
+      actions: [
+        // Location
+        GestureDetector(
+          onTap: onLocationTap,
+          child: Row(
+            children: [
+              Text(
+                location,
+                style: TextStyles.font14BlackMedium,
+              ),
+              SizedBox(width: 4.w),
+              Icon(
+                Icons.keyboard_arrow_down,
+                size: 20.sp,
+                color: ColorsManager.textPrimary,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(width: 12.w),
+        // Notifications
+        GestureDetector(
+          onTap: onNotificationTap,
+          child: Stack(
+            children: [
+              Icon(
+                Icons.notifications_outlined,
+                size: 24.sp,
+                color: ColorsManager.textPrimary,
+              ),
+              if (notificationCount > 0)
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: Container(
+                    padding: EdgeInsets.all(4.r),
+                    decoration: const BoxDecoration(
+                      color: ColorsManager.error,
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: BoxConstraints(
+                      minWidth: 16.w,
+                      minHeight: 16.h,
+                    ),
+                    child: Text(
+                      notificationCount > 9 ? '9+' : '$notificationCount',
+                      style: TextStyles.font10GreyMedium.copyWith(
+                        color: Colors.white,
+                        fontSize: 8.sp,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        SizedBox(width: 16.w),
+      ],
     );
   }
 

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
@@ -149,21 +148,11 @@ class CategorySelector extends StatelessWidget {
                         child: Row(
                           children: [
                             if (category.iconUrl != null)
-                              CachedNetworkImage(
-                                imageUrl: category.iconUrl!,
+                              Image.network(
+                                category.iconUrl!,
                                 width: 32.w,
                                 height: 32.h,
-                                placeholder: (context, url) => SizedBox(
-                                  width: 32.w,
-                                  height: 32.h,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: ColorsManager.mainColor,
-                                      strokeWidth: 2,
-                                    ),
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) {
+                                errorBuilder: (context, error, stackTrace) {
                                   return Icon(
                                     Icons.category,
                                     size: 32.sp,

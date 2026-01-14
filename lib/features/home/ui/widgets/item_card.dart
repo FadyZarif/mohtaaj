@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
@@ -84,23 +83,12 @@ class ItemCard extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 1.35,
             child: item.images.isNotEmpty
-                ? CachedNetworkImage(
-                    imageUrl: item.images.first,
+                ? Image.network(
+                    item.images.first,
                     fit: BoxFit.cover,
-                    fadeInDuration: Duration.zero,
-                    fadeOutDuration: Duration.zero,
-                    memCacheWidth: 600,
-                    memCacheHeight: 600,
-                    placeholder: (context, url) => Container(
-                      color: ColorsManager.inputBackground,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: ColorsManager.mainColor,
-                          strokeWidth: 2,
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => _buildImagePlaceholder(),
+                    errorBuilder: (context, error, stackTrace) {
+                      return _buildImagePlaceholder();
+                    },
                   )
                 : _buildImagePlaceholder(),
           ),
@@ -113,7 +101,8 @@ class ItemCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (item.isFeatured) _buildBadge('مميز', ColorsManager.badgeGold),
+              if (item.isFeatured)
+                _buildBadge('مميز', ColorsManager.badgeGold),
               // if (item.isFree)
               //   Padding(
               //     padding: EdgeInsets.only(top: 4.h),
@@ -194,10 +183,7 @@ class ItemCard extends StatelessWidget {
           ),
         ),
         // Time
-        Text(
-          timeago.format(item.createdAt, locale: 'ar'),
-          style: TextStyles.font10GreyRegular,
-        ),
+        Text(item.createdAt.timeAgo(), style: TextStyles.font10GreyRegular),
       ],
     );
   }

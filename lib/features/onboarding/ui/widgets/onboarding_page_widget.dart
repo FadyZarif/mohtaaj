@@ -21,7 +21,7 @@ class OnboardingPageWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Illustration
-          _buildIllustration(model.icon),
+          _buildIllustration(),
 
           verticalSpace(48),
 
@@ -47,7 +47,7 @@ class OnboardingPageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildIllustration(IconData icon) {
+  Widget _buildIllustration() {
     // Placeholder for now - يمكن استبدالها بـ SVG أو Image
     return Container(
       width: 300.w,
@@ -58,7 +58,7 @@ class OnboardingPageWidget extends StatelessWidget {
       ),
       child: Center(
         child: Icon(
-          icon,
+          Icons.shopping_bag_outlined,
           size: 120.sp,
           color: ColorsManager.mainColor,
         ),

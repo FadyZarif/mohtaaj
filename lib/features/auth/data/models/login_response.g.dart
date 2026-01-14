@@ -17,15 +17,8 @@ Map<String, dynamic> _$LoginResponseToJson(_LoginResponse instance) =>
 
 _LoginData _$LoginDataFromJson(Map<String, dynamic> json) => _LoginData(
   user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
-  tokens: json['tokens'] == null
-      ? null
-      : TokensModel.fromJson(json['tokens'] as Map<String, dynamic>),
-  requiresVerification: json['requiresVerification'] as bool?,
+  tokens: TokensModel.fromJson(json['tokens'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$LoginDataToJson(_LoginData instance) =>
-    <String, dynamic>{
-      'user': instance.user,
-      'tokens': instance.tokens,
-      'requiresVerification': instance.requiresVerification,
-    };
+    <String, dynamic>{'user': instance.user, 'tokens': instance.tokens};

@@ -55,16 +55,16 @@ extension RegisterStatePatterns on RegisterState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _DetectingLocation value)?  detectingLocation,TResult Function( LocationDetected value)?  locationDetected,TResult Function( _LocationError value)?  locationError,TResult Function( Success value)?  success,TResult Function( _Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( Loading value)?  loading,TResult Function( DetectingLocation value)?  detectingLocation,TResult Function( LocationDetected value)?  locationDetected,TResult Function( LocationError value)?  locationError,TResult Function( Success value)?  success,TResult Function( Error value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _DetectingLocation() when detectingLocation != null:
+return initial(_that);case Loading() when loading != null:
+return loading(_that);case DetectingLocation() when detectingLocation != null:
 return detectingLocation(_that);case LocationDetected() when locationDetected != null:
-return locationDetected(_that);case _LocationError() when locationError != null:
+return locationDetected(_that);case LocationError() when locationError != null:
 return locationError(_that);case Success() when success != null:
-return success(_that);case _Error() when error != null:
+return success(_that);case Error() when error != null:
 return error(_that);case _:
   return orElse();
 
@@ -83,16 +83,16 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _DetectingLocation value)  detectingLocation,required TResult Function( LocationDetected value)  locationDetected,required TResult Function( _LocationError value)  locationError,required TResult Function( Success value)  success,required TResult Function( _Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( Loading value)  loading,required TResult Function( DetectingLocation value)  detectingLocation,required TResult Function( LocationDetected value)  locationDetected,required TResult Function( LocationError value)  locationError,required TResult Function( Success value)  success,required TResult Function( Error value)  error,}){
 final _that = this;
 switch (_that) {
 case _Initial():
-return initial(_that);case _Loading():
-return loading(_that);case _DetectingLocation():
+return initial(_that);case Loading():
+return loading(_that);case DetectingLocation():
 return detectingLocation(_that);case LocationDetected():
-return locationDetected(_that);case _LocationError():
+return locationDetected(_that);case LocationError():
 return locationError(_that);case Success():
-return success(_that);case _Error():
+return success(_that);case Error():
 return error(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -110,16 +110,16 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _DetectingLocation value)?  detectingLocation,TResult? Function( LocationDetected value)?  locationDetected,TResult? Function( _LocationError value)?  locationError,TResult? Function( Success value)?  success,TResult? Function( _Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( Loading value)?  loading,TResult? Function( DetectingLocation value)?  detectingLocation,TResult? Function( LocationDetected value)?  locationDetected,TResult? Function( LocationError value)?  locationError,TResult? Function( Success value)?  success,TResult? Function( Error value)?  error,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _DetectingLocation() when detectingLocation != null:
+return initial(_that);case Loading() when loading != null:
+return loading(_that);case DetectingLocation() when detectingLocation != null:
 return detectingLocation(_that);case LocationDetected() when locationDetected != null:
-return locationDetected(_that);case _LocationError() when locationError != null:
+return locationDetected(_that);case LocationError() when locationError != null:
 return locationError(_that);case Success() when success != null:
-return success(_that);case _Error() when error != null:
+return success(_that);case Error() when error != null:
 return error(_that);case _:
   return null;
 
@@ -137,15 +137,15 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  detectingLocation,TResult Function( String city,  String country,  String phoneCountryCode)?  locationDetected,TResult Function( String error)?  locationError,TResult Function( String email,  String message)?  success,TResult Function( String error)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  detectingLocation,TResult Function( String city,  String country,  String phoneCountryCode)?  locationDetected,TResult Function( String error)?  locationError,TResult Function( String message)?  success,TResult Function( String error)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
-return loading();case _DetectingLocation() when detectingLocation != null:
+return initial();case Loading() when loading != null:
+return loading();case DetectingLocation() when detectingLocation != null:
 return detectingLocation();case LocationDetected() when locationDetected != null:
-return locationDetected(_that.city,_that.country,_that.phoneCountryCode);case _LocationError() when locationError != null:
+return locationDetected(_that.city,_that.country,_that.phoneCountryCode);case LocationError() when locationError != null:
 return locationError(_that.error);case Success() when success != null:
-return success(_that.email,_that.message);case _Error() when error != null:
+return success(_that.message);case Error() when error != null:
 return error(_that.error);case _:
   return orElse();
 
@@ -164,15 +164,15 @@ return error(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  detectingLocation,required TResult Function( String city,  String country,  String phoneCountryCode)  locationDetected,required TResult Function( String error)  locationError,required TResult Function( String email,  String message)  success,required TResult Function( String error)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  detectingLocation,required TResult Function( String city,  String country,  String phoneCountryCode)  locationDetected,required TResult Function( String error)  locationError,required TResult Function( String message)  success,required TResult Function( String error)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
-return initial();case _Loading():
-return loading();case _DetectingLocation():
+return initial();case Loading():
+return loading();case DetectingLocation():
 return detectingLocation();case LocationDetected():
-return locationDetected(_that.city,_that.country,_that.phoneCountryCode);case _LocationError():
+return locationDetected(_that.city,_that.country,_that.phoneCountryCode);case LocationError():
 return locationError(_that.error);case Success():
-return success(_that.email,_that.message);case _Error():
+return success(_that.message);case Error():
 return error(_that.error);case _:
   throw StateError('Unexpected subclass');
 
@@ -190,15 +190,15 @@ return error(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  detectingLocation,TResult? Function( String city,  String country,  String phoneCountryCode)?  locationDetected,TResult? Function( String error)?  locationError,TResult? Function( String email,  String message)?  success,TResult? Function( String error)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  detectingLocation,TResult? Function( String city,  String country,  String phoneCountryCode)?  locationDetected,TResult? Function( String error)?  locationError,TResult? Function( String message)?  success,TResult? Function( String error)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
-return loading();case _DetectingLocation() when detectingLocation != null:
+return initial();case Loading() when loading != null:
+return loading();case DetectingLocation() when detectingLocation != null:
 return detectingLocation();case LocationDetected() when locationDetected != null:
-return locationDetected(_that.city,_that.country,_that.phoneCountryCode);case _LocationError() when locationError != null:
+return locationDetected(_that.city,_that.country,_that.phoneCountryCode);case LocationError() when locationError != null:
 return locationError(_that.error);case Success() when success != null:
-return success(_that.email,_that.message);case _Error() when error != null:
+return success(_that.message);case Error() when error != null:
 return error(_that.error);case _:
   return null;
 
@@ -242,8 +242,8 @@ String toString() {
 /// @nodoc
 
 
-class _Loading implements RegisterState {
-  const _Loading();
+class Loading implements RegisterState {
+  const Loading();
   
 
 
@@ -253,7 +253,7 @@ class _Loading implements RegisterState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loading);
 }
 
 
@@ -274,8 +274,8 @@ String toString() {
 /// @nodoc
 
 
-class _DetectingLocation implements RegisterState {
-  const _DetectingLocation();
+class DetectingLocation implements RegisterState {
+  const DetectingLocation();
   
 
 
@@ -285,7 +285,7 @@ class _DetectingLocation implements RegisterState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DetectingLocation);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DetectingLocation);
 }
 
 
@@ -376,8 +376,8 @@ as String,
 /// @nodoc
 
 
-class _LocationError implements RegisterState {
-  const _LocationError(this.error);
+class LocationError implements RegisterState {
+  const LocationError(this.error);
   
 
  final  String error;
@@ -386,13 +386,13 @@ class _LocationError implements RegisterState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$LocationErrorCopyWith<_LocationError> get copyWith => __$LocationErrorCopyWithImpl<_LocationError>(this, _$identity);
+$LocationErrorCopyWith<LocationError> get copyWith => _$LocationErrorCopyWithImpl<LocationError>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LocationError&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LocationError&&(identical(other.error, error) || other.error == error));
 }
 
 
@@ -408,8 +408,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$LocationErrorCopyWith<$Res> implements $RegisterStateCopyWith<$Res> {
-  factory _$LocationErrorCopyWith(_LocationError value, $Res Function(_LocationError) _then) = __$LocationErrorCopyWithImpl;
+abstract mixin class $LocationErrorCopyWith<$Res> implements $RegisterStateCopyWith<$Res> {
+  factory $LocationErrorCopyWith(LocationError value, $Res Function(LocationError) _then) = _$LocationErrorCopyWithImpl;
 @useResult
 $Res call({
  String error
@@ -420,17 +420,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$LocationErrorCopyWithImpl<$Res>
-    implements _$LocationErrorCopyWith<$Res> {
-  __$LocationErrorCopyWithImpl(this._self, this._then);
+class _$LocationErrorCopyWithImpl<$Res>
+    implements $LocationErrorCopyWith<$Res> {
+  _$LocationErrorCopyWithImpl(this._self, this._then);
 
-  final _LocationError _self;
-  final $Res Function(_LocationError) _then;
+  final LocationError _self;
+  final $Res Function(LocationError) _then;
 
 /// Create a copy of RegisterState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
-  return _then(_LocationError(
+  return _then(LocationError(
 null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -443,10 +443,9 @@ as String,
 
 
 class Success implements RegisterState {
-  const Success({required this.email, required this.message});
+  const Success(this.message);
   
 
- final  String email;
  final  String message;
 
 /// Create a copy of RegisterState
@@ -459,16 +458,16 @@ $SuccessCopyWith<Success> get copyWith => _$SuccessCopyWithImpl<Success>(this, _
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Success&&(identical(other.email, email) || other.email == email)&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Success&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,message);
+int get hashCode => Object.hash(runtimeType,message);
 
 @override
 String toString() {
-  return 'RegisterState.success(email: $email, message: $message)';
+  return 'RegisterState.success(message: $message)';
 }
 
 
@@ -479,7 +478,7 @@ abstract mixin class $SuccessCopyWith<$Res> implements $RegisterStateCopyWith<$R
   factory $SuccessCopyWith(Success value, $Res Function(Success) _then) = _$SuccessCopyWithImpl;
 @useResult
 $Res call({
- String email, String message
+ String message
 });
 
 
@@ -496,10 +495,9 @@ class _$SuccessCopyWithImpl<$Res>
 
 /// Create a copy of RegisterState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? email = null,Object? message = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
   return _then(Success(
-email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -510,8 +508,8 @@ as String,
 /// @nodoc
 
 
-class _Error implements RegisterState {
-  const _Error(this.error);
+class Error implements RegisterState {
+  const Error(this.error);
   
 
  final  String error;
@@ -520,13 +518,13 @@ class _Error implements RegisterState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$identity);
+$ErrorCopyWith<Error> get copyWith => _$ErrorCopyWithImpl<Error>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Error&&(identical(other.error, error) || other.error == error));
 }
 
 
@@ -542,8 +540,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$ErrorCopyWith<$Res> implements $RegisterStateCopyWith<$Res> {
-  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
+abstract mixin class $ErrorCopyWith<$Res> implements $RegisterStateCopyWith<$Res> {
+  factory $ErrorCopyWith(Error value, $Res Function(Error) _then) = _$ErrorCopyWithImpl;
 @useResult
 $Res call({
  String error
@@ -554,17 +552,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$ErrorCopyWithImpl<$Res>
-    implements _$ErrorCopyWith<$Res> {
-  __$ErrorCopyWithImpl(this._self, this._then);
+class _$ErrorCopyWithImpl<$Res>
+    implements $ErrorCopyWith<$Res> {
+  _$ErrorCopyWithImpl(this._self, this._then);
 
-  final _Error _self;
-  final $Res Function(_Error) _then;
+  final Error _self;
+  final $Res Function(Error) _then;
 
 /// Create a copy of RegisterState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
-  return _then(_Error(
+  return _then(Error(
 null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String,
   ));

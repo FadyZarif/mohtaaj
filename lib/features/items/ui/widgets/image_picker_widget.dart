@@ -12,7 +12,6 @@ class ImagePickerWidget extends StatelessWidget {
   final VoidCallback onPickImages;
   final VoidCallback onPickFromCamera;
   final Function(int index) onRemoveImage;
-  final int maxImages;
 
   const ImagePickerWidget({
     super.key,
@@ -20,32 +19,16 @@ class ImagePickerWidget extends StatelessWidget {
     required this.onPickImages,
     required this.onPickFromCamera,
     required this.onRemoveImage,
-    this.maxImages = 8,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool canAddMore = images.length < maxImages;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'الصور *',
-              style: TextStyles.font16BlackSemiBold,
-            ),
-            Text(
-              '${images.length}/$maxImages',
-              style: TextStyles.font12BlackMedium.copyWith(
-                color: images.length >= maxImages
-                    ? ColorsManager.error
-                    : ColorsManager.textSecondary,
-              ),
-            ),
-          ],
+        Text(
+          'الصور *',
+          style: TextStyles.font16BlackSemiBold,
         ),
         verticalSpace(8),
         SizedBox(
@@ -53,11 +36,9 @@ class ImagePickerWidget extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              // Add Image Button - only show if not at max
-              if (canAddMore) ...[
-                _buildAddImageButton(context),
-                horizontalSpace(12),
-              ],
+              // Add Image Button
+              _buildAddImageButton(context),
+              horizontalSpace(12),
               // Selected Images
               ...images.asMap().entries.map((entry) {
                 return Padding(
@@ -68,34 +49,6 @@ class ImagePickerWidget extends StatelessWidget {
             ],
           ),
         ),
-        if (images.length >= maxImages) ...[
-          verticalSpace(8),
-          Container(
-            padding: EdgeInsets.all(8.w),
-            decoration: BoxDecoration(
-              color: ColorsManager.warning.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.info_outline,
-                  size: 16.sp,
-                  color: ColorsManager.warning,
-                ),
-                horizontalSpace(8),
-                Expanded(
-                  child: Text(
-                    'تم الوصول للحد الأقصى من الصور ($maxImages صور)',
-                    style: TextStyles.font12BlackMedium.copyWith(
-                      color: ColorsManager.warning,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ],
     );
   }

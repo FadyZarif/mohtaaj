@@ -85,7 +85,7 @@ class PhoneTextFieldState extends State<PhoneTextField> {
               }
             },
             initialSelection: _selectedCode,
-            favorite: const ['+20', '+966', '+971'],
+            favorite: LocationData.codeToDial.values.toList(),
             showCountryOnly: false,
             showOnlyCountryWhenClosed: false,
             alignLeft: false,

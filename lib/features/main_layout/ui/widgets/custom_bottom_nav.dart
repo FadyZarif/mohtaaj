@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theming/colors.dart';
-import '../../../../core/theming/styles.dart';
 
 class CustomBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -154,11 +153,7 @@ class CustomBottomNav extends StatelessWidget {
             ),
           ],
         ),
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 28.sp,
-        ),
+        child: Icon(Icons.add, color: Colors.white, size: 28.sp),
       ),
     );
   }

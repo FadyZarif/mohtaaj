@@ -21,7 +21,7 @@ abstract class RegisterResponse with _$RegisterResponse {
 abstract class RegisterData with _$RegisterData {
   const factory RegisterData({
     required UserModel user,
-    required TokensModel tokens,
+    required String message,
   }) = _RegisterData;
 
   factory RegisterData.fromJson(Map<String, dynamic> json) =>

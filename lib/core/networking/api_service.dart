@@ -3,10 +3,19 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:mohtaaj/features/auth/data/models/refresh_token_request.dart';
 import 'package:retrofit/retrofit.dart';
+import '../../features/auth/data/models/check_reset_code_request.dart';
+import '../../features/auth/data/models/check_reset_code_response.dart';
+import '../../features/auth/data/models/forgot_password_request.dart';
+import '../../features/auth/data/models/forgot_password_response.dart';
 import '../../features/auth/data/models/refresh_token_response.dart';
 import '../../features/auth/data/models/register_request.dart';
 import '../../features/auth/data/models/register_response.dart';
+import '../../features/auth/data/models/reset_password_request.dart';
+import '../../features/auth/data/models/reset_password_response.dart';
+import '../../features/auth/data/models/verify_email_request.dart';
+import '../../features/auth/data/models/verify_email_response.dart';
 import '../../features/categories/data/models/categories_response.dart';
+import '../../features/chats/data/models/chat_model.dart';
 import '../../features/favorites/data/models/add_favorite_response.dart';
 import '../../features/favorites/data/models/check_favorite_response.dart';
 import '../../features/favorites/data/models/favorite_count_response.dart';
@@ -23,6 +32,7 @@ import '../../features/profile/data/models/rate_user_response.dart';
 import '../../features/profile/data/models/update_profile_request.dart';
 import '../../features/profile/data/models/user_ratings_response.dart';
 import '../../features/profile/data/models/user_response.dart';
+import '../../features/reports/data/models/report_model.dart';
 import 'api_constants.dart';
 import '../../features/auth/data/models/login_request.dart';
 import '../../features/auth/data/models/login_response.dart';
@@ -49,15 +59,25 @@ abstract class ApiService {
   @POST(ApiConstants.logout)
   Future<void> logout(@Body() Map<String, dynamic> body);
 
-  /// TODO
   @POST(ApiConstants.forgotPassword)
-  Future<dynamic> forgotPassword(
-    @Body() Map<String, dynamic> forgotPasswordRequest,
+  Future<ForgotPasswordResponse> forgotPassword(
+    @Body() ForgotPasswordRequest request,
   );
 
-  /// TODO
+  @POST(ApiConstants.checkResetCode)
+  Future<CheckResetCodeResponse> checkResetCode(
+    @Body() CheckResetCodeRequest request,
+  );
+
+  @PATCH(ApiConstants.resetPassword)
+  Future<ResetPasswordResponse> resetPassword(
+    @Body() ResetPasswordRequest request,
+  );
+
   @POST(ApiConstants.verifyEmail)
-  Future<dynamic> verifyEmail(@Body() Map<String, dynamic> verifyEmailRequest);
+  Future<VerifyEmailResponse> verifyEmail(
+      @Body() VerifyEmailRequest request,
+      );
 
   // ========================== Users ==========================
 
@@ -78,24 +98,24 @@ abstract class ApiService {
   // Get user items
   @GET('${ApiConstants.users}/{userId}/items')
   Future<ItemsResponse> getUserItems(
-      @Path('userId') String userId,
-      @Queries() ItemsQueries? queries,
-      );
+    @Path('userId') String userId,
+    @Queries() ItemsQueries? queries,
+  );
 
   // Get user ratings
   @GET('${ApiConstants.users}/{userId}/ratings')
   Future<UserRatingsResponse> getUserRatings(
-      @Path('userId') String userId,
-      @Query('page') int? page,
-      @Query('limit') int? limit,
-      );
+    @Path('userId') String userId,
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+  );
 
   // Rate user
   @POST('${ApiConstants.users}/{userId}/rate')
   Future<RateUserResponse> rateUser(
-      @Path('userId') String userId,
-      @Body() RateUserRequest request,
-      );
+    @Path('userId') String userId,
+    @Body() RateUserRequest request,
+  );
 
   // ========================== Items ==========================
 
@@ -132,36 +152,30 @@ abstract class ApiService {
   //   @Queries() Map<String, dynamic>? queries,
   // );
 
+  // ========================== Authenticated Endpoints Items ==========================
+
   // Get My Items
   @GET(ApiConstants.myItems)
-  Future<ItemsResponse> getMyItems(
-      @Queries() ItemsQueries? queries,
-      );
+  Future<ItemsResponse> getMyItems(@Queries() ItemsQueries? queries);
 
   // Create Item
   @POST(ApiConstants.items)
-  Future<ItemDetailsResponse> createItem(
-      @Body() CreateItemRequest request,
-  );
+  Future<ItemDetailsResponse> createItem(@Body() CreateItemRequest request);
 
   // Update Item
   @PATCH('${ApiConstants.items}/{itemId}')
   Future<ItemDetailsResponse> updateItem(
-      @Path('itemId') String itemId,
-      @Body() UpdateItemRequest request,
+    @Path('itemId') String itemId,
+    @Body() UpdateItemRequest request,
   );
 
   // Delete Item
   @DELETE('${ApiConstants.items}/{itemId}')
-  Future<void> deleteItem(
-  @Path('itemId') String itemId,
-  );
+  Future<void> deleteItem(@Path('itemId') String itemId);
 
   // Close Item
   @POST('${ApiConstants.items}/{itemId}/close')
-  Future<ItemDetailsResponse> closeItem(
-  @Path('itemId') String itemId,
-  );
+  Future<ItemDetailsResponse> closeItem(@Path('itemId') String itemId);
 
   // ========================== Categories ==========================
 
@@ -186,9 +200,9 @@ abstract class ApiService {
 
   @POST('${ApiConstants.favorites}/{itemId}')
   Future<AddFavoriteResponse> addToFavorites(
-      @Path('itemId') String itemId,
-      @Body() Map<String, dynamic> body,
-      );
+    @Path('itemId') String itemId,
+    @Body() Map<String, dynamic> body,
+  );
 
   @DELETE('${ApiConstants.favorites}/{itemId}')
   Future<RemoveFavoriteResponse> removeFromFavorites(
@@ -203,6 +217,59 @@ abstract class ApiService {
 
   @GET(ApiConstants.favorites)
   Future<FavoritesResponse> getMyFavorites(@Queries() ItemsQueries queries);
+
+  // ========================== Reports ==========================
+  @POST(ApiConstants.reports)
+  Future<CreateReportResponse> createReport(
+    @Body() CreateReportRequest reportRequest,
+  );
+
+  @GET(ApiConstants.myReports)
+  Future<MyReportsResponse> getMyReports({
+    @Query('page') int page = 1,
+    @Query('limit') int limit = 20,
+  });
+
+  // ========================== Chats ==========================
+
+  @POST(ApiConstants.chats)
+  Future<ChatResponse> createChat(@Body() CreateChatRequest request);
+
+  @GET(ApiConstants.chats)
+  Future<ChatsResponse> getChats({
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+    @Query('search') String? search,
+  });
+
+  @GET('${ApiConstants.chats}/{chatId}')
+  Future<ChatResponse> getChatById(@Path('chatId') String chatId);
+
+  @POST('${ApiConstants.chats}/messages')
+  Future<MessageResponse> sendMessage(@Body() SendMessageRequest request);
+
+  @GET('${ApiConstants.chats}/{chatId}/messages')
+  Future<MessagesResponse> getMessages(
+    @Path('chatId') String chatId, {
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+    @Query('before') String? before,
+  });
+
+  @POST('${ApiConstants.chats}/{chatId}/read')
+  Future<CountResponse> markAsRead(@Path('chatId') String chatId);
+
+  @GET(ApiConstants.unreadCount)
+  Future<CountResponse> getUnreadCount();
+
+  @PATCH('${ApiConstants.chats}/messages/{messageId}')
+  Future<MessageResponse> editMessage(
+    @Path('messageId') String messageId,
+    @Body() EditMessageRequest request,
+  );
+
+  @DELETE('${ApiConstants.chats}/messages/{messageId}')
+  Future<void> deleteMessage(@Path('messageId') String messageId);
 
   // ========================== Offers ==========================
 
@@ -240,16 +307,16 @@ abstract class ApiService {
   @POST(ApiConstants.uploadImage)
   @MultiPart()
   Future<UploadImageResponse> uploadImage(
-  @Part(name: 'image') File image,
-  @Part(name: 'folder') String? folder,
+    @Part(name: 'image') File image,
+    @Part(name: 'folder') String? folder,
   );
 
-// Upload Multiple Images
+  // Upload Multiple Images
   @POST(ApiConstants.uploadImages)
   @MultiPart()
   Future<UploadImagesResponse> uploadImages(
-  @Part(name: 'images') List<File> images,
-  @Part(name: 'folder') String? folder,
+    @Part(name: 'images') List<File> images,
+    @Part(name: 'folder') String? folder,
   );
 
   // ========================== Badges ==========================

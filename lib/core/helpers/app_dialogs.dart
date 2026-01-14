@@ -10,7 +10,6 @@ import '../theming/styles.dart';
 import 'extensions.dart';
 
 class AppDialogs {
-
   static void showLoadingDialog(BuildContext context) {
     // Implementation for showing a loading dialog
     showDialog(
@@ -20,9 +19,7 @@ class AppDialogs {
         return Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
-              CircularProgressIndicator(),
-            ],
+            children: const [CircularProgressIndicator()],
           ),
         );
       },
@@ -45,10 +42,7 @@ class AppDialogs {
               size: 24.sp,
             ),
             horizontalSpace(8),
-            Text(
-              'تسجيل الدخول مطلوب',
-              style: TextStyles.font18BlackBold,
-            ),
+            Text('تسجيل الدخول مطلوب', style: TextStyles.font18BlackBold),
           ],
         ),
         content: Text(
@@ -58,15 +52,12 @@ class AppDialogs {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(
-              'إلغاء',
-              style: TextStyles.font14GreyMedium,
-            ),
+            child: Text('إلغاء', style: TextStyles.font14GreyMedium),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              context.pushNamed(Routes.loginScreen);
+              context.pushReplacementNamed(Routes.loginScreen);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: ColorsManager.mainColor,
@@ -74,10 +65,7 @@ class AppDialogs {
                 borderRadius: BorderRadius.circular(8.r),
               ),
             ),
-            child: Text(
-              'تسجيل الدخول',
-              style: TextStyles.font14WhiteMedium,
-            ),
+            child: Text('تسجيل الدخول', style: TextStyles.font14WhiteMedium),
           ),
         ],
       ),
@@ -91,10 +79,7 @@ class AppDialogs {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.r),
         ),
-        title: Text(
-          'تسجيل الخروج',
-          style: TextStyles.font18BlackBold,
-        ),
+        title: Text('تسجيل الخروج', style: TextStyles.font18BlackBold),
         content: Text(
           'هل أنت متأكد من تسجيل الخروج؟',
           style: TextStyles.font14GreyRegular,
@@ -102,10 +87,7 @@ class AppDialogs {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: Text(
-              'إلغاء',
-              style: TextStyles.font14GreyMedium,
-            ),
+            child: Text('إلغاء', style: TextStyles.font14GreyMedium),
           ),
           ElevatedButton(
             onPressed: () {
@@ -118,15 +100,10 @@ class AppDialogs {
                 borderRadius: BorderRadius.circular(8.r),
               ),
             ),
-            child: Text(
-              'تسجيل الخروج',
-              style: TextStyles.font14WhiteMedium,
-            ),
+            child: Text('تسجيل الخروج', style: TextStyles.font14WhiteMedium),
           ),
         ],
       ),
     );
   }
-
-
 }

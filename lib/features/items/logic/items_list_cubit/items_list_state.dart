@@ -28,6 +28,6 @@ abstract class ItemsListState with _$ItemsListState {
     // Location-based search
     double? latitude,
     double? longitude,
-    @Default(5.0) double radiusKm, // Default 5km radius
+    @Default(1.0) double radiusKm, // Default 5km radius
   }) = _ItemsListState;
 }

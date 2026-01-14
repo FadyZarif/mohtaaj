@@ -16,7 +16,7 @@ class LocationPickerDialog extends StatefulWidget {
     super.key,
     this.initialLatitude,
     this.initialLongitude,
-    this.initialRadius = 5.0,
+    this.initialRadius = 1.0,
   });
 
   @override
@@ -26,7 +26,7 @@ class LocationPickerDialog extends StatefulWidget {
 class _LocationPickerDialogState extends State<LocationPickerDialog> {
   final MapController _mapController = MapController();
   LatLng? _selectedLocation;
-  double _radius = 5.0; // km
+  double _radius = 1.0; // km
   bool _isLoadingCurrentLocation = false;
 
   @override
@@ -34,6 +34,9 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
     super.initState();
     if (widget.initialLatitude != null && widget.initialLongitude != null) {
       _selectedLocation = LatLng(widget.initialLatitude!, widget.initialLongitude!);
+    } else {
+      // إذا مفيش موقع محدد مسبقاً، جيب الموقع الحالي تلقائياً
+      _getCurrentLocation();
     }
     _radius = widget.initialRadius;
   }
@@ -67,7 +70,9 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
 
       // Get current position
       final position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
 
       setState(() {
@@ -116,51 +121,87 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12.r),
-                child: FlutterMap(
-                  mapController: _mapController,
-                  options: MapOptions(
-                    initialCenter: _selectedLocation ?? const LatLng(30.0444, 31.2357), // Cairo default
-                    initialZoom: 13,
-                    onTap: (tapPosition, point) {
-                      setState(() {
-                        _selectedLocation = point;
-                      });
-                    },
-                  ),
+                child: Stack(
                   children: [
-                    TileLayer(
-                      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      userAgentPackageName: 'com.mohtaaj.app',
-                    ),
-                    if (_selectedLocation != null) ...[
-                      CircleLayer(
-                        circles: [
-                          CircleMarker(
-                            point: _selectedLocation!,
-                            radius: _radius * 1000, // Convert km to meters
-                            useRadiusInMeter: true,
-                            color: ColorsManager.mainColor.withValues(alpha: 0.2),
-                            borderColor: ColorsManager.mainColor,
-                            borderStrokeWidth: 2,
+                    FlutterMap(
+                      mapController: _mapController,
+                      options: MapOptions(
+                        initialCenter: _selectedLocation ?? const LatLng(30.0444, 31.2357), // Cairo default
+                        initialZoom: 13,
+                        onTap: (tapPosition, point) {
+                          setState(() {
+                            _selectedLocation = point;
+                          });
+                        },
+                      ),
+                      children: [
+                        TileLayer(
+                          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          userAgentPackageName: 'com.mohtaaj.app',
+                        ),
+                        if (_selectedLocation != null) ...[
+                          CircleLayer(
+                            circles: [
+                              CircleMarker(
+                                point: _selectedLocation!,
+                                radius: _radius * 1000, // Convert km to meters
+                                useRadiusInMeter: true,
+                                color: ColorsManager.mainColor.withValues(alpha: 0.2),
+                                borderColor: ColorsManager.mainColor,
+                                borderStrokeWidth: 2,
+                              ),
+                            ],
+                          ),
+                          MarkerLayer(
+                            markers: [
+                              Marker(
+                                point: _selectedLocation!,
+                                width: 75,
+                                height: 75,
+                                alignment: Alignment.center, // Center the pin on the selected point
+                                child: Padding(
+                                  padding: EdgeInsetsGeometry.only(
+                                    bottom: 25,
+                                  ),
+                                  child: Image.asset(
+                                    'assets/app_icon.png',
+                                    width: 25,
+                                    height: 25,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
-                      ),
-                      MarkerLayer(
-                        markers: [
-                          Marker(
-                            point: _selectedLocation!,
-                            width: 50.w,
-                            height: 50.w,
-                            alignment: Alignment.topCenter, // Center the pin on the selected point
-                            child: Image.asset(
-                              'assets/app_icon.png',
-                              width: 50.w,
-                              height: 50.w,
+                      ],
+                    ),
+                    // Loading indicator عند جلب الموقع الحالي
+                    if (_isLoadingCurrentLocation)
+                      Container(
+                        color: Colors.black.withValues(alpha: 0.3),
+                        child: Center(
+                          child: Container(
+                            padding: EdgeInsets.all(20.w),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const CircularProgressIndicator(
+                                  color: ColorsManager.mainColor,
+                                ),
+                                verticalSpace(12),
+                                Text(
+                                  'جارٍ تحديد موقعك...',
+                                  style: TextStyles.font14BlackMedium,
+                                ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ],
                   ],
                 ),
               ),

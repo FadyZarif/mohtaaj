@@ -228,7 +228,7 @@ return $default(_that.searchQuery,_that.items,_that.isLoading,_that.isLoadingMor
 
 
 class _ItemsListState implements ItemsListState {
-  const _ItemsListState({this.searchQuery = '', final  List<ItemModel> items = const [], this.isLoading = false, this.isLoadingMore = false, this.error, this.currentPage = 1, this.hasMoreItems = false, this.categoryId, this.selectedCountry, this.selectedCity, this.minPrice, this.maxPrice, this.condition, this.isFreeOnly = false, this.sortBy = SortBy.createdAt, this.sortOrder = SortOrder.desc, this.latitude, this.longitude, this.radiusKm = 5.0}): _items = items;
+  const _ItemsListState({this.searchQuery = '', final  List<ItemModel> items = const [], this.isLoading = false, this.isLoadingMore = false, this.error, this.currentPage = 1, this.hasMoreItems = false, this.categoryId, this.selectedCountry, this.selectedCity, this.minPrice, this.maxPrice, this.condition, this.isFreeOnly = false, this.sortBy = SortBy.createdAt, this.sortOrder = SortOrder.desc, this.latitude, this.longitude, this.radiusKm = 1.0}): _items = items;
   
 
 @override@JsonKey() final  String searchQuery;

@@ -89,7 +89,8 @@ extension ItemStatusX on ItemStatus {
 abstract class ItemModel with _$ItemModel {
   const factory ItemModel({
     required String id,
-    String? ownerId,  // 👈 خليه optional
+    String? ownerId, // 👈 خليه optional
+    String? buyerId,
     required String title,
     required String description,
     String? categoryId,  // 👈 خليه optional

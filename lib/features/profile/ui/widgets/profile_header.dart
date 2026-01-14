@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/helpers/spacing.dart';
@@ -22,7 +23,7 @@ class ProfileHeader extends StatelessWidget {
           radius: 50.r,
           backgroundColor: ColorsManager.mainColor.withOpacity(0.1),
           backgroundImage: user.avatarUrl != null
-              ? NetworkImage(user.avatarUrl!)
+              ? CachedNetworkImageProvider(user.avatarUrl!)
               : null,
           child: user.avatarUrl == null
               ? Icon(

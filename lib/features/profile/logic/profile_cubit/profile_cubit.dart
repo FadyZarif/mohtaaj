@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../../../core/networking/api_error_handler.dart';
@@ -39,6 +40,21 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(ProfileState.error(
         apiError.message ?? 'حدث خطأ في تحديث البيانات',
       ));
+    }
+  }
+
+  /// Upload avatar image
+  Future<String?> uploadAvatar(File imageFile) async {
+    try {
+      final response = await _apiService.uploadImage(
+        imageFile,
+        'avatars', // Folder name
+      );
+      return response.data.url;
+    } catch (error) {
+      final apiError = ApiErrorHandler.handle(error);
+      emit(ProfileState.error(apiError.message));
+      return null;
     }
   }
 

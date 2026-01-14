@@ -15,9 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CreateItemRequest {
 
- String get title; String get description; String get categoryId; ItemCondition? get condition; List<String> get images; String get city; double? get geoLat;// 👈 غير من String لـ double
- double? get geoLng;// 👈 غير من String لـ double
- double? get price; bool get isFree;
+ String get title; String get description; String get categoryId; ItemCondition? get condition; List<String> get images; String get city;@JsonKey(includeIfNull: false) double? get geoLat;@JsonKey(includeIfNull: false) double? get geoLng; double? get price; bool get isFree;
 /// Create a copy of CreateItemRequest
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -50,7 +48,7 @@ abstract mixin class $CreateItemRequestCopyWith<$Res>  {
   factory $CreateItemRequestCopyWith(CreateItemRequest value, $Res Function(CreateItemRequest) _then) = _$CreateItemRequestCopyWithImpl;
 @useResult
 $Res call({
- String title, String description, String categoryId, ItemCondition? condition, List<String> images, String city, double? geoLat, double? geoLng, double? price, bool isFree
+ String title, String description, String categoryId, ItemCondition? condition, List<String> images, String city,@JsonKey(includeIfNull: false) double? geoLat,@JsonKey(includeIfNull: false) double? geoLng, double? price, bool isFree
 });
 
 
@@ -164,7 +162,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  String description,  String categoryId,  ItemCondition? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng,  double? price,  bool isFree)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  String description,  String categoryId,  ItemCondition? condition,  List<String> images,  String city, @JsonKey(includeIfNull: false)  double? geoLat, @JsonKey(includeIfNull: false)  double? geoLng,  double? price,  bool isFree)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateItemRequest() when $default != null:
 return $default(_that.title,_that.description,_that.categoryId,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree);case _:
@@ -185,7 +183,7 @@ return $default(_that.title,_that.description,_that.categoryId,_that.condition,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  String description,  String categoryId,  ItemCondition? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng,  double? price,  bool isFree)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  String description,  String categoryId,  ItemCondition? condition,  List<String> images,  String city, @JsonKey(includeIfNull: false)  double? geoLat, @JsonKey(includeIfNull: false)  double? geoLng,  double? price,  bool isFree)  $default,) {final _that = this;
 switch (_that) {
 case _CreateItemRequest():
 return $default(_that.title,_that.description,_that.categoryId,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree);case _:
@@ -205,7 +203,7 @@ return $default(_that.title,_that.description,_that.categoryId,_that.condition,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  String description,  String categoryId,  ItemCondition? condition,  List<String> images,  String city,  double? geoLat,  double? geoLng,  double? price,  bool isFree)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  String description,  String categoryId,  ItemCondition? condition,  List<String> images,  String city, @JsonKey(includeIfNull: false)  double? geoLat, @JsonKey(includeIfNull: false)  double? geoLng,  double? price,  bool isFree)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateItemRequest() when $default != null:
 return $default(_that.title,_that.description,_that.categoryId,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree);case _:
@@ -220,7 +218,7 @@ return $default(_that.title,_that.description,_that.categoryId,_that.condition,_
 
 @JsonSerializable(includeIfNull: false)
 class _CreateItemRequest implements CreateItemRequest {
-  const _CreateItemRequest({required this.title, required this.description, required this.categoryId, this.condition, required final  List<String> images, required this.city, this.geoLat, this.geoLng, this.price, required this.isFree}): _images = images;
+  const _CreateItemRequest({required this.title, required this.description, required this.categoryId, this.condition, required final  List<String> images, required this.city, @JsonKey(includeIfNull: false) this.geoLat, @JsonKey(includeIfNull: false) this.geoLng, this.price, required this.isFree}): _images = images;
   factory _CreateItemRequest.fromJson(Map<String, dynamic> json) => _$CreateItemRequestFromJson(json);
 
 @override final  String title;
@@ -235,10 +233,8 @@ class _CreateItemRequest implements CreateItemRequest {
 }
 
 @override final  String city;
-@override final  double? geoLat;
-// 👈 غير من String لـ double
-@override final  double? geoLng;
-// 👈 غير من String لـ double
+@override@JsonKey(includeIfNull: false) final  double? geoLat;
+@override@JsonKey(includeIfNull: false) final  double? geoLng;
 @override final  double? price;
 @override final  bool isFree;
 
@@ -275,7 +271,7 @@ abstract mixin class _$CreateItemRequestCopyWith<$Res> implements $CreateItemReq
   factory _$CreateItemRequestCopyWith(_CreateItemRequest value, $Res Function(_CreateItemRequest) _then) = __$CreateItemRequestCopyWithImpl;
 @override @useResult
 $Res call({
- String title, String description, String categoryId, ItemCondition? condition, List<String> images, String city, double? geoLat, double? geoLng, double? price, bool isFree
+ String title, String description, String categoryId, ItemCondition? condition, List<String> images, String city,@JsonKey(includeIfNull: false) double? geoLat,@JsonKey(includeIfNull: false) double? geoLng, double? price, bool isFree
 });
 
 

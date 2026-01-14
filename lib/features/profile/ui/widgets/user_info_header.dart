@@ -1,5 +1,6 @@
 // features/user_profile/ui/widgets/user_info_header.dart
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/helpers/spacing.dart';
@@ -27,19 +28,42 @@ class UserInfoHeader extends StatelessWidget {
           // Avatar with verified badge
           Stack(
             children: [
-              CircleAvatar(
-                radius: 50.r,
-                backgroundColor: ColorsManager.mainColor.withOpacity(0.1),
-                backgroundImage: user.avatarUrl != null
-                    ? NetworkImage(user.avatarUrl!)
-                    : null,
-                child: user.avatarUrl == null
-                    ? Icon(
-                  Icons.person,
-                  size: 50.sp,
-                  color: ColorsManager.mainColor,
-                )
-                    : null,
+
+              // Avatar with verified badge
+              Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 50.r,
+                    backgroundColor: ColorsManager.mainColor.withOpacity(0.1),
+                    backgroundImage: user.avatarUrl != null
+                        ? CachedNetworkImageProvider(user.avatarUrl!)
+                        : null,
+                    child: user.avatarUrl == null
+                        ? Icon(
+                      Icons.person,
+                      size: 50.sp,
+                      color: ColorsManager.mainColor,
+                    )
+                        : null,
+                  ),
+                  if (user.isVerified)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(4.r),
+                        decoration: const BoxDecoration(
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.check,
+                          size: 16.sp,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                ],
               ),
               if (user.isVerified)
                 Positioned(

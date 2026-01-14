@@ -1,5 +1,6 @@
 // features/user_profile/ui/screens/user_profile_screen.dart
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -201,7 +202,7 @@ class _UserProfileScreenBody extends StatelessWidget {
                 radius: 16.r,
                 backgroundColor: ColorsManager.mainColor.withOpacity(0.1),
                 backgroundImage: rating.fromUser.avatarUrl != null
-                    ? NetworkImage(rating.fromUser.avatarUrl!)
+                    ? CachedNetworkImageProvider(rating.fromUser.avatarUrl!)
                     : null,
                 child: rating.fromUser.avatarUrl == null
                     ? Icon(

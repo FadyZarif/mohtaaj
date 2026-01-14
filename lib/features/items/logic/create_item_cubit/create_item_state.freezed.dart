@@ -14,11 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CreateItemState {
 
-<<<<<<< HEAD
- List<File> get selectedImages; List<String> get uploadedImageUrls; bool get isUploadingImages; String? get title; String? get description; String? get categoryId; ItemCondition? get condition; String? get city; double? get geoLat; double? get geoLng; double? get price; bool get isFree; bool get isSubmitting; String? get error; ItemModel? get createdItem;// For Edit Mode
-=======
  List<File> get selectedImages; List<String> get uploadedImageUrls; bool get isUploadingImages; String? get title; String? get description; String? get categoryId; ItemCondition? get condition; String? get country; String? get city; double? get geoLat; double? get geoLng; double? get price; bool get isFree; bool get isSubmitting; String? get error; ItemModel? get createdItem;// For Edit Mode
->>>>>>> development
  bool get isEditMode; String? get editingItemId; List<String> get existingImageUrls;
 /// Create a copy of CreateItemState
 /// with the given fields replaced by the non-null parameter values.

@@ -89,10 +89,7 @@ abstract class ItemModel with _$ItemModel {
   const factory ItemModel({
     required String id,
     String? ownerId, // 👈 خليه optional
-<<<<<<< HEAD
     String? buyerId,
-=======
->>>>>>> development
     required String title,
     required String description,
     String? categoryId, // 👈 خليه optional

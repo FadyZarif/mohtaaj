@@ -16,13 +16,8 @@ T _$identity<T>(T value) => value;
 mixin _$ItemModel {
 
  String get id; String? get ownerId;// 👈 خليه optional
-<<<<<<< HEAD
  String? get buyerId; String get title; String get description; String? get categoryId;// 👈 خليه optional
- ItemCategory get category; ItemCondition? get condition; List<String> get images; String get city; String? get geoLat; String? get geoLng; String? get price; bool get isFree; bool get isFeatured; ItemStatus get status; int get views; int get favoritesCount; DateTime get createdAt; DateTime? get closedAt; ItemOwner? get owner;// 👈 خليه optional
-=======
- String get title; String get description; String? get categoryId;// 👈 خليه optional
  CategoryModel get category; ItemCondition? get condition; List<String> get images; String get city; String? get geoLat; String? get geoLng; String? get price; bool get isFree; bool get isFeatured; ItemStatus get status; int get views; int get favoritesCount; DateTime get createdAt; DateTime? get closedAt; ItemOwner? get owner;// 👈 خليه optional
->>>>>>> development
 @JsonKey(name: '_count') ItemCount? get count; FavoriteInfo? get favoriteInfo;
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
@@ -56,11 +51,7 @@ abstract mixin class $ItemModelCopyWith<$Res>  {
   factory $ItemModelCopyWith(ItemModel value, $Res Function(ItemModel) _then) = _$ItemModelCopyWithImpl;
 @useResult
 $Res call({
-<<<<<<< HEAD
- String id, String? ownerId, String? buyerId, String title, String description, String? categoryId, ItemCategory category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner? owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
-=======
- String id, String? ownerId, String title, String description, String? categoryId, CategoryModel category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner? owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
->>>>>>> development
+ String id, String? ownerId, String? buyerId, String title, String description, String? categoryId, CategoryModel category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner? owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
 });
 
 
@@ -232,11 +223,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-<<<<<<< HEAD
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? ownerId,  String? buyerId,  String title,  String description,  String? categoryId,  ItemCategory category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,{required TResult orElse(),}) {final _that = this;
-=======
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? ownerId,  String title,  String description,  String? categoryId,  CategoryModel category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,{required TResult orElse(),}) {final _that = this;
->>>>>>> development
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? ownerId,  String? buyerId,  String title,  String description,  String? categoryId,  CategoryModel category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ItemModel() when $default != null:
 return $default(_that.id,_that.ownerId,_that.buyerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
@@ -257,11 +244,7 @@ return $default(_that.id,_that.ownerId,_that.buyerId,_that.title,_that.descripti
 /// }
 /// ```
 
-<<<<<<< HEAD
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? ownerId,  String? buyerId,  String title,  String description,  String? categoryId,  ItemCategory category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)  $default,) {final _that = this;
-=======
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? ownerId,  String title,  String description,  String? categoryId,  CategoryModel category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)  $default,) {final _that = this;
->>>>>>> development
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? ownerId,  String? buyerId,  String title,  String description,  String? categoryId,  CategoryModel category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)  $default,) {final _that = this;
 switch (_that) {
 case _ItemModel():
 return $default(_that.id,_that.ownerId,_that.buyerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
@@ -281,11 +264,7 @@ return $default(_that.id,_that.ownerId,_that.buyerId,_that.title,_that.descripti
 /// }
 /// ```
 
-<<<<<<< HEAD
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? ownerId,  String? buyerId,  String title,  String description,  String? categoryId,  ItemCategory category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,) {final _that = this;
-=======
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? ownerId,  String title,  String description,  String? categoryId,  CategoryModel category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,) {final _that = this;
->>>>>>> development
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? ownerId,  String? buyerId,  String title,  String description,  String? categoryId,  CategoryModel category,  ItemCondition? condition,  List<String> images,  String city,  String? geoLat,  String? geoLng,  String? price,  bool isFree,  bool isFeatured,  ItemStatus status,  int views,  int favoritesCount,  DateTime createdAt,  DateTime? closedAt,  ItemOwner? owner, @JsonKey(name: '_count')  ItemCount? count,  FavoriteInfo? favoriteInfo)?  $default,) {final _that = this;
 switch (_that) {
 case _ItemModel() when $default != null:
 return $default(_that.id,_that.ownerId,_that.buyerId,_that.title,_that.description,_that.categoryId,_that.category,_that.condition,_that.images,_that.city,_that.geoLat,_that.geoLng,_that.price,_that.isFree,_that.isFeatured,_that.status,_that.views,_that.favoritesCount,_that.createdAt,_that.closedAt,_that.owner,_that.count,_that.favoriteInfo);case _:
@@ -369,11 +348,7 @@ abstract mixin class _$ItemModelCopyWith<$Res> implements $ItemModelCopyWith<$Re
   factory _$ItemModelCopyWith(_ItemModel value, $Res Function(_ItemModel) _then) = __$ItemModelCopyWithImpl;
 @override @useResult
 $Res call({
-<<<<<<< HEAD
- String id, String? ownerId, String? buyerId, String title, String description, String? categoryId, ItemCategory category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner? owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
-=======
- String id, String? ownerId, String title, String description, String? categoryId, CategoryModel category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner? owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
->>>>>>> development
+ String id, String? ownerId, String? buyerId, String title, String description, String? categoryId, CategoryModel category, ItemCondition? condition, List<String> images, String city, String? geoLat, String? geoLng, String? price, bool isFree, bool isFeatured, ItemStatus status, int views, int favoritesCount, DateTime createdAt, DateTime? closedAt, ItemOwner? owner,@JsonKey(name: '_count') ItemCount? count, FavoriteInfo? favoriteInfo
 });
 
 

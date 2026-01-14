@@ -3,10 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-<<<<<<< HEAD
 import 'package:image_picker/image_picker.dart';
-=======
->>>>>>> development
 import '../../../../core/helpers/app_dialogs.dart';
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/location_data.dart';
@@ -239,7 +236,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 radius: 50.r,
                                 backgroundColor: ColorsManager.mainColor
                                     .withOpacity(0.1),
-<<<<<<< HEAD
                                 backgroundImage: _selectedImage != null
                                     ? FileImage(_selectedImage!)
                                     : (widget.user.avatarUrl != null
@@ -248,12 +244,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         : null),
                                 child: _selectedImage == null &&
                                         widget.user.avatarUrl == null
-=======
-                                backgroundImage: widget.user.avatarUrl != null
-                                    ? NetworkImage(widget.user.avatarUrl!)
-                                    : null,
-                                child: widget.user.avatarUrl == null
->>>>>>> development
                                     ? Icon(
                                         Icons.person,
                                         size: 50.sp,
@@ -407,16 +397,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 country: _selectedCountry!,
                                 avatarUrl: avatarUrl,
                               );
-<<<<<<< HEAD
                               context.read<ProfileCubit>().updateProfile(
                                     request,
                                   );
-=======
-
-                              context.read<ProfileCubit>().updateProfile(
-                                request,
-                              );
->>>>>>> development
                             }
                           },
                         ),

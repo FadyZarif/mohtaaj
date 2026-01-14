@@ -5,7 +5,7 @@ import '../../../../core/di/dependency_injection.dart';
 import '../../../home/ui/screens/home_screen.dart';
 import '../../../categories/ui/screens/categories_screen.dart';
 import '../../../items/ui/screens/create_item_screen.dart';
-import '../../../chats/ui/screens/chats_screen.dart';
+import '../../../chats/ui/screens/chats_list_screen.dart';
 import '../../../profile/ui/screens/profile_screen.dart';
 import '../../logic/main_layout_cubit/main_layout_cubit.dart';
 import '../../logic/main_layout_cubit/main_layout_state.dart';
@@ -36,7 +36,7 @@ class _MainLayoutBodyState extends State<_MainLayoutBody> {
     HomeScreen(),
     CategoriesScreen(),
     CreateItemScreen(),
-    ChatsScreen(),
+    ChatsListScreen(),
     ProfileScreen(),
   ];
 
@@ -48,10 +48,7 @@ class _MainLayoutBodyState extends State<_MainLayoutBody> {
     return BlocBuilder<MainLayoutCubit, MainLayoutState>(
       builder: (context, state) {
         return Scaffold(
-          body: IndexedStack(
-            index: state.currentIndex,
-            children: _screens,
-          ),
+          body: IndexedStack(index: state.currentIndex, children: _screens),
           bottomNavigationBar: CustomBottomNav(
             currentIndex: state.currentIndex,
             unreadChatsCount: state.unreadChatsCount,
@@ -82,5 +79,4 @@ class _MainLayoutBodyState extends State<_MainLayoutBody> {
     // Change tab
     cubit.changeTab(index);
   }
-
 }

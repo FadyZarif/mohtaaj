@@ -104,16 +104,20 @@ class _ProfileScreenBody extends StatelessWidget {
   }
 
   Widget _buildProfileContent(BuildContext context, user) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
-      child: Column(
-        children: [
-          verticalSpace(20),
+    return RefreshIndicator(
+      color: ColorsManager.mainColor,
+      onRefresh: () => context.read<ProfileCubit>().refresh(),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Column(
+          children: [
+            verticalSpace(20),
 
-          // Profile Header
-          ProfileHeader(user: user),
+            // Profile Header
+            ProfileHeader(user: user),
 
-          verticalSpace(24),
+            verticalSpace(24),
 
           // Info Section
           Container(
@@ -187,6 +191,18 @@ class _ProfileScreenBody extends StatelessWidget {
                   indent: 56.w,
                 ),
                 ProfileMenuItem(
+                  icon: Icons.flag_outlined,
+                  title: 'بلاغاتي',
+                  onTap: () {
+                    context.pushNamed(Routes.myReportsScreen);
+                  },
+                ),
+                Divider(
+                  color: ColorsManager.borderColor,
+                  height: 1,
+                  indent: 56.w,
+                ),
+                ProfileMenuItem(
                   icon: Icons.edit_outlined,
                   title: 'تعديل الحساب',
                   onTap: () {
@@ -199,7 +215,7 @@ class _ProfileScreenBody extends StatelessWidget {
                     );
                   },
                 ),
-                Divider(
+               /* Divider(
                   color: ColorsManager.borderColor,
                   height: 1,
                   indent: 56.w,
@@ -208,9 +224,8 @@ class _ProfileScreenBody extends StatelessWidget {
                   icon: Icons.settings_outlined,
                   title: 'الإعدادات',
                   onTap: () {
-                    // TODO: Navigate to Settings
                   },
-                ),
+                ),*/
               ],
             ),
           ),
@@ -234,38 +249,51 @@ class _ProfileScreenBody extends StatelessWidget {
           ),
 
           verticalSpace(32),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildErrorWidget(BuildContext context, String message) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return RefreshIndicator(
+      color: ColorsManager.mainColor,
+      onRefresh: () => context.read<ProfileCubit>().refresh(),
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 64.sp,
-            color: ColorsManager.error,
-          ),
-          verticalSpace(16),
-          Text(
-            message,
-            style: TextStyles.font16GreyRegular,
-            textAlign: TextAlign.center,
-          ),
-          verticalSpace(16),
-          ElevatedButton(
-            onPressed: () {
-              context.read<ProfileCubit>().getProfile();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ColorsManager.mainColor,
-            ),
-            child: Text(
-              'إعادة المحاولة',
-              style: TextStyles.font14WhiteMedium,
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 64.sp,
+                    color: ColorsManager.error,
+                  ),
+                  verticalSpace(16),
+                  Text(
+                    message,
+                    style: TextStyles.font16GreyRegular,
+                    textAlign: TextAlign.center,
+                  ),
+                  verticalSpace(16),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<ProfileCubit>().getProfile();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorsManager.mainColor,
+                    ),
+                    child: Text(
+                      'إعادة المحاولة',
+                      style: TextStyles.font14WhiteMedium,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

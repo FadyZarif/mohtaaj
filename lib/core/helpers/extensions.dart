@@ -77,7 +77,7 @@ extension DateTimeExtension on DateTime {
   }
 
   // Time ago
-  String timeAgo() {
+/*  String timeAgo() {
     final now = DateTime.now();
     final difference = now.difference(this);
 
@@ -94,7 +94,7 @@ extension DateTimeExtension on DateTime {
     } else {
       return 'الآن';
     }
-  }
+  }*/
 }
 
 extension ListExtension<T> on List<T> {

@@ -43,4 +43,9 @@ class CategoriesCubit extends Cubit<CategoriesState> {
       emit(CategoriesState.error(errorMessage));
     }
   }
+
+  // Refresh method for Pull-to-Refresh
+  Future<void> refresh() async {
+    await getCategories();
+  }
 }

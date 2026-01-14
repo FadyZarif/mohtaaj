@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mohtaaj/core/helpers/app_dialogs.dart';
-import '../../../../core/di/dependency_injection.dart';
-import '../../../../core/helpers/extensions.dart';
-import '../../../../core/helpers/location_data.dart';
-import '../../../../core/helpers/spacing.dart';
-import '../../../../core/helpers/validators.dart';
-import '../../../../core/routing/routes.dart';
-import '../../../../core/theming/colors.dart';
-import '../../../../core/theming/styles.dart';
-import '../../../core/widgets/app_button.dart';
-import '../../../core/widgets/app_text_field.dart';
-import '../data/models/register_request.dart';
-import '../logic/register_cubit/register_cubit.dart';
-import '../logic/register_cubit/register_state.dart';
-import 'widgets/password_text_field.dart';
-import 'widgets/phone_text_field.dart';
-import 'widgets/searchable_dropdown.dart';
+import '../../../../../core/di/dependency_injection.dart';
+import '../../../../../core/helpers/extensions.dart';
+import '../../../../../core/helpers/location_data.dart';
+import '../../../../../core/helpers/spacing.dart';
+import '../../../../../core/helpers/validators.dart';
+import '../../../../../core/routing/routes.dart';
+import '../../../../../core/theming/colors.dart';
+import '../../../../../core/theming/styles.dart';
+import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_text_field.dart';
+import '../../data/models/register_request.dart';
+import '../../logic/register_cubit/register_cubit.dart';
+import '../../logic/register_cubit/register_state.dart';
+import '../widgets/password_text_field.dart';
+import '../widgets/phone_text_field.dart';
+import '../widgets/searchable_dropdown.dart';
 
 
 class RegisterScreen extends StatelessWidget {
@@ -26,7 +26,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<RegisterCubit>(),
+      create: (context) => getIt<RegisterCubit>()..detectLocation(),
       child: const _RegisterScreenBody(),
     );
   }
@@ -53,15 +53,6 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
   String? _selectedCity;
   String _dial = '+20';
   String _initialCode = 'EG'; // Initial country code for phone picker
-
-  @override
-  void initState() {
-    super.initState();
-    // Auto-detect location when screen opens
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<RegisterCubit>().detectLocation();
-    });
-  }
 
   @override
   void dispose() {
@@ -102,9 +93,7 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
                 loading: () {
                   AppDialogs.showLoadingDialog(context);
                 },
-                detectingLocation: () {
-
-                },
+                detectingLocation: () {},
                 locationDetected: (city, country, phoneCountryCode) {
                   setState(() {
                     _selectedCity = city;
@@ -131,22 +120,28 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
                     _initialCode = 'EG';
                   });
                 },
-                success: (message) {
-                  context.pop(); // Close loading dialog
+                success: (email, message) {
+                  context.pop(); // Close loading
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(message),
                       backgroundColor: ColorsManager.success,
                     ),
                   );
-                  // Navigate to login
-                  context.pushReplacementNamed(Routes.loginScreen);
+                  // ✅ Navigate to email verification
+                  context.pushReplacementNamed(
+                    Routes.verifyEmailScreen,
+                    arguments: {
+                      'email': email,
+                      'fromRegister': true,
+                    },
+                  );
                 },
-                error: (error) {
-                  context.pop(); // Close loading dialog
+                error: (message) {
+                  context.pop(); // Close loading
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(error),
+                      content: Text(message),
                       backgroundColor: ColorsManager.error,
                     ),
                   );
@@ -154,8 +149,14 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
               );
             },
             builder: (context, state) {
-              final isDetectingLocation = state is DetectingLocation;
-              final isLoading = state is Loading;
+              final isDetectingLocation = state.maybeWhen(
+                detectingLocation: () => true,
+                orElse: () => false,
+              );
+              final isLoading = state.maybeWhen(
+                loading: () => true,
+                orElse: () => false,
+              );
 
               return SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -198,38 +199,6 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
                           color: ColorsManager.textSecondary,
                           size: 20.sp,
                         ),
-                      ),
-
-                      verticalSpace(20),
-
-                      // Phone Field
-                      Text(
-                        'رقم الهاتف',
-                        style: TextStyles.font14BlackSemiBold,
-                      ),
-                      verticalSpace(8),
-                      PhoneTextField(
-                        key: _phoneFieldKey,
-                        controller: _phoneController,
-                        initialCode: _initialCode,
-                        validator: AppValidators.validatePhone,
-                        onCountryChanged: (code) {
-                          _dial = code;
-                        },
-                      ),
-
-                      verticalSpace(20),
-
-                      // Password Field
-                      Text(
-                        'كلمة المرور',
-                        style: TextStyles.font14BlackSemiBold,
-                      ),
-                      verticalSpace(8),
-                      PasswordTextField(
-                        hintText: '••••••••',
-                        controller: _passwordController,
-                        validator: AppValidators.validatePassword,
                       ),
 
                       verticalSpace(20),
@@ -299,6 +268,38 @@ class _RegisterScreenBodyState extends State<_RegisterScreenBody> {
                         },
                         validator: (value) =>
                         value == null ? 'الرجاء اختيار المدينة' : null,
+                      ),
+
+                      verticalSpace(20),
+
+                      // Phone Field
+                      Text(
+                        'رقم الهاتف',
+                        style: TextStyles.font14BlackSemiBold,
+                      ),
+                      verticalSpace(8),
+                      PhoneTextField(
+                        key: _phoneFieldKey,
+                        controller: _phoneController,
+                        initialCode: _initialCode,
+                        validator: AppValidators.validatePhone,
+                        onCountryChanged: (code) {
+                          _dial = code;
+                        },
+                      ),
+
+                      verticalSpace(20),
+
+                      // Password Field
+                      Text(
+                        'كلمة المرور',
+                        style: TextStyles.font14BlackSemiBold,
+                      ),
+                      verticalSpace(8),
+                      PasswordTextField(
+                        hintText: '••••••••',
+                        controller: _passwordController,
+                        validator: AppValidators.validatePassword,
                       ),
 
                       verticalSpace(32),

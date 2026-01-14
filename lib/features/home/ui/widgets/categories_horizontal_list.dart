@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../../categories/data/models/category_model.dart';
@@ -78,12 +79,20 @@ class _CategoryItem extends StatelessWidget {
             child: category.iconUrl != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(12.r),
-                    child: Image.network(
-                      category.iconUrl!,
+                    child: CachedNetworkImage(
+                      imageUrl: category.iconUrl!,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return _buildDefaultIcon();
-                      },
+                      fadeInDuration: Duration.zero,
+                      fadeOutDuration: Duration.zero,
+                      memCacheWidth: 200,
+                      memCacheHeight: 200,
+                      placeholder: (context, url) => Center(
+                        child: CircularProgressIndicator(
+                          color: ColorsManager.mainColor,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => _buildDefaultIcon(),
                     ),
                   )
                 : _buildDefaultIcon(),

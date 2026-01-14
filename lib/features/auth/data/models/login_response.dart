@@ -20,7 +20,8 @@ abstract class LoginResponse with _$LoginResponse {
 abstract class LoginData with _$LoginData {
   const factory LoginData({
     required UserModel user,
-    required TokensModel tokens,
+    TokensModel? tokens, // ✅ Optional - موجود بس لو verified
+    bool? requiresVerification, // ✅ أضف flag
   }) = _LoginData;
 
   factory LoginData.fromJson(Map<String, dynamic> json) =>

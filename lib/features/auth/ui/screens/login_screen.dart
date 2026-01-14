@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mohtaaj/core/helpers/spacing.dart';
-import '../../../../core/di/dependency_injection.dart';
-import '../../../../core/helpers/extensions.dart';
-import '../../../../core/helpers/validators.dart';
-import '../../../../core/routing/routes.dart';
-import '../../../../core/theming/colors.dart';
-import '../../../../core/theming/styles.dart';
-import '../../../core/helpers/app_dialogs.dart';
-import '../../../core/widgets/app_button.dart';
-import '../../../core/widgets/app_text_field.dart';
-import '../logic/login_cubit/login_cubit.dart';
-import '../logic/login_cubit/login_state.dart';
-import 'widgets/password_text_field.dart';
+import '../../../../../core/di/dependency_injection.dart';
+import '../../../../../core/helpers/extensions.dart';
+import '../../../../../core/helpers/validators.dart';
+import '../../../../../core/routing/routes.dart';
+import '../../../../../core/theming/colors.dart';
+import '../../../../../core/theming/styles.dart';
+import '../../../../core/helpers/app_dialogs.dart';
+import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_text_field.dart';
+import '../../logic/login_cubit/login_cubit.dart';
+import '../../logic/login_cubit/login_state.dart';
+import '../widgets/password_text_field.dart';
 
 
 class LoginScreen extends StatelessWidget {
@@ -62,7 +62,7 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                   AppDialogs.showLoadingDialog(context);
                 },
                 success: (message) {
-                  context.pop(); // Close loading dialog
+                  context.pop(); // Close loading
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(message),
@@ -72,8 +72,26 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                   // Navigate to home
                   context.pushReplacementNamed(Routes.homeScreen);
                 },
+                // ✅ NEW - Handle needs verification
+                needsVerification: (email, message) {
+                  context.pop(); // Close loading
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                      backgroundColor: ColorsManager.warning,
+                    ),
+                  );
+                  // Navigate to email verification
+                  context.pushReplacementNamed(
+                    Routes.verifyEmailScreen,
+                    arguments: {
+                      'email': email,
+                      'fromRegister': false,
+                    },
+                  );
+                },
                 error: (error) {
-                  context.pop(); // Close loading dialog
+                  context.pop(); // Close loading
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(error),
@@ -96,10 +114,10 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                     
                         // Logo/App Name
                         Center(
-                          child: Icon(
-                            Icons.shopping_bag,
-                            size: 80.sp,
-                            color: ColorsManager.mainColor,
+                          child: Image.asset(
+                            'assets/logo_trans.png',
+                            width: 100.w,
+                            height: 100.w,
                           ),
                         ),
                     

@@ -21,6 +21,7 @@ import '../../features/favorites/data/models/check_favorite_response.dart';
 import '../../features/favorites/data/models/favorite_count_response.dart';
 import '../../features/favorites/data/models/favorites_response.dart';
 import '../../features/favorites/data/models/remove_favorite_response.dart';
+import '../../features/items/data/models/close_item_request.dart';
 import '../../features/items/data/models/create_item_request.dart';
 import '../../features/items/data/models/items_queries.dart';
 import '../../features/items/data/models/items_response.dart';
@@ -175,7 +176,10 @@ abstract class ApiService {
 
   // Close Item
   @POST('${ApiConstants.items}/{itemId}/close')
-  Future<ItemDetailsResponse> closeItem(@Path('itemId') String itemId);
+  Future<ItemDetailsResponse> closeItem(
+    @Path('itemId') String itemId,
+    @Body() CloseItemRequest request,
+  );
 
   // ========================== Categories ==========================
 

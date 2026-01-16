@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../../../core/services/auth_service.dart';
+import '../../../items/data/models/close_item_request.dart';
 import '../../../items/data/models/item_model.dart';
 import '../../../items/data/models/items_queries.dart';
 import 'my_items_state.dart';
@@ -102,7 +103,7 @@ class MyItemsCubit extends Cubit<MyItemsState> {
 
   Future<void> closeItem(String itemId) async {
     try {
-      await _apiService.closeItem(itemId);
+      await _apiService.closeItem(itemId, const CloseItemRequest());
 
       // Update item status in list
       final updatedAllItems = state.allItems.map((item) {

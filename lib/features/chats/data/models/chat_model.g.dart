@@ -60,6 +60,8 @@ _ChatItem _$ChatItemFromJson(Map<String, dynamic> json) => _ChatItem(
   title: json['title'] as String,
   images: (json['images'] as List<dynamic>).map((e) => e as String).toList(),
   status: json['status'] as String,
+  buyerId: json['buyerId'] as String?,
+  canRate: json['canRate'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$ChatItemToJson(_ChatItem instance) => <String, dynamic>{
@@ -67,6 +69,8 @@ Map<String, dynamic> _$ChatItemToJson(_ChatItem instance) => <String, dynamic>{
   'title': instance.title,
   'images': instance.images,
   'status': instance.status,
+  'buyerId': instance.buyerId,
+  'canRate': instance.canRate,
 };
 
 _ChatUser _$ChatUserFromJson(Map<String, dynamic> json) => _ChatUser(

@@ -164,30 +164,35 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
 
   Widget _buildChatsList(List<ChatModel> chats, bool hasMore, bool isLoadingMore) {
     if (chats.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      return RefreshIndicator(
+        onRefresh: () => context.read<ChatsListCubit>().refresh(),
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
           children: [
-            Icon(
-              Icons.chat_bubble_outline,
-              size: 80.sp,
-              color: ColorsManager.textTertiary,
+            SizedBox(height: 200.h),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.chat_bubble_outline,
+                    size: 80.sp,
+                    color: ColorsManager.textTertiary,
+                  ),
+                  SizedBox(height: 16.h),
+                  Text('لا توجد محادثات', style: TextStyles.font18GreyMedium),
+                  SizedBox(height: 8.h),
+                  Text('اسحب للأسفل للتحديث', style: TextStyles.font14GreyRegular),
+                ],
+              ),
             ),
-            SizedBox(height: 16.h),
-            Text('لا توجد محادثات', style: TextStyles.font18GreyMedium),
           ],
         ),
       );
     }
 
     return RefreshIndicator(
-      onRefresh: () async {
-        if (_currentUserId != null) {
-          await context.read<ChatsListCubit>().loadChats(
-            userId: _currentUserId,
-          );
-        }
-      },
+      onRefresh: () => context.read<ChatsListCubit>().refresh(),
       child: ListView.separated(
         controller: _scrollController,
         padding: EdgeInsets.symmetric(vertical: 8.h),

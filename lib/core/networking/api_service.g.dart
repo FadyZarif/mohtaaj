@@ -664,11 +664,14 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<ItemDetailsResponse> closeItem(String itemId) async {
+  Future<ItemDetailsResponse> closeItem(
+    String itemId,
+    CloseItemRequest request,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = request;
     final _options = _setStreamType<ItemDetailsResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(

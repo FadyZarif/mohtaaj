@@ -15,7 +15,9 @@ import '../../data/models/chat_model.dart';
 import '../../logic/chat_room/chat_room_cubit.dart';
 import '../../logic/chat_room/chat_room_state.dart';
 import '../../logic/chats_list/chats_list_cubit.dart';
+import '../../../../core/helpers/spacing.dart';
 import '../widgets/chat_input_field.dart';
+import '../widgets/chat_item_actions.dart';
 import '../widgets/item_preview_card.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/typing_indicator.dart';
@@ -109,7 +111,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           return state.when(
             initial: () => const SizedBox(),
             loading: () => const Center(child: CircularProgressIndicator()),
-            success: (chat, messages, isOnline, isTyping) {
+            success: (chat, messages, isOnline, isTyping, isClosingItem, isRatingUser, hasRatedSeller) {
+              // Check if buyer should see rating section
+              final isBuyer = chat.buyerId == _currentUserId;
+              final isItemClosed = chat.item?.status == 'closed';
+              final isActualBuyer = chat.item?.buyerId == _currentUserId;
+              // ✅ canRate من الـ API مباشرة
+              final canRate = chat.item?.canRate ?? false;
+              final showRatingSection = canRate;
+
               return Column(
                 children: [
                   // Item Preview Card
@@ -124,10 +134,45 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       },
                     ),
 
+                  // Seller Actions (Mark as sold) - show inline
+                  if (chat.item != null &&
+                      _currentUserId != null &&
+                      chat.sellerId == _currentUserId &&
+                      chat.item?.status == 'active')
+                    ChatItemActions(
+                      chat: chat,
+                      currentUserId: _currentUserId!,
+                      isClosingItem: isClosingItem,
+                      isRatingUser: isRatingUser,
+                      hasRatedSeller: hasRatedSeller,
+                    ),
+
+                  // Already rated message - actual buyer who can't rate anymore
+                  if (isBuyer && isItemClosed && isActualBuyer && !canRate)
+                    ChatItemActions(
+                      chat: chat,
+                      currentUserId: _currentUserId!,
+                      isClosingItem: isClosingItem,
+                      isRatingUser: isRatingUser,
+                      hasRatedSeller: hasRatedSeller,
+                    ),
+
+                  verticalSpace(8),
+
                   // Messages List
                   Expanded(
                     child: _buildMessagesList(messages, isTyping),
                   ),
+
+                  // Buyer Rating Section - show at bottom above input
+                  if (showRatingSection)
+                    ChatItemActions(
+                      chat: chat,
+                      currentUserId: _currentUserId!,
+                      isClosingItem: isClosingItem,
+                      isRatingUser: isRatingUser,
+                      hasRatedSeller: hasRatedSeller,
+                    ),
 
                   // Input Field
                   ChatInputField(
@@ -173,7 +218,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       title: BlocBuilder<ChatRoomCubit, ChatRoomState>(
         builder: (context, state) {
           return state.maybeWhen(
-            success: (chat, _, isOnline, __) {
+            success: (chat, _, isOnline, __, ___, ____, _____) {
               final otherUser = chat.buyerId == _currentUserId
                   ? chat.seller
                   : chat.buyer;
@@ -334,23 +379,26 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   }
 
   bool _isSameDay(DateTime date1, DateTime date2) {
-    return date1.year == date2.year &&
-        date1.month == date2.month &&
-        date1.day == date2.day;
+    final local1 = date1.toLocal();
+    final local2 = date2.toLocal();
+    return local1.year == local2.year &&
+        local1.month == local2.month &&
+        local1.day == local2.day;
   }
 
   String _formatDate(DateTime date) {
+    final localDate = date.toLocal();
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(const Duration(days: 1));
-    final chatDate = DateTime(date.year, date.month, date.day);
+    final chatDate = DateTime(localDate.year, localDate.month, localDate.day);
 
     if (chatDate == today) {
       return 'اليوم';
     } else if (chatDate == yesterday) {
       return 'أمس';
     } else {
-      return '${date.day}/${date.month}/${date.year}';
+      return '${localDate.day}/${localDate.month}/${localDate.year}';
     }
   }
 

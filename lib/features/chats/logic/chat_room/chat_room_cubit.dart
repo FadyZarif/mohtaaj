@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
+import '../../../items/data/models/close_item_request.dart';
+import '../../../profile/data/models/rate_user_request.dart';
 import '../../data/models/chat_model.dart';
 import '../../data/services/socket_service.dart';
 import 'chat_room_state.dart';
@@ -23,6 +25,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   String? _otherUserId;
   bool _isTyping = false;
   Timer? _typingTimer;
+  bool _isClosingItem = false;
+  bool _isRatingUser = false;
+  bool _hasRatedSeller = false;
 
   StreamSubscription? _newMessageSub;
   StreamSubscription? _messageSentSub;
@@ -52,38 +57,47 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       }
     }
 
-    // Wait for socket connection
-    if (!_socketService.isConnected) {
-      if (kDebugMode) {
-        print('⏳ Waiting for socket to connect...');
-      }
-      await Future.delayed(const Duration(milliseconds: 500));
+    // Load chat and messages first (don't block on socket)
+    await _loadChatAndMessages();
 
-      int attempts = 0;
-      while (!_socketService.isConnected && attempts < 10) {
-        await Future.delayed(const Duration(milliseconds: 500));
-        attempts++;
-      }
+    // Try to connect socket in background
+    _connectSocketAndJoin();
+  }
 
+  /// Connect socket and join chat room (non-blocking)
+  Future<void> _connectSocketAndJoin() async {
+    try {
+      // If not connected, try to reconnect
       if (!_socketService.isConnected) {
         if (kDebugMode) {
-          print('❌ Socket connection timeout');
+          print('⏳ Socket not connected, trying to connect...');
         }
-        emit(const ChatRoomState.error('فشل الاتصال بالخادم'));
-        return;
+        await _socketService.connect();
+
+        // Wait for connection with timeout
+        int attempts = 0;
+        while (!_socketService.isConnected && attempts < 6) {
+          await Future.delayed(const Duration(milliseconds: 500));
+          attempts++;
+        }
+      }
+
+      if (_socketService.isConnected) {
+        if (kDebugMode) {
+          print('✅ Socket connected - joining chat');
+        }
+        _socketService.joinChat(chatId);
+        _setupSocketListeners();
+      } else {
+        if (kDebugMode) {
+          print('⚠️ Socket not connected - real-time updates disabled');
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('❌ Socket connection error: $e');
       }
     }
-
-    print('✅ Socket connected - joining chat');
-
-    // Join chat room
-    _socketService.joinChat(chatId);
-
-    // Setup socket listeners
-    _setupSocketListeners();
-
-    // Load chat and messages
-    await _loadChatAndMessages();
   }
 
   Future<void> _markChatAsReadViaAPI() async {
@@ -115,12 +129,18 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       final messagesResponse = await _apiService.getMessages(chatId, limit: 50);
       _messages = messagesResponse.data;
 
+      // ✅ canRate from API - if false and user is actual buyer, means already rated
+      final canRate = _currentChat!.item?.canRate ?? false;
+      final isActualBuyer = _currentChat!.item?.buyerId == _currentUserId;
+      _hasRatedSeller = isActualBuyer && !canRate;
+
       emit(
         ChatRoomState.success(
           chat: _currentChat!,
           messages: _messages,
           isOtherUserOnline: false,
           isOtherUserTyping: false,
+          hasRatedSeller: _hasRatedSeller,
         ),
       );
 
@@ -699,7 +719,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
     final currentState = state;
     final currentOnlineStatus = currentState.maybeWhen(
-      success: (_, _, isOnline, _) => isOnline,
+      success: (_, _, isOnline, _, __, ___, ____) => isOnline,
       orElse: () => false,
     );
 
@@ -714,9 +734,104 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         messages: [..._messages], // ✅ هنا المهم
         isOtherUserOnline: isOnline ?? currentOnlineStatus,
         isOtherUserTyping: _isTyping,
+        isClosingItem: _isClosingItem,
+        isRatingUser: _isRatingUser,
+        hasRatedSeller: _hasRatedSeller,
       ),
     );
   }
+
+  /// Close item and mark as sold to the buyer in this chat
+  Future<void> closeItemAsSold() async {
+    if (_currentChat?.item == null) {
+      if (kDebugMode) {
+        print('❌ Cannot close item: No item in chat');
+      }
+      return;
+    }
+
+    _isClosingItem = true;
+    _emitSuccessState();
+
+    try {
+      final request = CloseItemRequest(buyerId: _currentChat!.buyerId);
+      await _apiService.closeItem(_currentChat!.item!.id, request);
+
+      // Update local chat item status and buyerId
+      _currentChat = _currentChat!.copyWith(
+        item: _currentChat!.item!.copyWith(
+          status: 'closed',
+          buyerId: _currentChat!.buyerId, // ✅ تحديد المشتري الفعلي
+        ),
+      );
+
+      _isClosingItem = false;
+      _emitSuccessState();
+
+      // Send a message to notify about the sale
+      final buyerName = _currentChat!.buyer.name;
+      final itemTitle = _currentChat!.item!.title;
+      sendMessage('تم إتمام عملية البيع بنجاح للمشتري $buyerName على "$itemTitle"');
+
+      if (kDebugMode) {
+        print('✅ Item closed successfully');
+      }
+    } catch (e) {
+      _isClosingItem = false;
+      final error = ApiErrorHandler.handle(e);
+      emit(ChatRoomState.error(error.message));
+      _emitSuccessState();
+      if (kDebugMode) {
+        print('❌ Error closing item: $e');
+      }
+    }
+  }
+
+  /// Rate the seller (for buyer after item is sold)
+  Future<void> rateSeller(int rating, String? comment) async {
+    if (_currentChat == null) {
+      if (kDebugMode) {
+        print('❌ Cannot rate: No chat');
+      }
+      return;
+    }
+
+    _isRatingUser = true;
+    _emitSuccessState();
+
+    try {
+      await _apiService.rateUser(
+        _currentChat!.sellerId,
+        RateUserRequest(
+          rating: rating,
+          comment: comment,
+          itemId: _currentChat!.item!.id,
+        ),
+      );
+
+      _isRatingUser = false;
+      _hasRatedSeller = true;
+      _emitSuccessState();
+
+      if (kDebugMode) {
+        print('✅ Seller rated successfully');
+      }
+    } catch (e) {
+      _isRatingUser = false;
+      final error = ApiErrorHandler.handle(e);
+      emit(ChatRoomState.error(error.message));
+      _emitSuccessState();
+      if (kDebugMode) {
+        print('❌ Error rating seller: $e');
+      }
+    }
+  }
+
+  /// Check if current user is the seller
+  bool get isCurrentUserSeller => _currentChat?.sellerId == _currentUserId;
+
+  /// Check if current user is the buyer
+  bool get isCurrentUserBuyer => _currentChat?.buyerId == _currentUserId;
 
   @override
   Future<void> close() {

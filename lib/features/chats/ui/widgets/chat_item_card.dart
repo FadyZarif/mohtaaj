@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:mohtaaj/core/helpers/spacing.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
@@ -72,12 +73,14 @@ class ChatItemCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      if (otherUser.isVerified)
-                        Icon(
-                          Icons.verified,
-                          size: 16.sp,
-                          color: ColorsManager.success,
-                        ),
+                      // Verified badge
+                      // if (otherUser.isVerified)
+                      //   Icon(
+                      //     Icons.verified,
+                      //     size: 16.sp,
+                      //     color: ColorsManager.success,
+                      //   ),
+
                       // Online indicator (TODO: from socket)
                       // Container(
                       //   width: 8.w,
@@ -91,7 +94,7 @@ class ChatItemCard extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(height: 4.h),
+                  verticalSpace(4),
 
                   // Item name
                   if (chat.item != null)
@@ -102,7 +105,7 @@ class ChatItemCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                  SizedBox(height: 4.h),
+                  verticalSpace(4),
 
                   // Last message + Time
                   Row(
@@ -119,7 +122,7 @@ class ChatItemCard extends StatelessWidget {
                       ),
 
                       Text(
-                        timeago.format(chat.updatedAt, locale: 'ar'),
+                        timeago.format(chat.updatedAt.toLocal(), locale: 'ar'),
                         // chat.updatedAt.timeAgo(),
                         style: TextStyles.font12GreyRegular,
                       ),

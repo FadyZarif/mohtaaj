@@ -183,9 +183,11 @@ class ChatsListCubit extends Cubit<ChatsListState> {
             print('   Seller unread: ${updatedChat.unreadCountSeller}');
           }
         } else {
+          // Chat not found - it's a new chat, fetch it from API
           if (kDebugMode) {
-            print('⚠️ Chat not found: $chatId');
+            print('🆕 New chat detected: $chatId, fetching from API...');
           }
+          _fetchAndAddNewChat(chatId);
         }
       } catch (e, stackTrace) {
         if (kDebugMode) {
@@ -217,6 +219,39 @@ class ChatsListCubit extends Cubit<ChatsListState> {
     });
   }
 
+  /// Refresh chats list
+  Future<void> refresh() async {
+    await loadChats(userId: _currentUserId, loadMore: false);
+  }
+
+  /// Fetch a new chat from API and add it to the list
+  Future<void> _fetchAndAddNewChat(String chatId) async {
+    try {
+      final response = await _apiService.getChatById(chatId);
+      final newChat = response.data;
+
+      // Check if chat already exists (race condition)
+      if (_allChats.any((c) => c.id == chatId)) {
+        if (kDebugMode) {
+          print('⚠️ Chat already exists, skipping add');
+        }
+        return;
+      }
+
+      // Add new chat at the beginning
+      _allChats = [newChat, ..._allChats];
+      _applyFilter();
+
+      if (kDebugMode) {
+        print('✅ New chat added: $chatId');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('❌ Error fetching new chat: $e');
+      }
+    }
+  }
+
   void changeFilter(ChatFilterType filter) {
     _currentFilter = filter;
     _applyFilter();
@@ -225,26 +260,30 @@ class ChatsListCubit extends Cubit<ChatsListState> {
   void _updateLoadingMore(bool loading) {
     state.whenOrNull(
       success: (chats, filter, currentPage, hasMore, _) {
-        emit(ChatsListState.success(
-          chats: chats,
-          currentFilter: filter,
-          currentPage: currentPage,
-          hasMore: hasMore,
-          isLoadingMore: loading,
-        ));
+        emit(
+          ChatsListState.success(
+            chats: chats,
+            currentFilter: filter,
+            currentPage: currentPage,
+            hasMore: hasMore,
+            isLoadingMore: loading,
+          ),
+        );
       },
     );
   }
 
   void _applyFilter() {
     if (_currentUserId == null) {
-      emit(ChatsListState.success(
-        chats: _allChats,
-        currentFilter: _currentFilter,
-        currentPage: _currentPage,
-        hasMore: _hasMore,
-        isLoadingMore: false,
-      ));
+      emit(
+        ChatsListState.success(
+          chats: _allChats,
+          currentFilter: _currentFilter,
+          currentPage: _currentPage,
+          hasMore: _hasMore,
+          isLoadingMore: false,
+        ),
+      );
       return;
     }
 
@@ -308,13 +347,15 @@ class ChatsListCubit extends Cubit<ChatsListState> {
           itemTitle.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
-    emit(ChatsListState.success(
-      chats: filtered,
-      currentFilter: _currentFilter,
-      currentPage: _currentPage,
-      hasMore: _hasMore,
-      isLoadingMore: false,
-    ));
+    emit(
+      ChatsListState.success(
+        chats: filtered,
+        currentFilter: _currentFilter,
+        currentPage: _currentPage,
+        hasMore: _hasMore,
+        isLoadingMore: false,
+      ),
+    );
   }
 
   void markChatAsRead(String chatId) {

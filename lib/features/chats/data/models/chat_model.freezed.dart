@@ -383,7 +383,7 @@ $ChatUserCopyWith<$Res> get seller {
 /// @nodoc
 mixin _$ChatItem {
 
- String get id; String get title; List<String> get images; String get status;
+ String get id; String get title; List<String> get images; String get status; String? get buyerId; bool get canRate;
 /// Create a copy of ChatItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -396,16 +396,16 @@ $ChatItemCopyWith<ChatItem> get copyWith => _$ChatItemCopyWithImpl<ChatItem>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other.images, images)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other.images, images)&&(identical(other.status, status) || other.status == status)&&(identical(other.buyerId, buyerId) || other.buyerId == buyerId)&&(identical(other.canRate, canRate) || other.canRate == canRate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,const DeepCollectionEquality().hash(images),status);
+int get hashCode => Object.hash(runtimeType,id,title,const DeepCollectionEquality().hash(images),status,buyerId,canRate);
 
 @override
 String toString() {
-  return 'ChatItem(id: $id, title: $title, images: $images, status: $status)';
+  return 'ChatItem(id: $id, title: $title, images: $images, status: $status, buyerId: $buyerId, canRate: $canRate)';
 }
 
 
@@ -416,7 +416,7 @@ abstract mixin class $ChatItemCopyWith<$Res>  {
   factory $ChatItemCopyWith(ChatItem value, $Res Function(ChatItem) _then) = _$ChatItemCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, List<String> images, String status
+ String id, String title, List<String> images, String status, String? buyerId, bool canRate
 });
 
 
@@ -433,13 +433,15 @@ class _$ChatItemCopyWithImpl<$Res>
 
 /// Create a copy of ChatItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? images = null,Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? images = null,Object? status = null,Object? buyerId = freezed,Object? canRate = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,
+as String,buyerId: freezed == buyerId ? _self.buyerId : buyerId // ignore: cast_nullable_to_non_nullable
+as String?,canRate: null == canRate ? _self.canRate : canRate // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -524,10 +526,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  List<String> images,  String status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  List<String> images,  String status,  String? buyerId,  bool canRate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatItem() when $default != null:
-return $default(_that.id,_that.title,_that.images,_that.status);case _:
+return $default(_that.id,_that.title,_that.images,_that.status,_that.buyerId,_that.canRate);case _:
   return orElse();
 
 }
@@ -545,10 +547,10 @@ return $default(_that.id,_that.title,_that.images,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  List<String> images,  String status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  List<String> images,  String status,  String? buyerId,  bool canRate)  $default,) {final _that = this;
 switch (_that) {
 case _ChatItem():
-return $default(_that.id,_that.title,_that.images,_that.status);case _:
+return $default(_that.id,_that.title,_that.images,_that.status,_that.buyerId,_that.canRate);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -565,10 +567,10 @@ return $default(_that.id,_that.title,_that.images,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  List<String> images,  String status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  List<String> images,  String status,  String? buyerId,  bool canRate)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatItem() when $default != null:
-return $default(_that.id,_that.title,_that.images,_that.status);case _:
+return $default(_that.id,_that.title,_that.images,_that.status,_that.buyerId,_that.canRate);case _:
   return null;
 
 }
@@ -580,7 +582,7 @@ return $default(_that.id,_that.title,_that.images,_that.status);case _:
 @JsonSerializable()
 
 class _ChatItem implements ChatItem {
-  const _ChatItem({required this.id, required this.title, required final  List<String> images, required this.status}): _images = images;
+  const _ChatItem({required this.id, required this.title, required final  List<String> images, required this.status, this.buyerId, this.canRate = false}): _images = images;
   factory _ChatItem.fromJson(Map<String, dynamic> json) => _$ChatItemFromJson(json);
 
 @override final  String id;
@@ -593,6 +595,8 @@ class _ChatItem implements ChatItem {
 }
 
 @override final  String status;
+@override final  String? buyerId;
+@override@JsonKey() final  bool canRate;
 
 /// Create a copy of ChatItem
 /// with the given fields replaced by the non-null parameter values.
@@ -607,16 +611,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other._images, _images)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other._images, _images)&&(identical(other.status, status) || other.status == status)&&(identical(other.buyerId, buyerId) || other.buyerId == buyerId)&&(identical(other.canRate, canRate) || other.canRate == canRate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,const DeepCollectionEquality().hash(_images),status);
+int get hashCode => Object.hash(runtimeType,id,title,const DeepCollectionEquality().hash(_images),status,buyerId,canRate);
 
 @override
 String toString() {
-  return 'ChatItem(id: $id, title: $title, images: $images, status: $status)';
+  return 'ChatItem(id: $id, title: $title, images: $images, status: $status, buyerId: $buyerId, canRate: $canRate)';
 }
 
 
@@ -627,7 +631,7 @@ abstract mixin class _$ChatItemCopyWith<$Res> implements $ChatItemCopyWith<$Res>
   factory _$ChatItemCopyWith(_ChatItem value, $Res Function(_ChatItem) _then) = __$ChatItemCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, List<String> images, String status
+ String id, String title, List<String> images, String status, String? buyerId, bool canRate
 });
 
 
@@ -644,13 +648,15 @@ class __$ChatItemCopyWithImpl<$Res>
 
 /// Create a copy of ChatItem
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? images = null,Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? images = null,Object? status = null,Object? buyerId = freezed,Object? canRate = null,}) {
   return _then(_ChatItem(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,
+as String,buyerId: freezed == buyerId ? _self.buyerId : buyerId // ignore: cast_nullable_to_non_nullable
+as String?,canRate: null == canRate ? _self.canRate : canRate // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

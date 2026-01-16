@@ -37,6 +37,8 @@ abstract class ChatItem with _$ChatItem {
     required String title,
     required List<String> images,
     required String status,
+    String? buyerId,
+    @Default(false) bool canRate, // ✅ هل يمكن للمشتري التقييم
   }) = _ChatItem;
 
   factory ChatItem.fromJson(Map<String, dynamic> json) =>

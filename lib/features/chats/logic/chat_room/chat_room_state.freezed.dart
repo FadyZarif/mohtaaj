@@ -131,12 +131,12 @@ return editingMessage(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping)?  success,TResult Function( String message)?  error,TResult Function()?  editingMessage,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping,  bool isClosingItem,  bool isRatingUser,  bool hasRatedSeller)?  success,TResult Function( String message)?  error,TResult Function()?  editingMessage,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
-return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping);case _Error() when error != null:
+return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping,_that.isClosingItem,_that.isRatingUser,_that.hasRatedSeller);case _Error() when error != null:
 return error(_that.message);case _EditingMessage() when editingMessage != null:
 return editingMessage();case _:
   return orElse();
@@ -156,12 +156,12 @@ return editingMessage();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping)  success,required TResult Function( String message)  error,required TResult Function()  editingMessage,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping,  bool isClosingItem,  bool isRatingUser,  bool hasRatedSeller)  success,required TResult Function( String message)  error,required TResult Function()  editingMessage,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _Success():
-return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping);case _Error():
+return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping,_that.isClosingItem,_that.isRatingUser,_that.hasRatedSeller);case _Error():
 return error(_that.message);case _EditingMessage():
 return editingMessage();case _:
   throw StateError('Unexpected subclass');
@@ -180,12 +180,12 @@ return editingMessage();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping)?  success,TResult? Function( String message)?  error,TResult? Function()?  editingMessage,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ChatModel chat,  List<MessageModel> messages,  bool isOtherUserOnline,  bool isOtherUserTyping,  bool isClosingItem,  bool isRatingUser,  bool hasRatedSeller)?  success,TResult? Function( String message)?  error,TResult? Function()?  editingMessage,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
-return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping);case _Error() when error != null:
+return success(_that.chat,_that.messages,_that.isOtherUserOnline,_that.isOtherUserTyping,_that.isClosingItem,_that.isRatingUser,_that.hasRatedSeller);case _Error() when error != null:
 return error(_that.message);case _EditingMessage() when editingMessage != null:
 return editingMessage();case _:
   return null;
@@ -263,7 +263,7 @@ String toString() {
 
 
 class _Success implements ChatRoomState {
-  const _Success({required this.chat, required final  List<MessageModel> messages, required this.isOtherUserOnline, required this.isOtherUserTyping}): _messages = messages;
+  const _Success({required this.chat, required final  List<MessageModel> messages, required this.isOtherUserOnline, required this.isOtherUserTyping, this.isClosingItem = false, this.isRatingUser = false, this.hasRatedSeller = false}): _messages = messages;
   
 
  final  ChatModel chat;
@@ -276,6 +276,9 @@ class _Success implements ChatRoomState {
 
  final  bool isOtherUserOnline;
  final  bool isOtherUserTyping;
+@JsonKey() final  bool isClosingItem;
+@JsonKey() final  bool isRatingUser;
+@JsonKey() final  bool hasRatedSeller;
 
 /// Create a copy of ChatRoomState
 /// with the given fields replaced by the non-null parameter values.
@@ -287,16 +290,16 @@ _$SuccessCopyWith<_Success> get copyWith => __$SuccessCopyWithImpl<_Success>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&(identical(other.chat, chat) || other.chat == chat)&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.isOtherUserOnline, isOtherUserOnline) || other.isOtherUserOnline == isOtherUserOnline)&&(identical(other.isOtherUserTyping, isOtherUserTyping) || other.isOtherUserTyping == isOtherUserTyping));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&(identical(other.chat, chat) || other.chat == chat)&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.isOtherUserOnline, isOtherUserOnline) || other.isOtherUserOnline == isOtherUserOnline)&&(identical(other.isOtherUserTyping, isOtherUserTyping) || other.isOtherUserTyping == isOtherUserTyping)&&(identical(other.isClosingItem, isClosingItem) || other.isClosingItem == isClosingItem)&&(identical(other.isRatingUser, isRatingUser) || other.isRatingUser == isRatingUser)&&(identical(other.hasRatedSeller, hasRatedSeller) || other.hasRatedSeller == hasRatedSeller));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,chat,const DeepCollectionEquality().hash(_messages),isOtherUserOnline,isOtherUserTyping);
+int get hashCode => Object.hash(runtimeType,chat,const DeepCollectionEquality().hash(_messages),isOtherUserOnline,isOtherUserTyping,isClosingItem,isRatingUser,hasRatedSeller);
 
 @override
 String toString() {
-  return 'ChatRoomState.success(chat: $chat, messages: $messages, isOtherUserOnline: $isOtherUserOnline, isOtherUserTyping: $isOtherUserTyping)';
+  return 'ChatRoomState.success(chat: $chat, messages: $messages, isOtherUserOnline: $isOtherUserOnline, isOtherUserTyping: $isOtherUserTyping, isClosingItem: $isClosingItem, isRatingUser: $isRatingUser, hasRatedSeller: $hasRatedSeller)';
 }
 
 
@@ -307,7 +310,7 @@ abstract mixin class _$SuccessCopyWith<$Res> implements $ChatRoomStateCopyWith<$
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) = __$SuccessCopyWithImpl;
 @useResult
 $Res call({
- ChatModel chat, List<MessageModel> messages, bool isOtherUserOnline, bool isOtherUserTyping
+ ChatModel chat, List<MessageModel> messages, bool isOtherUserOnline, bool isOtherUserTyping, bool isClosingItem, bool isRatingUser, bool hasRatedSeller
 });
 
 
@@ -324,12 +327,15 @@ class __$SuccessCopyWithImpl<$Res>
 
 /// Create a copy of ChatRoomState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? chat = null,Object? messages = null,Object? isOtherUserOnline = null,Object? isOtherUserTyping = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? chat = null,Object? messages = null,Object? isOtherUserOnline = null,Object? isOtherUserTyping = null,Object? isClosingItem = null,Object? isRatingUser = null,Object? hasRatedSeller = null,}) {
   return _then(_Success(
 chat: null == chat ? _self.chat : chat // ignore: cast_nullable_to_non_nullable
 as ChatModel,messages: null == messages ? _self._messages : messages // ignore: cast_nullable_to_non_nullable
 as List<MessageModel>,isOtherUserOnline: null == isOtherUserOnline ? _self.isOtherUserOnline : isOtherUserOnline // ignore: cast_nullable_to_non_nullable
 as bool,isOtherUserTyping: null == isOtherUserTyping ? _self.isOtherUserTyping : isOtherUserTyping // ignore: cast_nullable_to_non_nullable
+as bool,isClosingItem: null == isClosingItem ? _self.isClosingItem : isClosingItem // ignore: cast_nullable_to_non_nullable
+as bool,isRatingUser: null == isRatingUser ? _self.isRatingUser : isRatingUser // ignore: cast_nullable_to_non_nullable
+as bool,hasRatedSeller: null == hasRatedSeller ? _self.hasRatedSeller : hasRatedSeller // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

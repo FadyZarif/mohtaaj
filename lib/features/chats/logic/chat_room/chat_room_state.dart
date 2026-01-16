@@ -16,6 +16,9 @@ abstract class ChatRoomState with _$ChatRoomState {
     required List<MessageModel> messages,
     required bool isOtherUserOnline,
     required bool isOtherUserTyping,
+    @Default(false) bool isClosingItem,
+    @Default(false) bool isRatingUser,
+    @Default(false) bool hasRatedSeller,
   }) = _Success;
   const factory ChatRoomState.error(String message) = _Error;
   const factory ChatRoomState.editingMessage() = _EditingMessage;

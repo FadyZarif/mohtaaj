@@ -239,15 +239,16 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            if (otherUser.isVerified)
-                              Padding(
-                                padding: EdgeInsets.only(right: 4.w),
-                                child: Icon(
-                                  Icons.verified,
-                                  size: 14.sp,
-                                  color: ColorsManager.success,
-                                ),
-                              ),
+                            // verified badge
+                            // if (otherUser.isVerified)
+                            //   Padding(
+                            //     padding: EdgeInsets.only(right: 4.w),
+                            //     child: Icon(
+                            //       Icons.verified,
+                            //       size: 14.sp,
+                            //       color: ColorsManager.success,
+                            //     ),
+                            //   ),
                           ],
                         ),
                         Row(

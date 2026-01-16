@@ -69,32 +69,32 @@ class ProfileHeader extends StatelessWidget {
         verticalSpace(8),
 
         // Verified badge
-        if (user.isVerified)
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 12.w,
-              vertical: 4.h,
-            ),
-            decoration: BoxDecoration(
-              color: ColorsManager.success.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.verified,
-                  color: ColorsManager.success,
-                  size: 16.sp,
-                ),
-                horizontalSpace(4),
-                Text(
-                  'موثق',
-                  style: TextStyles.font12GreenMedium,
-                ),
-              ],
-            ),
-          ),
+        // if (user.isVerified)
+        //   Container(
+        //     padding: EdgeInsets.symmetric(
+        //       horizontal: 12.w,
+        //       vertical: 4.h,
+        //     ),
+        //     decoration: BoxDecoration(
+        //       color: ColorsManager.success.withOpacity(0.1),
+        //       borderRadius: BorderRadius.circular(12.r),
+        //     ),
+        //     child: Row(
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: [
+        //         Icon(
+        //           Icons.verified,
+        //           color: ColorsManager.success,
+        //           size: 16.sp,
+        //         ),
+        //         horizontalSpace(4),
+        //         Text(
+        //           'موثق',
+        //           style: TextStyles.font12GreenMedium,
+        //         ),
+        //       ],
+        //     ),
+        //   ),
       ],
     );
   }

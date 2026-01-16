@@ -155,8 +155,11 @@ class _EmailVerificationBodyState extends State<_EmailVerificationBody> {
                       backgroundColor: ColorsManager.success,
                     ),
                   );
-                  // Navigate to home
-                  context.pushReplacementNamed(Routes.homeScreen);
+                  // Navigate to home and clear all previous routes
+                  context.pushNamedAndRemoveUntil(
+                    Routes.homeScreen,
+                    predicate: (route) => false,
+                  );
                 },
                 codeResent: (message) {
                   ScaffoldMessenger.of(context).showSnackBar(

@@ -88,6 +88,7 @@ _ItemOwner _$ItemOwnerFromJson(Map<String, dynamic> json) => _ItemOwner(
   avatarUrl: json['avatarUrl'] as String?,
   ratingAvg: json['ratingAvg'] as num,
   reputationScore: (json['reputationScore'] as num).toInt(),
+  phone: json['phone'] as String?,
 );
 
 Map<String, dynamic> _$ItemOwnerToJson(_ItemOwner instance) =>
@@ -97,6 +98,7 @@ Map<String, dynamic> _$ItemOwnerToJson(_ItemOwner instance) =>
       'avatarUrl': instance.avatarUrl,
       'ratingAvg': instance.ratingAvg,
       'reputationScore': instance.reputationScore,
+      'phone': instance.phone,
     };
 
 _ItemCount _$ItemCountFromJson(Map<String, dynamic> json) => _ItemCount(

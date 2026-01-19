@@ -33,6 +33,7 @@ _UserData _$UserDataFromJson(Map<String, dynamic> json) => _UserData(
   lastActive: DateTime.parse(json['lastActive'] as String),
   itemsCount: (json['itemsCount'] as num).toInt(),
   ratingsCount: (json['ratingsCount'] as num).toInt(),
+  phone: json['phone'] as String,
 );
 
 Map<String, dynamic> _$UserDataToJson(_UserData instance) => <String, dynamic>{
@@ -48,4 +49,5 @@ Map<String, dynamic> _$UserDataToJson(_UserData instance) => <String, dynamic>{
   'lastActive': instance.lastActive.toIso8601String(),
   'itemsCount': instance.itemsCount,
   'ratingsCount': instance.ratingsCount,
+  'phone': instance.phone,
 };

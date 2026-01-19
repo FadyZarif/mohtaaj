@@ -302,7 +302,7 @@ $UserDataCopyWith<$Res> get data {
 /// @nodoc
 mixin _$UserData {
 
- String get id; String get name; String get city; String get country; String? get avatarUrl; num get ratingAvg; int get reputationScore; bool get isVerified; DateTime get createdAt; DateTime get lastActive; int get itemsCount; int get ratingsCount;
+ String get id; String get name; String get city; String get country; String? get avatarUrl; num get ratingAvg; int get reputationScore; bool get isVerified; DateTime get createdAt; DateTime get lastActive; int get itemsCount; int get ratingsCount; String get phone;
 /// Create a copy of UserData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -315,16 +315,16 @@ $UserDataCopyWith<UserData> get copyWith => _$UserDataCopyWithImpl<UserData>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserData&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastActive, lastActive) || other.lastActive == lastActive)&&(identical(other.itemsCount, itemsCount) || other.itemsCount == itemsCount)&&(identical(other.ratingsCount, ratingsCount) || other.ratingsCount == ratingsCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserData&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastActive, lastActive) || other.lastActive == lastActive)&&(identical(other.itemsCount, itemsCount) || other.itemsCount == itemsCount)&&(identical(other.ratingsCount, ratingsCount) || other.ratingsCount == ratingsCount)&&(identical(other.phone, phone) || other.phone == phone));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,city,country,avatarUrl,ratingAvg,reputationScore,isVerified,createdAt,lastActive,itemsCount,ratingsCount);
+int get hashCode => Object.hash(runtimeType,id,name,city,country,avatarUrl,ratingAvg,reputationScore,isVerified,createdAt,lastActive,itemsCount,ratingsCount,phone);
 
 @override
 String toString() {
-  return 'UserData(id: $id, name: $name, city: $city, country: $country, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore, isVerified: $isVerified, createdAt: $createdAt, lastActive: $lastActive, itemsCount: $itemsCount, ratingsCount: $ratingsCount)';
+  return 'UserData(id: $id, name: $name, city: $city, country: $country, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore, isVerified: $isVerified, createdAt: $createdAt, lastActive: $lastActive, itemsCount: $itemsCount, ratingsCount: $ratingsCount, phone: $phone)';
 }
 
 
@@ -335,7 +335,7 @@ abstract mixin class $UserDataCopyWith<$Res>  {
   factory $UserDataCopyWith(UserData value, $Res Function(UserData) _then) = _$UserDataCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String city, String country, String? avatarUrl, num ratingAvg, int reputationScore, bool isVerified, DateTime createdAt, DateTime lastActive, int itemsCount, int ratingsCount
+ String id, String name, String city, String country, String? avatarUrl, num ratingAvg, int reputationScore, bool isVerified, DateTime createdAt, DateTime lastActive, int itemsCount, int ratingsCount, String phone
 });
 
 
@@ -352,7 +352,7 @@ class _$UserDataCopyWithImpl<$Res>
 
 /// Create a copy of UserData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? city = null,Object? country = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,Object? isVerified = null,Object? createdAt = null,Object? lastActive = null,Object? itemsCount = null,Object? ratingsCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? city = null,Object? country = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,Object? isVerified = null,Object? createdAt = null,Object? lastActive = null,Object? itemsCount = null,Object? ratingsCount = null,Object? phone = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -366,7 +366,8 @@ as bool,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: ca
 as DateTime,lastActive: null == lastActive ? _self.lastActive : lastActive // ignore: cast_nullable_to_non_nullable
 as DateTime,itemsCount: null == itemsCount ? _self.itemsCount : itemsCount // ignore: cast_nullable_to_non_nullable
 as int,ratingsCount: null == ratingsCount ? _self.ratingsCount : ratingsCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -451,10 +452,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String city,  String country,  String? avatarUrl,  num ratingAvg,  int reputationScore,  bool isVerified,  DateTime createdAt,  DateTime lastActive,  int itemsCount,  int ratingsCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String city,  String country,  String? avatarUrl,  num ratingAvg,  int reputationScore,  bool isVerified,  DateTime createdAt,  DateTime lastActive,  int itemsCount,  int ratingsCount,  String phone)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserData() when $default != null:
-return $default(_that.id,_that.name,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.createdAt,_that.lastActive,_that.itemsCount,_that.ratingsCount);case _:
+return $default(_that.id,_that.name,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.createdAt,_that.lastActive,_that.itemsCount,_that.ratingsCount,_that.phone);case _:
   return orElse();
 
 }
@@ -472,10 +473,10 @@ return $default(_that.id,_that.name,_that.city,_that.country,_that.avatarUrl,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String city,  String country,  String? avatarUrl,  num ratingAvg,  int reputationScore,  bool isVerified,  DateTime createdAt,  DateTime lastActive,  int itemsCount,  int ratingsCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String city,  String country,  String? avatarUrl,  num ratingAvg,  int reputationScore,  bool isVerified,  DateTime createdAt,  DateTime lastActive,  int itemsCount,  int ratingsCount,  String phone)  $default,) {final _that = this;
 switch (_that) {
 case _UserData():
-return $default(_that.id,_that.name,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.createdAt,_that.lastActive,_that.itemsCount,_that.ratingsCount);case _:
+return $default(_that.id,_that.name,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.createdAt,_that.lastActive,_that.itemsCount,_that.ratingsCount,_that.phone);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -492,10 +493,10 @@ return $default(_that.id,_that.name,_that.city,_that.country,_that.avatarUrl,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String city,  String country,  String? avatarUrl,  num ratingAvg,  int reputationScore,  bool isVerified,  DateTime createdAt,  DateTime lastActive,  int itemsCount,  int ratingsCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String city,  String country,  String? avatarUrl,  num ratingAvg,  int reputationScore,  bool isVerified,  DateTime createdAt,  DateTime lastActive,  int itemsCount,  int ratingsCount,  String phone)?  $default,) {final _that = this;
 switch (_that) {
 case _UserData() when $default != null:
-return $default(_that.id,_that.name,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.createdAt,_that.lastActive,_that.itemsCount,_that.ratingsCount);case _:
+return $default(_that.id,_that.name,_that.city,_that.country,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.isVerified,_that.createdAt,_that.lastActive,_that.itemsCount,_that.ratingsCount,_that.phone);case _:
   return null;
 
 }
@@ -507,7 +508,7 @@ return $default(_that.id,_that.name,_that.city,_that.country,_that.avatarUrl,_th
 @JsonSerializable()
 
 class _UserData implements UserData {
-  const _UserData({required this.id, required this.name, required this.city, required this.country, this.avatarUrl, required this.ratingAvg, required this.reputationScore, required this.isVerified, required this.createdAt, required this.lastActive, required this.itemsCount, required this.ratingsCount});
+  const _UserData({required this.id, required this.name, required this.city, required this.country, this.avatarUrl, required this.ratingAvg, required this.reputationScore, required this.isVerified, required this.createdAt, required this.lastActive, required this.itemsCount, required this.ratingsCount, required this.phone});
   factory _UserData.fromJson(Map<String, dynamic> json) => _$UserDataFromJson(json);
 
 @override final  String id;
@@ -522,6 +523,7 @@ class _UserData implements UserData {
 @override final  DateTime lastActive;
 @override final  int itemsCount;
 @override final  int ratingsCount;
+@override final  String phone;
 
 /// Create a copy of UserData
 /// with the given fields replaced by the non-null parameter values.
@@ -536,16 +538,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserData&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastActive, lastActive) || other.lastActive == lastActive)&&(identical(other.itemsCount, itemsCount) || other.itemsCount == itemsCount)&&(identical(other.ratingsCount, ratingsCount) || other.ratingsCount == ratingsCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserData&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastActive, lastActive) || other.lastActive == lastActive)&&(identical(other.itemsCount, itemsCount) || other.itemsCount == itemsCount)&&(identical(other.ratingsCount, ratingsCount) || other.ratingsCount == ratingsCount)&&(identical(other.phone, phone) || other.phone == phone));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,city,country,avatarUrl,ratingAvg,reputationScore,isVerified,createdAt,lastActive,itemsCount,ratingsCount);
+int get hashCode => Object.hash(runtimeType,id,name,city,country,avatarUrl,ratingAvg,reputationScore,isVerified,createdAt,lastActive,itemsCount,ratingsCount,phone);
 
 @override
 String toString() {
-  return 'UserData(id: $id, name: $name, city: $city, country: $country, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore, isVerified: $isVerified, createdAt: $createdAt, lastActive: $lastActive, itemsCount: $itemsCount, ratingsCount: $ratingsCount)';
+  return 'UserData(id: $id, name: $name, city: $city, country: $country, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore, isVerified: $isVerified, createdAt: $createdAt, lastActive: $lastActive, itemsCount: $itemsCount, ratingsCount: $ratingsCount, phone: $phone)';
 }
 
 
@@ -556,7 +558,7 @@ abstract mixin class _$UserDataCopyWith<$Res> implements $UserDataCopyWith<$Res>
   factory _$UserDataCopyWith(_UserData value, $Res Function(_UserData) _then) = __$UserDataCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String city, String country, String? avatarUrl, num ratingAvg, int reputationScore, bool isVerified, DateTime createdAt, DateTime lastActive, int itemsCount, int ratingsCount
+ String id, String name, String city, String country, String? avatarUrl, num ratingAvg, int reputationScore, bool isVerified, DateTime createdAt, DateTime lastActive, int itemsCount, int ratingsCount, String phone
 });
 
 
@@ -573,7 +575,7 @@ class __$UserDataCopyWithImpl<$Res>
 
 /// Create a copy of UserData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? city = null,Object? country = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,Object? isVerified = null,Object? createdAt = null,Object? lastActive = null,Object? itemsCount = null,Object? ratingsCount = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? city = null,Object? country = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,Object? isVerified = null,Object? createdAt = null,Object? lastActive = null,Object? itemsCount = null,Object? ratingsCount = null,Object? phone = null,}) {
   return _then(_UserData(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -587,7 +589,8 @@ as bool,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: ca
 as DateTime,lastActive: null == lastActive ? _self.lastActive : lastActive // ignore: cast_nullable_to_non_nullable
 as DateTime,itemsCount: null == itemsCount ? _self.itemsCount : itemsCount // ignore: cast_nullable_to_non_nullable
 as int,ratingsCount: null == ratingsCount ? _self.ratingsCount : ratingsCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

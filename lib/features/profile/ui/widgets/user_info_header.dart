@@ -3,7 +3,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/helpers/contact_helper.dart';
 import '../../../../core/helpers/spacing.dart';
+import '../../../../core/services/auth_service.dart';
+import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../data/models/user_response.dart';
@@ -30,7 +33,7 @@ class UserInfoHeader extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 50.r,
-                backgroundColor: ColorsManager.mainColor.withOpacity(0.1),
+                backgroundColor: ColorsManager.mainColor.withValues(alpha: 0.1),
                 backgroundImage: user.avatarUrl != null
                     ? CachedNetworkImageProvider(user.avatarUrl!)
                     : null,
@@ -170,7 +173,21 @@ class UserInfoHeader extends StatelessWidget {
               horizontalSpace(12),
               GestureDetector(
                 onTap: () {
-                  // TODO: Make call
+                  getIt<AuthService>().requireAuth(
+                    context,
+                    () {
+                      if (user.phone.isNotEmpty) {
+                        ContactHelper.showContactOptions(context, user.phone);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('رقم الهاتف غير متوفر'),
+                            backgroundColor: ColorsManager.error,
+                          ),
+                        );
+                      }
+                    },
+                  );
                 },
                 child: Container(
                   padding: EdgeInsets.all(12.r),

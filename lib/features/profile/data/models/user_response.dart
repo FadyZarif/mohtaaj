@@ -32,6 +32,7 @@ abstract class UserData with _$UserData {
     required DateTime lastActive,
     required int itemsCount,
     required int ratingsCount,
+    required String phone,
   }) = _UserData;
 
   factory UserData.fromJson(Map<String, dynamic> json) =>

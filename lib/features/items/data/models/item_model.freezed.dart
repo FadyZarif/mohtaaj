@@ -446,7 +446,7 @@ $FavoriteInfoCopyWith<$Res>? get favoriteInfo {
 /// @nodoc
 mixin _$ItemOwner {
 
- String get id; String get name; String? get avatarUrl; num get ratingAvg; int get reputationScore;
+ String get id; String get name; String? get avatarUrl; num get ratingAvg; int get reputationScore; String? get phone;
 /// Create a copy of ItemOwner
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -459,16 +459,16 @@ $ItemOwnerCopyWith<ItemOwner> get copyWith => _$ItemOwnerCopyWithImpl<ItemOwner>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemOwner&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemOwner&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore)&&(identical(other.phone, phone) || other.phone == phone));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,avatarUrl,ratingAvg,reputationScore);
+int get hashCode => Object.hash(runtimeType,id,name,avatarUrl,ratingAvg,reputationScore,phone);
 
 @override
 String toString() {
-  return 'ItemOwner(id: $id, name: $name, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore)';
+  return 'ItemOwner(id: $id, name: $name, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore, phone: $phone)';
 }
 
 
@@ -479,7 +479,7 @@ abstract mixin class $ItemOwnerCopyWith<$Res>  {
   factory $ItemOwnerCopyWith(ItemOwner value, $Res Function(ItemOwner) _then) = _$ItemOwnerCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String? avatarUrl, num ratingAvg, int reputationScore
+ String id, String name, String? avatarUrl, num ratingAvg, int reputationScore, String? phone
 });
 
 
@@ -496,14 +496,15 @@ class _$ItemOwnerCopyWithImpl<$Res>
 
 /// Create a copy of ItemOwner
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,Object? phone = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
 as String?,ratingAvg: null == ratingAvg ? _self.ratingAvg : ratingAvg // ignore: cast_nullable_to_non_nullable
 as num,reputationScore: null == reputationScore ? _self.reputationScore : reputationScore // ignore: cast_nullable_to_non_nullable
-as int,
+as int,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -588,10 +589,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? avatarUrl,  num ratingAvg,  int reputationScore)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? avatarUrl,  num ratingAvg,  int reputationScore,  String? phone)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ItemOwner() when $default != null:
-return $default(_that.id,_that.name,_that.avatarUrl,_that.ratingAvg,_that.reputationScore);case _:
+return $default(_that.id,_that.name,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.phone);case _:
   return orElse();
 
 }
@@ -609,10 +610,10 @@ return $default(_that.id,_that.name,_that.avatarUrl,_that.ratingAvg,_that.reputa
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? avatarUrl,  num ratingAvg,  int reputationScore)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? avatarUrl,  num ratingAvg,  int reputationScore,  String? phone)  $default,) {final _that = this;
 switch (_that) {
 case _ItemOwner():
-return $default(_that.id,_that.name,_that.avatarUrl,_that.ratingAvg,_that.reputationScore);case _:
+return $default(_that.id,_that.name,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.phone);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -629,10 +630,10 @@ return $default(_that.id,_that.name,_that.avatarUrl,_that.ratingAvg,_that.reputa
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? avatarUrl,  num ratingAvg,  int reputationScore)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? avatarUrl,  num ratingAvg,  int reputationScore,  String? phone)?  $default,) {final _that = this;
 switch (_that) {
 case _ItemOwner() when $default != null:
-return $default(_that.id,_that.name,_that.avatarUrl,_that.ratingAvg,_that.reputationScore);case _:
+return $default(_that.id,_that.name,_that.avatarUrl,_that.ratingAvg,_that.reputationScore,_that.phone);case _:
   return null;
 
 }
@@ -644,7 +645,7 @@ return $default(_that.id,_that.name,_that.avatarUrl,_that.ratingAvg,_that.reputa
 @JsonSerializable()
 
 class _ItemOwner implements ItemOwner {
-  const _ItemOwner({required this.id, required this.name, this.avatarUrl, required this.ratingAvg, required this.reputationScore});
+  const _ItemOwner({required this.id, required this.name, this.avatarUrl, required this.ratingAvg, required this.reputationScore, required this.phone});
   factory _ItemOwner.fromJson(Map<String, dynamic> json) => _$ItemOwnerFromJson(json);
 
 @override final  String id;
@@ -652,6 +653,7 @@ class _ItemOwner implements ItemOwner {
 @override final  String? avatarUrl;
 @override final  num ratingAvg;
 @override final  int reputationScore;
+@override final  String? phone;
 
 /// Create a copy of ItemOwner
 /// with the given fields replaced by the non-null parameter values.
@@ -666,16 +668,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemOwner&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemOwner&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.ratingAvg, ratingAvg) || other.ratingAvg == ratingAvg)&&(identical(other.reputationScore, reputationScore) || other.reputationScore == reputationScore)&&(identical(other.phone, phone) || other.phone == phone));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,avatarUrl,ratingAvg,reputationScore);
+int get hashCode => Object.hash(runtimeType,id,name,avatarUrl,ratingAvg,reputationScore,phone);
 
 @override
 String toString() {
-  return 'ItemOwner(id: $id, name: $name, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore)';
+  return 'ItemOwner(id: $id, name: $name, avatarUrl: $avatarUrl, ratingAvg: $ratingAvg, reputationScore: $reputationScore, phone: $phone)';
 }
 
 
@@ -686,7 +688,7 @@ abstract mixin class _$ItemOwnerCopyWith<$Res> implements $ItemOwnerCopyWith<$Re
   factory _$ItemOwnerCopyWith(_ItemOwner value, $Res Function(_ItemOwner) _then) = __$ItemOwnerCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String? avatarUrl, num ratingAvg, int reputationScore
+ String id, String name, String? avatarUrl, num ratingAvg, int reputationScore, String? phone
 });
 
 
@@ -703,14 +705,15 @@ class __$ItemOwnerCopyWithImpl<$Res>
 
 /// Create a copy of ItemOwner
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? avatarUrl = freezed,Object? ratingAvg = null,Object? reputationScore = null,Object? phone = freezed,}) {
   return _then(_ItemOwner(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
 as String?,ratingAvg: null == ratingAvg ? _self.ratingAvg : ratingAvg // ignore: cast_nullable_to_non_nullable
 as num,reputationScore: null == reputationScore ? _self.reputationScore : reputationScore // ignore: cast_nullable_to_non_nullable
-as int,
+as int,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

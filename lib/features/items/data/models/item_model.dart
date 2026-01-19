@@ -144,6 +144,8 @@ abstract class ItemOwner with _$ItemOwner {
     String? avatarUrl,
     required num ratingAvg,
     required int reputationScore,
+    required String? phone,
+
   }) = _ItemOwner;
 
   factory ItemOwner.fromJson(Map<String, dynamic> json) =>

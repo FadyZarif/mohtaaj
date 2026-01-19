@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/di/dependency_injection.dart';
+import '../../../../core/helpers/contact_helper.dart';
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/routing/routes.dart';
@@ -200,10 +201,31 @@ class _ItemDetailsBody extends StatelessWidget {
             // Call Button
             GestureDetector(
               onTap: () {
-                // TODO
-                // getIt<AuthService>().requireAuth(context, () {
-                //   _makePhoneCall(context, item.owner?.phone);
-                // });
+                getIt<AuthService>().requireAuth(
+                  context,
+                  () async {
+                    // Get the item to access the owner's phone number
+                    final state = context.read<ItemDetailsCubit>().state;
+                    state.maybeWhen(
+                      success: (item, _, __) {
+                        if (item.owner?.phone != null && item.owner!.phone!.isNotEmpty) {
+                          ContactHelper.showContactOptions(
+                            context,
+                            item.owner!.phone!,
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('رقم الهاتف غير متوفر'),
+                              backgroundColor: ColorsManager.error,
+                            ),
+                          );
+                        }
+                      },
+                      orElse: () {},
+                    );
+                  },
+                );
               },
               child: Container(
                 width: 48.w,

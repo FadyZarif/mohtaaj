@@ -7,6 +7,8 @@ import '../../../../core/helpers/spacing.dart';
 import '../../../../core/routing/routes.dart';
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
+import '../../../main_layout/logic/main_layout_cubit/main_layout_cubit.dart';
+import '../../../main_layout/logic/main_layout_cubit/main_layout_state.dart';
 import '../../logic/home_cubit/home_cubit.dart';
 import '../../logic/home_cubit/home_state.dart';
 import '../widgets/home_app_bar.dart';
@@ -74,19 +76,38 @@ class _HomeScreenBodyState extends State<_HomeScreenBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorsManager.backgroundColor,
-      appBar: HomeAppBar(
-        location: 'دمشق',
-        notificationCount: 0,
-        onLocationTap: () {
-          // TODO: Open location picker
-        },
-        onNotificationTap: () {
-          // TODO: Navigate to notifications
-        },
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56.h),
+        child: BlocBuilder<MainLayoutCubit, MainLayoutState>(
+          buildWhen: (previous, current) =>
+              previous.unreadNotificationsCount != current.unreadNotificationsCount,
+          builder: (context, mainState) {
+            return HomeAppBar(
+              location: 'دمشق',
+              notificationCount: mainState.unreadNotificationsCount,
+              onLocationTap: () {
+                // TODO: Open location picker
+              },
+              onNotificationTap: () async {
+                await context.pushNamed(Routes.notificationsScreen);
+                // Refresh notification count when returning from notifications screen
+                if (context.mounted) {
+                  context.read<MainLayoutCubit>().loadUnreadNotificationsCount();
+                }
+              },
+            );
+          },
+        ),
       ),
       body: RefreshIndicator(
         color: ColorsManager.mainColor,
-        onRefresh: () => context.read<HomeCubit>().refresh(),
+        onRefresh: () async {
+          await context.read<HomeCubit>().refresh();
+          // تحديث عدد الإشعارات عند عمل refresh
+          if (context.mounted) {
+            context.read<MainLayoutCubit>().loadUnreadNotificationsCount();
+          }
+        },
         child: SingleChildScrollView(
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),

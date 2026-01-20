@@ -64,41 +64,59 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         // Notifications
         GestureDetector(
           onTap: onNotificationTap,
-          child: Stack(
-            children: [
-              Icon(
-                Icons.notifications_outlined,
-                size: 24.sp,
-                color: ColorsManager.textPrimary,
-              ),
-              if (notificationCount > 0)
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Container(
-                    padding: EdgeInsets.all(4.r),
-                    decoration: const BoxDecoration(
-                      color: ColorsManager.error,
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: BoxConstraints(
-                      minWidth: 16.w,
-                      minHeight: 16.h,
-                    ),
-                    child: Text(
-                      notificationCount > 9 ? '9+' : '$notificationCount',
-                      style: TextStyles.font10GreyMedium.copyWith(
-                        color: Colors.white,
-                        fontSize: 8.sp,
+          child: Container(
+            padding: EdgeInsets.all(4.r),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(
+                  Icons.notifications_outlined,
+                  size: 26.sp,
+                  color: ColorsManager.textPrimary,
+                ),
+                if (notificationCount > 0)
+                  Positioned(
+                    right: -2,
+                    top: -2,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: notificationCount > 9 ? 4.w : 5.w,
+                        vertical: 2.h,
                       ),
-                      textAlign: TextAlign.center,
+                      decoration: BoxDecoration(
+                        color: ColorsManager.error,
+                        borderRadius: BorderRadius.circular(10.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: ColorsManager.error.withOpacity(0.3),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      constraints: BoxConstraints(
+                        minWidth: 18.w,
+                        minHeight: 18.h,
+                      ),
+                      child: Center(
+                        child: Text(
+                          notificationCount > 99 ? '99+' : '$notificationCount',
+                          style: TextStyles.font10GreyMedium.copyWith(
+                            color: Colors.white,
+                            fontSize: 9.sp,
+                            fontWeight: FontWeight.bold,
+                            height: 1,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
-        horizontalSpace(16)
+        horizontalSpace(12)
       ],
     );
   }

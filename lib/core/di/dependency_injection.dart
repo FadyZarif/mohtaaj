@@ -11,6 +11,7 @@ import '../../features/items/logic/create_item_cubit/create_item_cubit.dart';
 import '../../features/items/logic/item_details_cubit/item_details_cubit.dart';
 import '../../features/items/logic/items_list_cubit/items_list_cubit.dart';
 import '../../features/main_layout/logic/main_layout_cubit/main_layout_cubit.dart';
+import '../../features/notifications/logic/notifications_cubit/notifications_cubit.dart';
 import '../../features/profile/logic/my_items_cubit/my_items_cubit.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/categories/logic/categories_cubit/categories_cubit.dart';
@@ -132,6 +133,12 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<FavoritesCubit>(
     () => FavoritesCubit(getIt<ApiService>()),
+  );
+
+  // ========================== Notifications ==========================
+
+  getIt.registerFactory<NotificationsCubit>(
+    () => NotificationsCubit(getIt<ApiService>()),
   );
 
   // ========================== Socket Service ==========================

@@ -63,6 +63,12 @@ class ApiConstants {
   static const String badges = '$apiPath/badges';
   static const String myBadges = '$apiPath/badges/my';
 
+  // Notifications
+  static const String notifications = '$apiPath/notifications';
+  static const String notificationsUnreadCount = '$notifications/unread-count';
+  static const String notificationsReadAll = '$notifications/read-all';
+  static const String notificationsRead = '$notifications/read';
+
   // Health Check
   static const String health = '/health';
 }

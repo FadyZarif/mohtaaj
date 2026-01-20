@@ -27,6 +27,10 @@ import '../../features/items/data/models/items_queries.dart';
 import '../../features/items/data/models/items_response.dart';
 import '../../features/items/data/models/update_item_request.dart';
 import '../../features/items/data/models/upload_image_response.dart';
+import '../../features/notifications/data/models/delete_notification_response.dart';
+import '../../features/notifications/data/models/mark_notification_response.dart';
+import '../../features/notifications/data/models/notifications_response.dart';
+import '../../features/notifications/data/models/unread_count_response.dart';
 import '../../features/profile/data/models/profile_response.dart';
 import '../../features/profile/data/models/rate_user_request.dart';
 import '../../features/profile/data/models/rate_user_response.dart';
@@ -330,4 +334,32 @@ abstract class ApiService {
 
   @GET(ApiConstants.myBadges)
   Future<dynamic> getMyBadges();
+
+  // ========================== Notifications ==========================
+
+  @GET(ApiConstants.notifications)
+  Future<NotificationsResponse> getNotifications({
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+    @Query('unreadOnly') bool? unreadOnly,
+  });
+
+  @GET(ApiConstants.notificationsUnreadCount)
+  Future<UnreadCountResponse> getNotificationsUnreadCount();
+
+  @PATCH('${ApiConstants.notifications}/{notificationId}/read')
+  Future<MarkNotificationResponse> markNotificationAsRead(
+    @Path('notificationId') String notificationId,
+  );
+
+  @PATCH(ApiConstants.notificationsReadAll)
+  Future<MarkAllNotificationsResponse> markAllNotificationsAsRead();
+
+  @DELETE('${ApiConstants.notifications}/{notificationId}')
+  Future<DeleteNotificationResponse> deleteNotification(
+    @Path('notificationId') String notificationId,
+  );
+
+  @DELETE(ApiConstants.notificationsRead)
+  Future<DeleteAllReadNotificationsResponse> deleteAllReadNotifications();
 }

@@ -7,5 +7,6 @@ abstract class MainLayoutState with _$MainLayoutState {
   const factory MainLayoutState({
     @Default(0) int currentIndex,
     @Default(0) int unreadChatsCount,
+    @Default(0) int unreadNotificationsCount,
   }) = _MainLayoutState;
 }

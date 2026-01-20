@@ -17,7 +17,7 @@ class MainLayoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<MainLayoutCubit>(),
+      create: (context) => getIt<MainLayoutCubit>()..init(),
       child: const _MainLayoutBody(),
     );
   }

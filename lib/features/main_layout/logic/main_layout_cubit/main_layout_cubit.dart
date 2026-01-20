@@ -27,6 +27,7 @@ class MainLayoutCubit extends Cubit<MainLayoutState> {
     final isLoggedIn = await _authService.isLoggedIn();
     if (isLoggedIn) {
       await loadUnreadCount();
+      await loadUnreadNotificationsCount();
     }
   }
 
@@ -38,6 +39,17 @@ class MainLayoutCubit extends Cubit<MainLayoutState> {
       print('📊 Unread count loaded: ${response.data.totalUnread}');
     } catch (e) {
       print('❌ Error loading unread count: $e');
+    }
+  }
+
+  /// Load unread notifications count from API
+  Future<void> loadUnreadNotificationsCount() async {
+    try {
+      final response = await _apiService.getNotificationsUnreadCount();
+      emit(state.copyWith(unreadNotificationsCount: response.data.unreadCount));
+      print('📊 Unread notifications count loaded: ${response.data.unreadCount}');
+    } catch (e) {
+      print('❌ Error loading unread notifications count: $e');
     }
   }
 
@@ -65,6 +77,11 @@ class MainLayoutCubit extends Cubit<MainLayoutState> {
   /// Update unread chats count
   void updateUnreadChatsCount(int count) {
     emit(state.copyWith(unreadChatsCount: count));
+  }
+
+  /// Update unread notifications count
+  void updateUnreadNotificationsCount(int count) {
+    emit(state.copyWith(unreadNotificationsCount: count));
   }
 
   /// Reset to home tab

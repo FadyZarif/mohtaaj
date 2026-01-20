@@ -19,6 +19,7 @@ import '../../features/items/ui/screens/category_items_screen.dart';
 import '../../features/items/ui/screens/edit_item_screen.dart';
 import '../../features/items/ui/screens/item_details_screen.dart';
 import '../../features/main_layout/ui/screens/main_layout_screen.dart';
+import '../../features/notifications/ui/screens/notifications_screen.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/profile/ui/screens/edit_profile_screen.dart';
 import '../../features/profile/ui/screens/my_items_screen.dart';
@@ -118,6 +119,10 @@ class AppRouter {
       // Favorites Screen
       case Routes.favoritesScreen:
         return MaterialPageRoute(builder: (_) => const FavoritesScreen());
+
+      // Notifications Screen
+      case Routes.notificationsScreen:
+        return MaterialPageRoute(builder: (_) => const NotificationsScreen());
 
       // Reports Screen
       case Routes.myReportsScreen:

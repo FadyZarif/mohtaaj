@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MainLayoutState {
 
- int get currentIndex; int get unreadChatsCount;
+ int get currentIndex; int get unreadChatsCount; int get unreadNotificationsCount;
 /// Create a copy of MainLayoutState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $MainLayoutStateCopyWith<MainLayoutState> get copyWith => _$MainLayoutStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MainLayoutState&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.unreadChatsCount, unreadChatsCount) || other.unreadChatsCount == unreadChatsCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MainLayoutState&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.unreadChatsCount, unreadChatsCount) || other.unreadChatsCount == unreadChatsCount)&&(identical(other.unreadNotificationsCount, unreadNotificationsCount) || other.unreadNotificationsCount == unreadNotificationsCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentIndex,unreadChatsCount);
+int get hashCode => Object.hash(runtimeType,currentIndex,unreadChatsCount,unreadNotificationsCount);
 
 @override
 String toString() {
-  return 'MainLayoutState(currentIndex: $currentIndex, unreadChatsCount: $unreadChatsCount)';
+  return 'MainLayoutState(currentIndex: $currentIndex, unreadChatsCount: $unreadChatsCount, unreadNotificationsCount: $unreadNotificationsCount)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $MainLayoutStateCopyWith<$Res>  {
   factory $MainLayoutStateCopyWith(MainLayoutState value, $Res Function(MainLayoutState) _then) = _$MainLayoutStateCopyWithImpl;
 @useResult
 $Res call({
- int currentIndex, int unreadChatsCount
+ int currentIndex, int unreadChatsCount, int unreadNotificationsCount
 });
 
 
@@ -62,10 +62,11 @@ class _$MainLayoutStateCopyWithImpl<$Res>
 
 /// Create a copy of MainLayoutState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? currentIndex = null,Object? unreadChatsCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? currentIndex = null,Object? unreadChatsCount = null,Object? unreadNotificationsCount = null,}) {
   return _then(_self.copyWith(
 currentIndex: null == currentIndex ? _self.currentIndex : currentIndex // ignore: cast_nullable_to_non_nullable
 as int,unreadChatsCount: null == unreadChatsCount ? _self.unreadChatsCount : unreadChatsCount // ignore: cast_nullable_to_non_nullable
+as int,unreadNotificationsCount: null == unreadNotificationsCount ? _self.unreadNotificationsCount : unreadNotificationsCount // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -151,10 +152,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int currentIndex,  int unreadChatsCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int currentIndex,  int unreadChatsCount,  int unreadNotificationsCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MainLayoutState() when $default != null:
-return $default(_that.currentIndex,_that.unreadChatsCount);case _:
+return $default(_that.currentIndex,_that.unreadChatsCount,_that.unreadNotificationsCount);case _:
   return orElse();
 
 }
@@ -172,10 +173,10 @@ return $default(_that.currentIndex,_that.unreadChatsCount);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int currentIndex,  int unreadChatsCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int currentIndex,  int unreadChatsCount,  int unreadNotificationsCount)  $default,) {final _that = this;
 switch (_that) {
 case _MainLayoutState():
-return $default(_that.currentIndex,_that.unreadChatsCount);case _:
+return $default(_that.currentIndex,_that.unreadChatsCount,_that.unreadNotificationsCount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +193,10 @@ return $default(_that.currentIndex,_that.unreadChatsCount);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int currentIndex,  int unreadChatsCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int currentIndex,  int unreadChatsCount,  int unreadNotificationsCount)?  $default,) {final _that = this;
 switch (_that) {
 case _MainLayoutState() when $default != null:
-return $default(_that.currentIndex,_that.unreadChatsCount);case _:
+return $default(_that.currentIndex,_that.unreadChatsCount,_that.unreadNotificationsCount);case _:
   return null;
 
 }
@@ -207,11 +208,12 @@ return $default(_that.currentIndex,_that.unreadChatsCount);case _:
 
 
 class _MainLayoutState implements MainLayoutState {
-  const _MainLayoutState({this.currentIndex = 0, this.unreadChatsCount = 0});
+  const _MainLayoutState({this.currentIndex = 0, this.unreadChatsCount = 0, this.unreadNotificationsCount = 0});
   
 
 @override@JsonKey() final  int currentIndex;
 @override@JsonKey() final  int unreadChatsCount;
+@override@JsonKey() final  int unreadNotificationsCount;
 
 /// Create a copy of MainLayoutState
 /// with the given fields replaced by the non-null parameter values.
@@ -223,16 +225,16 @@ _$MainLayoutStateCopyWith<_MainLayoutState> get copyWith => __$MainLayoutStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MainLayoutState&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.unreadChatsCount, unreadChatsCount) || other.unreadChatsCount == unreadChatsCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MainLayoutState&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.unreadChatsCount, unreadChatsCount) || other.unreadChatsCount == unreadChatsCount)&&(identical(other.unreadNotificationsCount, unreadNotificationsCount) || other.unreadNotificationsCount == unreadNotificationsCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentIndex,unreadChatsCount);
+int get hashCode => Object.hash(runtimeType,currentIndex,unreadChatsCount,unreadNotificationsCount);
 
 @override
 String toString() {
-  return 'MainLayoutState(currentIndex: $currentIndex, unreadChatsCount: $unreadChatsCount)';
+  return 'MainLayoutState(currentIndex: $currentIndex, unreadChatsCount: $unreadChatsCount, unreadNotificationsCount: $unreadNotificationsCount)';
 }
 
 
@@ -243,7 +245,7 @@ abstract mixin class _$MainLayoutStateCopyWith<$Res> implements $MainLayoutState
   factory _$MainLayoutStateCopyWith(_MainLayoutState value, $Res Function(_MainLayoutState) _then) = __$MainLayoutStateCopyWithImpl;
 @override @useResult
 $Res call({
- int currentIndex, int unreadChatsCount
+ int currentIndex, int unreadChatsCount, int unreadNotificationsCount
 });
 
 
@@ -260,10 +262,11 @@ class __$MainLayoutStateCopyWithImpl<$Res>
 
 /// Create a copy of MainLayoutState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentIndex = null,Object? unreadChatsCount = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? currentIndex = null,Object? unreadChatsCount = null,Object? unreadNotificationsCount = null,}) {
   return _then(_MainLayoutState(
 currentIndex: null == currentIndex ? _self.currentIndex : currentIndex // ignore: cast_nullable_to_non_nullable
 as int,unreadChatsCount: null == unreadChatsCount ? _self.unreadChatsCount : unreadChatsCount // ignore: cast_nullable_to_non_nullable
+as int,unreadNotificationsCount: null == unreadNotificationsCount ? _self.unreadNotificationsCount : unreadNotificationsCount // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }

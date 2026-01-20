@@ -38,6 +38,9 @@ class Routes {
   // Favorites Routes
   static const String favoritesScreen = '/favoritesScreen';
 
+  // Notifications
+  static const String notificationsScreen = '/notificationsScreen';
+
   // Chats
   static const String chatsListScreen = '/chatsListScreen';
   static const String chatRoomScreen = '/chatRoomScreen';

@@ -84,7 +84,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       detectedPhoneCode = 'EG';
 
       final apiError = ApiErrorHandler.handle(error);
-      emit(RegisterState.locationError(apiError.message ?? 'فشل تحديد الموقع'));
+      emit(RegisterState.locationError(apiError.message));
     }
   }
 
@@ -104,7 +104,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       ));
     } catch (error) {
       final apiError = ApiErrorHandler.handle(error);
-      emit(RegisterState.error(apiError.message ?? 'فشل التسجيل'));
+      emit(RegisterState.error(apiError.message));
     }
   }
 }

@@ -145,9 +145,9 @@ class UserProfileCubit extends Cubit<UserProfileState> {
       // Reload profile to get updated ratings
       await loadUserProfile();
     } catch (error) {
-      final errorMessage = ApiErrorHandler.handle(error).message;
-
-      /// TODO Handle error - show snackbar or dialog
+      if (kDebugMode) {
+        print('Error rating user: $error');
+      }
     }
   }
 

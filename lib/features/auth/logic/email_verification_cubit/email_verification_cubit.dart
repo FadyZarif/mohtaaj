@@ -1,5 +1,6 @@
 // lib/features/auth/logic/email_verification/email_verification_cubit.dart
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/networking/api_error_handler.dart';
@@ -53,12 +54,16 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
       );
 
       // ✅ Connect Socket
-      print('🔌 Connecting socket after verification...');
+      if (kDebugMode) {
+        print('🔌 Connecting socket after verification...');
+      }
       await _socketService.connect();
       await Future.delayed(const Duration(seconds: 1));
 
       if (_socketService.isConnected) {
-        print('✅ Socket connected successfully');
+        if (kDebugMode) {
+          print('✅ Socket connected successfully');
+        }
       }
 
       emit(EmailVerificationState.verified(
@@ -67,7 +72,7 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
     } catch (error) {
       final apiError = ApiErrorHandler.handle(error);
       emit(EmailVerificationState.error(
-        apiError.message ?? 'رمز التحقق غير صحيح',
+        apiError.message,
       ));
     }
   }
@@ -88,7 +93,7 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
     } catch (error) {
       final apiError = ApiErrorHandler.handle(error);
       emit(EmailVerificationState.error(
-        apiError.message ?? 'فشل إعادة إرسال الرمز',
+        apiError.message,
       ));
     }
   }

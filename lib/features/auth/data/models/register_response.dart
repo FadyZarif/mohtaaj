@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'user_model.dart';
-import 'tokens_model.dart';
 
 part 'register_response.freezed.dart';
 part 'register_response.g.dart';

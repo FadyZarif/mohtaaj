@@ -1,5 +1,6 @@
 // lib/features/items/logic/items_list_cubit/items_list_cubit.dart
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
@@ -176,8 +177,10 @@ class ItemsListCubit extends Cubit<ItemsListState> {
         error: null,
       ));
     } catch (error,s) {
-      print(error);
-      print(s);
+      if (kDebugMode) {
+        print(error);
+        print(s);
+      }
       final errorMessage = ApiErrorHandler.handle(error).message;
       emit(state.copyWith(
         isLoading: false,

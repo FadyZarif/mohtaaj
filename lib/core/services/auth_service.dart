@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mohtaaj/core/helpers/cache_helper.dart';
 import 'package:mohtaaj/features/auth/data/models/user_model.dart';
@@ -121,7 +122,9 @@ class AuthService {
         return false;
       }
     } catch (e) {
-      print('❌ Error in requireAuth: $e');
+      if (kDebugMode) {
+        print('❌ Error in requireAuth: $e');
+      }
 
       // On error, prompt login
       if (context.mounted) {

@@ -72,7 +72,7 @@ class AppRouter {
             email: args['email'] as String,
             fromRegister: args['fromRegister'] as bool? ?? true,
           ),
-        );;
+        );
 
       // ========================== Main Layout ==========================
 

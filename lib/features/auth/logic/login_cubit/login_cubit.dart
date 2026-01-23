@@ -1,5 +1,6 @@
 // lib/features/auth/logic/login_cubit/login_cubit.dart
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mohtaaj/core/services/auth_service.dart';
 import '../../../../core/di/dependency_injection.dart';
@@ -27,7 +28,9 @@ class LoginCubit extends Cubit<LoginState> {
 
       // ✅ Check if email verification is required
       if (response.data.requiresVerification == true) {
-        print('⚠️ Email verification required');
+        if (kDebugMode) {
+          print('⚠️ Email verification required');
+        }
         emit(LoginState.needsVerification(
           email: email,
           message: 'يرجى التحقق من بريدك الإلكتروني لإكمال تسجيل الدخول',
@@ -59,15 +62,21 @@ class LoginCubit extends Cubit<LoginState> {
         );
 
         // Connect Socket
-        print('🔌 Connecting socket after login...');
+        if (kDebugMode) {
+          print('🔌 Connecting socket after login...');
+        }
         await _socketService.connect();
 
         await Future.delayed(const Duration(seconds: 1));
 
         if (_socketService.isConnected) {
-          print('✅ Socket connected successfully');
+          if (kDebugMode) {
+            print('✅ Socket connected successfully');
+          }
         } else {
-          print('⚠️ Socket connection pending...');
+          if (kDebugMode) {
+            print('⚠️ Socket connection pending...');
+          }
         }
 
         emit(const LoginState.success('تم تسجيل الدخول بنجاح'));

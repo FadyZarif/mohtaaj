@@ -1,5 +1,6 @@
 // lib/features/reports/logic/reports_cubit/reports_cubit.dart
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
@@ -41,14 +42,18 @@ class ReportsCubit extends Cubit<ReportsState> {
         ),
       );
 
-      print('✅ Report created successfully');
+      if (kDebugMode) {
+        print('✅ Report created successfully');
+      }
     } catch (e) {
       final error = ApiErrorHandler.handle(e);
 
       String errorMessage = error.message;
 
       emit(ReportsState.error(errorMessage));
-      print('❌ Error creating report: $errorMessage');
+      if (kDebugMode) {
+        print('❌ Error creating report: $errorMessage');
+      }
     }
   }
 
@@ -62,7 +67,9 @@ class ReportsCubit extends Cubit<ReportsState> {
     }
 
     if (!_hasMorePages && !refresh) {
-      print('⚠️ No more pages to load');
+      if (kDebugMode) {
+        print('⚠️ No more pages to load');
+      }
       return;
     }
 
@@ -89,13 +96,17 @@ class ReportsCubit extends Cubit<ReportsState> {
         ),
       );
 
-      print(
+      if (kDebugMode) {
+        print(
         '✅ Reports loaded: ${_allReports.length}, Has more: $_hasMorePages',
       );
+      }
     } catch (e) {
       final error = ApiErrorHandler.handle(e);
       emit(ReportsState.error(error.message));
-      print('❌ Error loading reports: ${error.message}');
+      if (kDebugMode) {
+        print('❌ Error loading reports: ${error.message}');
+      }
     }
   }
 

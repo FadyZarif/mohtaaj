@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/helpers/app_logger.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../chats/data/models/chat_model.dart';
@@ -47,20 +49,24 @@ class MainLayoutCubit extends Cubit<MainLayoutState> {
     try {
       final response = await _apiService.getNotificationsUnreadCount();
       emit(state.copyWith(unreadNotificationsCount: response.data.unreadCount));
-      print('📊 Unread notifications count loaded: ${response.data.unreadCount}');
+      if (kDebugMode) {
+        print('📊 Unread notifications count loaded: ${response.data.unreadCount}');
+      }
     } catch (e) {
-      print('❌ Error loading unread notifications count: $e');
+      if (kDebugMode) {
+        print('❌ Error loading unread notifications count: $e');
+      }
     }
   }
 
   /// Setup socket listener for new messages
   void _setupSocketListener() {
     _messageNotificationSub = _socketService.messageNotificationStream.listen((data) {
-      print('🔔 New message notification - incrementing badge');
+      AppLogger.info('New message notification - incrementing badge', tag: 'Socket');
       // Increment unread count
       final newCount = state.unreadChatsCount + 1;
       emit(state.copyWith(unreadChatsCount: newCount));
-      print('📊 Unread count updated: $newCount');
+      AppLogger.info('Unread count updated: $newCount', tag: 'Socket');
     });
   }
 

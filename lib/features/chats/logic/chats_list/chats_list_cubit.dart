@@ -146,8 +146,8 @@ class ChatsListCubit extends Cubit<ChatsListState> {
           final chat = _allChats[index];
           final isBuyer = chat.buyerId == _currentUserId;
 
-          print('📊 Processing message: $messageId');
           if (kDebugMode) {
+            print('📊 Processing message: $messageId');
             print('   Current user: $_currentUserId');
             print('   Is buyer: $isBuyer');
             print('   Sender: $senderId');
@@ -214,7 +214,9 @@ class ChatsListCubit extends Cubit<ChatsListState> {
         }
         markChatAsRead(chatId);
       } catch (e) {
-        print('❌ Error in marked_read listener: $e');
+        if (kDebugMode) {
+          print('❌ Error in marked_read listener: $e');
+        }
       }
     });
   }
@@ -370,7 +372,9 @@ class ChatsListCubit extends Cubit<ChatsListState> {
         unreadCountSeller: !isBuyer ? 0 : chat.unreadCountSeller,
       );
       _applyFilter();
-      print('✅ Chat marked as read: $chatId');
+      if (kDebugMode) {
+        print('✅ Chat marked as read: $chatId');
+      }
     }
   }
 

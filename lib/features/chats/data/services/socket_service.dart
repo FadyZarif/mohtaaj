@@ -1,6 +1,7 @@
 // lib/features/chats/data/services/socket_service.dart
 
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../../../core/helpers/cache_helper.dart';
 
@@ -41,20 +42,28 @@ class SocketService {
 
   Future<void> connect() async {
     if (_socket != null && _isConnected) {
-      print('ℹ️ Socket already connected');
+      if (kDebugMode) {
+        print('ℹ️ Socket already connected');
+      }
       return;
     }
 
     try {
-      print('🔌 Getting token...');
+      if (kDebugMode) {
+        print('🔌 Getting token...');
+      }
       final token = await CacheHelper.getSecureData(key: 'accessToken');
 
       if (token == null || token.isEmpty) {
-        print('❌ No token found');
+        if (kDebugMode) {
+          print('❌ No token found');
+        }
         return;
       }
 
-      print('✅ Token found, connecting...');
+      if (kDebugMode) {
+        print('✅ Token found, connecting...');
+      }
 
       _socket = IO.io(
         'https://mohtaaj.onrender.com',
@@ -71,9 +80,13 @@ class SocketService {
       _setupListeners();
       _socket!.connect();
 
-      print('🚀 Socket connection initiated');
+      if (kDebugMode) {
+        print('🚀 Socket connection initiated');
+      }
     } catch (e) {
-      print('❌ Socket connection error: $e');
+      if (kDebugMode) {
+        print('❌ Socket connection error: $e');
+      }
     }
   }
 
@@ -82,53 +95,73 @@ class SocketService {
     _socket!.onConnect((_) {
       _isConnected = true;
       _connectionController.add(true);
-      print('✅ Socket Connected');
+      if (kDebugMode) {
+        print('✅ Socket Connected');
+      }
     });
 
     _socket!.onDisconnect((_) {
       _isConnected = false;
       _connectionController.add(false);
-      print('❌ Socket Disconnected');
+      if (kDebugMode) {
+        print('❌ Socket Disconnected');
+      }
     });
 
     _socket!.onConnectError((error) {
-      print('🔴 Connection Error: $error');
+      if (kDebugMode) {
+        print('🔴 Connection Error: $error');
+      }
     });
 
     // Auth
     _socket!.on('connected', (data) {
-      print('🔗 [Socket] connected: $data');
+      if (kDebugMode) {
+        print('🔗 [Socket] connected: $data');
+      }
     });
 
     _socket!.on('auth_invalid', (data) {
-      print('🚫 [Socket] auth_invalid: $data');
+      if (kDebugMode) {
+        print('🚫 [Socket] auth_invalid: $data');
+      }
       _authInvalidController.add(data);
     });
 
     _socket!.on('token_expiring_soon', (data) {
-      print('⚠️ [Socket] token_expiring_soon: $data');
+      if (kDebugMode) {
+        print('⚠️ [Socket] token_expiring_soon: $data');
+      }
       _tokenExpiringController.add(data);
     });
 
     // Messages
     _socket!.on('new_message', (data) {
-      print('📩 [Socket] new_message: $data');
+      if (kDebugMode) {
+        print('📩 [Socket] new_message: $data');
+      }
       _newMessageController.add(data);
     });
 
     _socket!.on('message_sent', (data) {
-      print('📤 [Socket] message_sent: $data');
+      if (kDebugMode) {
+        print('📤 [Socket] message_sent: $data');
+      }
       _messageSentController.add(data);
     });
 
     _socket!.on('new_message_notification', (data) {
-      print('🔔 [Socket] new_message_notification: $data');
+      if (kDebugMode) {
+        print('🔔 [Socket] new_message_notification: $data');
+      }
       _messageNotificationController.add(data);
     });
 
     // ✅ Edit/Delete Events
     _socket!.on('message_edited', (data) {
-      print('✏️ [Socket] message_edited: $data');
+      if (kDebugMode) {
+        print('✏️ [Socket] message_edited: $data');
+      }
       _newMessageController.add({
         'type': 'message_edited',
         'message': data['message'],
@@ -136,7 +169,9 @@ class SocketService {
     });
 
     _socket!.on('message_deleted', (data) {
-      print('🗑️ [Socket] message_deleted: $data');
+      if (kDebugMode) {
+        print('🗑️ [Socket] message_deleted: $data');
+      }
       _newMessageController.add({
         'type': 'message_deleted',
         'message': data['message'],
@@ -145,18 +180,24 @@ class SocketService {
 
     // Typing
     _socket!.on('user_typing', (data) {
-      print('⌨️ [Socket] user_typing: $data');
+      if (kDebugMode) {
+        print('⌨️ [Socket] user_typing: $data');
+      }
       _userTypingController.add(data);
     });
 
     // Read
     _socket!.on('messages_read', (data) {
-      print('📖 [Socket] messages_read: $data');
+      if (kDebugMode) {
+        print('📖 [Socket] messages_read: $data');
+      }
       _messagesReadController.add(data);
     });
 
     _socket!.on('marked_read', (data) {
-      print('✅ [Socket] marked_read: $data');
+      if (kDebugMode) {
+        print('✅ [Socket] marked_read: $data');
+      }
       _messagesReadController.add({
         'chatId': data['chatId'],
         'userId': data['userId'],
@@ -166,23 +207,31 @@ class SocketService {
 
     // Online Status
     _socket!.on('user_online', (data) {
-      print('🟢 [Socket] user_online: $data');
+      if (kDebugMode) {
+        print('🟢 [Socket] user_online: $data');
+      }
       _userOnlineController.add(data);
     });
 
     _socket!.on('user_offline', (data) {
-      print('⚫ [Socket] user_offline: $data');
+      if (kDebugMode) {
+        print('⚫ [Socket] user_offline: $data');
+      }
       _userOfflineController.add(data);
     });
 
     _socket!.on('online_statuses', (data) {
-      print('📊 [Socket] online_statuses: $data');
+      if (kDebugMode) {
+        print('📊 [Socket] online_statuses: $data');
+      }
       _onlineStatusesController.add(data);
     });
 
     // Error
     _socket!.on('error', (data) {
-      print('🔴 [Socket] error: $data');
+      if (kDebugMode) {
+        print('🔴 [Socket] error: $data');
+      }
     });
   }
 
@@ -190,16 +239,22 @@ class SocketService {
   void joinChat(String chatId) {
     if (_isConnected) {
       _socket?.emit('join_chat', {'chatId': chatId});
-      print('🏠 Joined chat: $chatId');
+      if (kDebugMode) {
+        print('🏠 Joined chat: $chatId');
+      }
     } else {
-      print('❌ Cannot join - not connected');
+      if (kDebugMode) {
+        print('❌ Cannot join - not connected');
+      }
     }
   }
 
   void leaveChat(String chatId) {
     if (_isConnected) {
       _socket?.emit('leave_chat', {'chatId': chatId});
-      print('🚪 Left chat: $chatId');
+      if (kDebugMode) {
+        print('🚪 Left chat: $chatId');
+      }
     }
   }
 
@@ -213,40 +268,54 @@ class SocketService {
       if (imageUrl != null) data['imageUrl'] = imageUrl;
 
       _socket?.emit('send_message', data);
-      print('📤 Sending message: $data');
+      if (kDebugMode) {
+        print('📤 Sending message: $data');
+      }
     } else {
-      print('❌ Cannot send - not connected');
+      if (kDebugMode) {
+        print('❌ Cannot send - not connected');
+      }
     }
   }
 
   void typing(String chatId, bool isTyping) {
     if (_isConnected) {
       _socket?.emit('typing', {'chatId': chatId, 'isTyping': isTyping});
-      print('⌨️ Typing: $isTyping in $chatId');
+      if (kDebugMode) {
+        print('⌨️ Typing: $isTyping in $chatId');
+      }
     }
   }
 
   void markRead(String chatId) {
     if (_isConnected) {
       _socket?.emit('mark_read', {'chatId': chatId});
-      print('✅ Mark read: $chatId');
+      if (kDebugMode) {
+        print('✅ Mark read: $chatId');
+      }
     }
   }
 
   void checkOnline(List<String> userIds) {
     if (_isConnected) {
       _socket?.emit('check_online', {'userIds': userIds});
-      print('🔍 Check online: $userIds');
+      if (kDebugMode) {
+        print('🔍 Check online: $userIds');
+      }
     }
   }
 
   void disconnect() {
-    print('🔌 Disconnecting...');
+    if (kDebugMode) {
+      print('🔌 Disconnecting...');
+    }
     _socket?.disconnect();
     _socket?.dispose();
     _socket = null;
     _isConnected = false;
-    print('❌ Disconnected');
+    if (kDebugMode) {
+      print('❌ Disconnected');
+    }
   }
 
   void dispose() {

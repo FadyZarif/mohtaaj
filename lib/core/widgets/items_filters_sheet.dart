@@ -477,7 +477,7 @@ class _ItemsFiltersSheetState extends State<ItemsFiltersSheet> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
-      builder: (sheetContext) => Container(
+      builder: (sheetContext) => SizedBox(
         height: MediaQuery.of(context).size.height * 0.6,
         child: Column(
           children: [

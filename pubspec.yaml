@@ -48,6 +48,8 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   retrofit: ^4.9.0
   retrofit_generator: ^10.1.4
+  # SSL Certificate Pinning للأمان
+  http_certificate_pinning: ^3.0.1
   #localization
   #easy_localization: ^3.0.7
   #splash screen

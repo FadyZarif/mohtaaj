@@ -40,8 +40,6 @@ class _ChatItemActionsState extends State<ChatItemActions> {
   bool get _isItemActive => widget.chat.item?.status == 'active';
   bool get _isItemClosed => widget.chat.item?.status == 'closed';
   bool get _isActualBuyer => widget.chat.item?.buyerId == widget.currentUserId;
-  // ✅ canRate من الـ API - يعني المشتري الفعلي ولسه مقيمش
-  bool get _canRate => widget.chat.item?.canRate ?? false;
 
   @override
   void dispose() {

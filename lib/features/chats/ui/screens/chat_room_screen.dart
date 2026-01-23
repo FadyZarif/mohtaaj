@@ -1,6 +1,7 @@
 // lib/features/chats/ui/screens/chat_room_screen.dart
 
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,13 +48,17 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       try {
         context.read<ChatsListCubit>().markChatAsRead(widget.chatId);
       } catch (e) {
-        print('⚠️ ChatsListCubit not found - skipping markChatAsRead');
+        if (kDebugMode) {
+          print('⚠️ ChatsListCubit not found - skipping markChatAsRead');
+        }
       }
 
       // Initialize chat room
       context.read<ChatRoomCubit>().init(_currentUserId!);
     } catch (e) {
-      print('User not logged in: $e');
+      if (kDebugMode) {
+        print('User not logged in: $e');
+      }
     }
 
     _scrollController.addListener(_onScroll);
@@ -99,7 +104,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         listener: (context, state) {
           state.maybeWhen(
             error: (message) {
-              print('❌ Error: $message');
+              if (kDebugMode) {
+                print('❌ Error: $message');
+              }
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(message)),
               );

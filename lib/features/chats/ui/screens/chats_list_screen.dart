@@ -1,5 +1,6 @@
 // lib/features/chats/ui/screens/chats_list_screen.dart
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -81,7 +82,9 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
       context.read<ChatsListCubit>().loadChats(userId: _currentUserId);
     } catch (e) {
       // User not logged in
-      print('User not logged in: $e');
+      if (kDebugMode) {
+        print('User not logged in: $e');
+      }
     }
   }
 
@@ -139,18 +142,24 @@ class _ChatsListScreenState extends State<_ChatsListScreen>
       ),
       body: BlocBuilder<ChatsListCubit, ChatsListState>(
         buildWhen: (previous, current) {
-          print('🔄 buildWhen called');
-          print('   Previous: ${previous.runtimeType}');
-          print('   Current: ${current.runtimeType}');
+          if (kDebugMode) {
+            print('🔄 buildWhen called');
+            print('   Previous: ${previous.runtimeType}');
+            print('   Current: ${current.runtimeType}');
+          }
           return true; // Always rebuild
         },
         builder: (context, state) {
-          print('🎨 Builder called with state: ${state.runtimeType}');
+          if (kDebugMode) {
+            print('🎨 Builder called with state: ${state.runtimeType}');
+          }
           return state.when(
             initial: () => const SizedBox(),
             loading: () => const Center(child: CircularProgressIndicator()),
             success: (chats, filter, currentPage, hasMore, isLoadingMore) {
-              print('✅ Success state - Chats count: ${chats.length}');
+              if (kDebugMode) {
+                print('✅ Success state - Chats count: ${chats.length}');
+              }
               return _buildChatsList(chats, hasMore, isLoadingMore);
             },
             error: (message) => Center(

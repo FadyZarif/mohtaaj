@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mohtaaj/core/helpers/cache_helper.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'api_constants.dart';
@@ -40,13 +41,15 @@ class DioFactory {
   }
 
   static void addDioInterceptor() {
-    dio?.interceptors.add(
+    if(kDebugMode) {
+      dio?.interceptors.add(
       PrettyDioLogger(
         requestBody: true,
         // requestHeader: true,
         // responseHeader: true,
       ),
     );
+    }
 
     // Token Interceptor
     dio?.interceptors.add(

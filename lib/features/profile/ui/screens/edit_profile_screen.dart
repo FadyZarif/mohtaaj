@@ -52,8 +52,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _initialCode = LocationData.getCodeByCountry(widget.user.country);
     _dial = LocationData.getDialByCode(_initialCode);
     _nameController = TextEditingController(text: widget.user.name);
-    print(_dial);
-    print(widget.user.phone.replaceFirst(_dial, ''));
 
     _phoneController = TextEditingController(
       text: widget.user.phone.replaceFirst(_dial, ''),
@@ -388,7 +386,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 final uploadedUrl = await context
                                     .read<ProfileCubit>()
                                     .uploadAvatar(_selectedImage!);
-                                if (mounted) context.pop(); // Close loading dialog
+                                if (context.mounted) context.pop(); // Close loading dialog
 
                                 if (uploadedUrl == null) {
                                   // Error already handled by cubit
@@ -406,9 +404,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 country: _selectedCountry!,
                                 avatarUrl: avatarUrl,
                               );
-                              context.read<ProfileCubit>().updateProfile(
+                              if(context.mounted) {
+                                context.read<ProfileCubit>().updateProfile(
                                     request,
                                   );
+                              }
                             }
                           },
                         ),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "26467411857",
+    "project_id": "muhtaj-f3440",
+    "storage_bucket": "muhtaj-f3440.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:26467411857:android:2f08f91e60833f593c9c30",
+        "android_client_info": {
+          "package_name": "com.layra.mohtaaj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaqIdFpHLHW7-dFUwGSLkfdzZrsl0oou8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1771,28 +1771,27 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<FcmRegisterTokenResponse> registerFcmToken(
+  Future<FcmTokenResponse> registerFcmToken(
     FcmRegisterTokenRequest request,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(request.toJson());
-    final _options = _setStreamType<FcmRegisterTokenResponse>(
+    final _data = request;
+    final _options = _setStreamType<FcmTokenResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/fcm/tokens',
+            '/api/fcm/tokens',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late FcmRegisterTokenResponse _value;
+    late FcmTokenResponse _value;
     try {
-      _value = FcmRegisterTokenResponse.fromJson(_result.data!);
+      _value = FcmTokenResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -1801,28 +1800,54 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<FcmRegisterTokenResponse> updateFcmToken(
-    FcmUpdateTokenRequest request,
+  Future<FcmTokenResponse> updateFcmToken(FcmUpdateTokenRequest request) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = request;
+    final _options = _setStreamType<FcmTokenResponse>(
+      Options(method: 'PUT', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/api/fcm/tokens',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late FcmTokenResponse _value;
+    try {
+      _value = FcmTokenResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<FcmDeleteTokenResponse> deleteFcmToken(
+    FcmDeleteTokenRequest request,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(request.toJson());
-    final _options = _setStreamType<FcmRegisterTokenResponse>(
-      Options(method: 'PUT', headers: _headers, extra: _extra)
+    final _data = request;
+    final _options = _setStreamType<FcmDeleteTokenResponse>(
+      Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/fcm/tokens',
+            '/api/fcm/tokens',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late FcmRegisterTokenResponse _value;
+    late FcmDeleteTokenResponse _value;
     try {
-      _value = FcmRegisterTokenResponse.fromJson(_result.data!);
+      _value = FcmDeleteTokenResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -1831,45 +1856,25 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<void> deleteFcmToken(FcmDeleteTokenRequest request) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(request.toJson());
-    final _options = _setStreamType<void>(
-      Options(method: 'DELETE', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/api/v1/fcm/tokens',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    await _dio.fetch<void>(_options);
-  }
-
-  @override
-  Future<FcmDeleteAllResponse> deleteAllFcmTokens() async {
+  Future<FcmDeleteAllTokensResponse> deleteAllFcmTokens() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<FcmDeleteAllResponse>(
+    final _options = _setStreamType<FcmDeleteAllTokensResponse>(
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/fcm/tokens/all',
+            '/api/fcm/tokens/all',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late FcmDeleteAllResponse _value;
+    late FcmDeleteAllTokensResponse _value;
     try {
-      _value = FcmDeleteAllResponse.fromJson(_result.data!);
+      _value = FcmDeleteAllTokensResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -1887,7 +1892,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/fcm/tokens',
+            '/api/fcm/tokens',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -1914,7 +1919,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/fcm/preferences',
+            '/api/fcm/preferences',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -1938,13 +1943,12 @@ class _ApiService implements ApiService {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(request.toJson());
+    final _data = request;
     final _options = _setStreamType<FcmPreferencesResponse>(
       Options(method: 'PUT', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/fcm/preferences',
+            '/api/fcm/preferences',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -1971,7 +1975,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/fcm/preferences/enable-all',
+            '/api/fcm/preferences/enable-all',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -1998,7 +2002,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/fcm/preferences/disable-all',
+            '/api/fcm/preferences/disable-all',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -2025,7 +2029,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/fcm/preferences/reset',
+            '/api/fcm/preferences/reset',
             queryParameters: queryParameters,
             data: _data,
           )

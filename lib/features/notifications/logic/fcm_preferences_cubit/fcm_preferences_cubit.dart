@@ -7,14 +7,16 @@ import 'fcm_preferences_state.dart';
 class FcmPreferencesCubit extends Cubit<FcmPreferencesState> {
   final ApiService _apiService;
 
-  FcmPreferencesCubit(this._apiService)
-      : super(const FcmPreferencesState());
+  FcmPreferencesCubit(this._apiService) : super(const FcmPreferencesState());
 
   Future<void> loadPreferences() async {
     emit(state.copyWith(isLoading: true, error: null));
     try {
       final response = await _apiService.getFcmPreferences();
-      emit(state.copyWith(isLoading: false, preferences: response.preferences));
+      emit(state.copyWith(
+        isLoading: false,
+        preferences: response.data.preferences,
+      ));
     } catch (e) {
       final apiError = ApiErrorHandler.handle(e);
       emit(state.copyWith(isLoading: false, error: apiError.message));
@@ -24,7 +26,7 @@ class FcmPreferencesCubit extends Cubit<FcmPreferencesState> {
   Future<void> updatePreference(FcmUpdatePreferencesRequest request) async {
     try {
       final response = await _apiService.updateFcmPreferences(request);
-      emit(state.copyWith(preferences: response.preferences));
+      emit(state.copyWith(preferences: response.data.preferences));
     } catch (e) {
       final apiError = ApiErrorHandler.handle(e);
       emit(state.copyWith(error: apiError.message));
@@ -35,7 +37,10 @@ class FcmPreferencesCubit extends Cubit<FcmPreferencesState> {
     emit(state.copyWith(isLoading: true, error: null));
     try {
       final response = await _apiService.enableAllNotifications();
-      emit(state.copyWith(isLoading: false, preferences: response.preferences));
+      emit(state.copyWith(
+        isLoading: false,
+        preferences: response.data.preferences,
+      ));
     } catch (e) {
       final apiError = ApiErrorHandler.handle(e);
       emit(state.copyWith(isLoading: false, error: apiError.message));
@@ -46,7 +51,10 @@ class FcmPreferencesCubit extends Cubit<FcmPreferencesState> {
     emit(state.copyWith(isLoading: true, error: null));
     try {
       final response = await _apiService.disableAllNotifications();
-      emit(state.copyWith(isLoading: false, preferences: response.preferences));
+      emit(state.copyWith(
+        isLoading: false,
+        preferences: response.data.preferences,
+      ));
     } catch (e) {
       final apiError = ApiErrorHandler.handle(e);
       emit(state.copyWith(isLoading: false, error: apiError.message));
@@ -57,7 +65,10 @@ class FcmPreferencesCubit extends Cubit<FcmPreferencesState> {
     emit(state.copyWith(isLoading: true, error: null));
     try {
       final response = await _apiService.resetFcmPreferences();
-      emit(state.copyWith(isLoading: false, preferences: response.preferences));
+      emit(state.copyWith(
+        isLoading: false,
+        preferences: response.data.preferences,
+      ));
     } catch (e) {
       final apiError = ApiErrorHandler.handle(e);
       emit(state.copyWith(isLoading: false, error: apiError.message));

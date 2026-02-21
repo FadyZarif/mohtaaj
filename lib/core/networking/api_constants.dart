@@ -70,7 +70,7 @@ class ApiConstants {
   static const String notificationsRead = '$notifications/read';
 
   // FCM (Firebase Cloud Messaging)
-  static const String fcm = '$apiPath/v1/fcm';
+  static const String fcm = '$apiPath/fcm';
   static const String fcmTokens = '$fcm/tokens';
   static const String fcmTokensAll = '$fcmTokens/all';
   static const String fcmPreferences = '$fcm/preferences';

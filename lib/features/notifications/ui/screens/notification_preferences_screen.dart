@@ -45,18 +45,11 @@ class NotificationPreferencesScreen extends StatelessWidget {
                   if (value == 'reset') cubit.resetToDefault();
                 },
                 itemBuilder: (_) => const [
+                  PopupMenuItem(value: 'enable_all', child: Text('تفعيل الكل')),
                   PopupMenuItem(
-                    value: 'enable_all',
-                    child: Text('تفعيل الكل'),
-                  ),
+                      value: 'disable_all', child: Text('تعطيل الكل')),
                   PopupMenuItem(
-                    value: 'disable_all',
-                    child: Text('تعطيل الكل'),
-                  ),
-                  PopupMenuItem(
-                    value: 'reset',
-                    child: Text('إعادة الضبط'),
-                  ),
+                      value: 'reset', child: Text('إعادة الضبط')),
                 ],
               );
             },
@@ -100,115 +93,100 @@ class NotificationPreferencesScreen extends StatelessWidget {
 
           return ListView(
             children: [
+              // ── General (read-only) ──────────────────────────────────
               _SectionHeader(title: 'عام'),
-              _PreferenceSwitch(
+              _InfoTile(
                 title: 'إشعارات الهاتف',
-                subtitle: 'استقبال إشعارات على هذا الجهاز',
-                value: prefs.pushNotifications,
-                onChanged: (v) => _update(context,
-                    FcmUpdatePreferencesRequest(pushNotifications: v)),
+                enabled: prefs.pushEnabled,
               ),
-              _PreferenceSwitch(
+              _InfoTile(
                 title: 'إشعارات البريد الإلكتروني',
-                subtitle: 'استقبال إشعارات عبر البريد الإلكتروني',
-                value: prefs.emailNotifications,
-                onChanged: (v) => _update(context,
-                    FcmUpdatePreferencesRequest(emailNotifications: v)),
+                enabled: prefs.emailEnabled,
               ),
+
+              // ── Quiet Hours (read-only) ──────────────────────────────
               _SectionHeader(title: 'ساعات الهدوء'),
-              _PreferenceSwitch(
-                title: 'تفعيل ساعات الهدوء',
-                subtitle: 'إيقاف الإشعارات خلال ساعات محددة',
-                value: prefs.quietHoursEnabled,
-                onChanged: (v) => _update(context,
-                    FcmUpdatePreferencesRequest(quietHoursEnabled: v)),
+              _InfoTile(
+                title: 'ساعات الهدوء',
+                subtitle: prefs.quietHoursEnabled
+                    ? '${prefs.quietHoursStart ?? '--'} - ${prefs.quietHoursEnd ?? '--'}'
+                    : 'معطّلة',
+                enabled: prefs.quietHoursEnabled,
               ),
-              if (prefs.quietHoursEnabled) ...[
-                _TimePickerTile(
-                  title: 'وقت البدء',
-                  value: prefs.quietHoursStart ?? '22:00',
-                  onChanged: (v) => _update(
-                      context, FcmUpdatePreferencesRequest(quietHoursStart: v)),
-                ),
-                _TimePickerTile(
-                  title: 'وقت الانتهاء',
-                  value: prefs.quietHoursEnd ?? '07:00',
-                  onChanged: (v) => _update(
-                      context, FcmUpdatePreferencesRequest(quietHoursEnd: v)),
-                ),
-              ],
+
+              // ── Notification Types (editable) ────────────────────────
               _SectionHeader(title: 'أنواع الإشعارات'),
               _PreferenceSwitch(
                 title: 'رسائل جديدة',
-                value: prefs.newMessage,
+                value: prefs.newMessageEnabled,
                 onChanged: (v) =>
                     _update(context, FcmUpdatePreferencesRequest(newMessage: v)),
               ),
               _PreferenceSwitch(
-                title: 'إضافة للمفضلة',
-                value: prefs.itemFavorited,
-                onChanged: (v) => _update(
-                    context, FcmUpdatePreferencesRequest(itemFavorited: v)),
-              ),
-              _PreferenceSwitch(
-                title: 'شارات جديدة',
-                value: prefs.badgeEarned,
-                onChanged: (v) => _update(
-                    context, FcmUpdatePreferencesRequest(badgeEarned: v)),
-              ),
-              _PreferenceSwitch(
                 title: 'عروض جديدة',
-                value: prefs.newOffer,
+                value: prefs.newOfferEnabled,
                 onChanged: (v) =>
                     _update(context, FcmUpdatePreferencesRequest(newOffer: v)),
               ),
               _PreferenceSwitch(
                 title: 'قبول العروض',
-                value: prefs.offerAccepted,
+                value: prefs.offerAcceptedEnabled,
                 onChanged: (v) => _update(
                     context, FcmUpdatePreferencesRequest(offerAccepted: v)),
               ),
               _PreferenceSwitch(
                 title: 'رفض العروض',
-                value: prefs.offerRejected,
+                value: prefs.offerRejectedEnabled,
                 onChanged: (v) => _update(
                     context, FcmUpdatePreferencesRequest(offerRejected: v)),
               ),
               _PreferenceSwitch(
+                title: 'إضافة للمفضلة',
+                value: prefs.itemFavoritedEnabled,
+                onChanged: (v) => _update(
+                    context, FcmUpdatePreferencesRequest(itemFavorited: v)),
+              ),
+              _PreferenceSwitch(
                 title: 'تقييمات جديدة',
-                value: prefs.newRating,
+                value: prefs.newRatingEnabled,
                 onChanged: (v) =>
                     _update(context, FcmUpdatePreferencesRequest(newRating: v)),
               ),
               _PreferenceSwitch(
-                title: 'إتمام التحدي',
-                value: prefs.challengeCompleted,
-                onChanged: (v) => _update(
-                    context, FcmUpdatePreferencesRequest(challengeCompleted: v)),
+                title: 'شارات جديدة',
+                value: prefs.badgeEarnedEnabled,
+                onChanged: (v) =>
+                    _update(context, FcmUpdatePreferencesRequest(newBadge: v)),
+              ),
+              _PreferenceSwitch(
+                title: 'إتمام التحديات',
+                value: prefs.challengeEnabled,
+                onChanged: (v) => _update(context,
+                    FcmUpdatePreferencesRequest(challengeCompleted: v)),
               ),
               _PreferenceSwitch(
                 title: 'كسب النقاط',
-                value: prefs.pointsEarned,
-                onChanged: (v) => _update(
-                    context, FcmUpdatePreferencesRequest(pointsEarned: v)),
+                value: prefs.pointsEarnedEnabled,
+                onChanged: (v) =>
+                    _update(context, FcmUpdatePreferencesRequest()),
               ),
               _PreferenceSwitch(
                 title: 'تلبية الطلبات',
-                value: prefs.requestFulfilled,
-                onChanged: (v) => _update(
-                    context, FcmUpdatePreferencesRequest(requestFulfilled: v)),
+                value: prefs.requestFulfilledEnabled,
+                onChanged: (v) =>
+                    _update(context, FcmUpdatePreferencesRequest()),
               ),
               _PreferenceSwitch(
                 title: 'إشعارات النظام',
-                value: prefs.systemNotifications,
-                onChanged: (v) => _update(
-                    context, FcmUpdatePreferencesRequest(systemNotifications: v)),
+                value: prefs.systemEnabled,
+                onChanged: (v) => _update(context,
+                    FcmUpdatePreferencesRequest(systemAnnouncement: v)),
               ),
               _PreferenceSwitch(
                 title: 'إشعارات تسويقية',
-                value: prefs.marketingNotifications,
-                onChanged: (v) => _update(context,
-                    FcmUpdatePreferencesRequest(marketingNotifications: v)),
+                value: prefs.marketingEnabled,
+                onChanged: (v) =>
+                    _update(context, FcmUpdatePreferencesRequest(marketing: v)),
               ),
               const SizedBox(height: 24),
             ],
@@ -222,6 +200,10 @@ class NotificationPreferencesScreen extends StatelessWidget {
     context.read<FcmPreferencesCubit>().updatePreference(request);
   }
 }
+
+// ════════════════════════════════════════════════════════════════════
+// Widgets
+// ════════════════════════════════════════════════════════════════════
 
 class _SectionHeader extends StatelessWidget {
   final String title;
@@ -242,15 +224,44 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _PreferenceSwitch extends StatelessWidget {
+/// Read-only tile showing current state with a status icon
+class _InfoTile extends StatelessWidget {
   final String title;
   final String? subtitle;
+  final bool enabled;
+
+  const _InfoTile({
+    required this.title,
+    this.subtitle,
+    required this.enabled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: ListTile(
+        title: Text(title, style: TextStyles.font14BlackRegular),
+        subtitle: subtitle != null
+            ? Text(subtitle!, style: TextStyles.font12GreyRegular)
+            : null,
+        trailing: Icon(
+          enabled ? Icons.check_circle_outline : Icons.cancel_outlined,
+          color: enabled ? Colors.green : Colors.grey,
+          size: 20,
+        ),
+      ),
+    );
+  }
+}
+
+class _PreferenceSwitch extends StatelessWidget {
+  final String title;
   final bool value;
   final ValueChanged<bool> onChanged;
 
   const _PreferenceSwitch({
     required this.title,
-    this.subtitle,
     required this.value,
     required this.onChanged,
   });
@@ -261,54 +272,9 @@ class _PreferenceSwitch extends StatelessWidget {
       color: Colors.white,
       child: SwitchListTile(
         title: Text(title, style: TextStyles.font14BlackRegular),
-        subtitle: subtitle != null
-            ? Text(subtitle!, style: TextStyles.font12GreyRegular)
-            : null,
         value: value,
         activeThumbColor: ColorsManager.mainColor,
         onChanged: onChanged,
-      ),
-    );
-  }
-}
-
-class _TimePickerTile extends StatelessWidget {
-  final String title;
-  final String value;
-  final ValueChanged<String> onChanged;
-
-  const _TimePickerTile({
-    required this.title,
-    required this.value,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final parts = value.split(':');
-    final hour = int.tryParse(parts.isNotEmpty ? parts[0] : '0') ?? 0;
-    final minute = int.tryParse(parts.length > 1 ? parts[1] : '0') ?? 0;
-    final timeOfDay = TimeOfDay(hour: hour, minute: minute);
-
-    return Container(
-      color: Colors.white,
-      child: ListTile(
-        title: Text(title, style: TextStyles.font14BlackRegular),
-        trailing: Text(
-          timeOfDay.format(context),
-          style: TextStyles.font14GreyRegular,
-        ),
-        onTap: () async {
-          final picked = await showTimePicker(
-            context: context,
-            initialTime: timeOfDay,
-          );
-          if (picked != null) {
-            final formatted =
-                '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
-            onChanged(formatted);
-          }
-        },
       ),
     );
   }

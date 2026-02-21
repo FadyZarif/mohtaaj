@@ -1,137 +1,148 @@
-class FcmRegisterTokenRequest {
-  final String token;
-  final String? deviceType;
-  final String? deviceId;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  FcmRegisterTokenRequest({
-    required this.token,
-    this.deviceType,
-    this.deviceId,
-  });
+part 'fcm_token_model.freezed.dart';
+part 'fcm_token_model.g.dart';
 
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{'token': token};
-    if (deviceType != null) map['deviceType'] = deviceType;
-    if (deviceId != null) map['deviceId'] = deviceId;
-    return map;
-  }
+// ========================== Requests ==========================
+
+@freezed
+abstract class FcmRegisterTokenRequest with _$FcmRegisterTokenRequest {
+  const factory FcmRegisterTokenRequest({
+    required String token,
+    @JsonKey(includeIfNull: false) String? deviceType,
+    @JsonKey(includeIfNull: false) String? deviceId,
+  }) = _FcmRegisterTokenRequest;
+
+  factory FcmRegisterTokenRequest.fromJson(Map<String, dynamic> json) =>
+      _$FcmRegisterTokenRequestFromJson(json);
 }
 
-class FcmUpdateTokenRequest {
-  final String oldToken;
-  final String newToken;
-  final String? deviceType;
-  final String? deviceId;
+@freezed
+abstract class FcmUpdateTokenRequest with _$FcmUpdateTokenRequest {
+  const factory FcmUpdateTokenRequest({
+    required String oldToken,
+    required String newToken,
+    @JsonKey(includeIfNull: false) String? deviceType,
+    @JsonKey(includeIfNull: false) String? deviceId,
+  }) = _FcmUpdateTokenRequest;
 
-  FcmUpdateTokenRequest({
-    required this.oldToken,
-    required this.newToken,
-    this.deviceType,
-    this.deviceId,
-  });
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{
-      'oldToken': oldToken,
-      'newToken': newToken,
-    };
-    if (deviceType != null) map['deviceType'] = deviceType;
-    if (deviceId != null) map['deviceId'] = deviceId;
-    return map;
-  }
+  factory FcmUpdateTokenRequest.fromJson(Map<String, dynamic> json) =>
+      _$FcmUpdateTokenRequestFromJson(json);
 }
 
-class FcmDeleteTokenRequest {
-  final String token;
+@freezed
+abstract class FcmDeleteTokenRequest with _$FcmDeleteTokenRequest {
+  const factory FcmDeleteTokenRequest({
+    required String token,
+  }) = _FcmDeleteTokenRequest;
 
-  FcmDeleteTokenRequest({required this.token});
-
-  Map<String, dynamic> toJson() => {'token': token};
+  factory FcmDeleteTokenRequest.fromJson(Map<String, dynamic> json) =>
+      _$FcmDeleteTokenRequestFromJson(json);
 }
 
-class FcmTokenModel {
-  final String id;
-  final String deviceType;
-  final String? deviceId;
-  final bool isValid;
-  final String? lastUsedAt;
-  final String createdAt;
+// ========================== Nested Data Models ==========================
 
-  FcmTokenModel({
-    required this.id,
-    required this.deviceType,
-    this.deviceId,
-    required this.isValid,
-    this.lastUsedAt,
-    required this.createdAt,
-  });
+/// data field in register/update response: { id, deviceType, isValid }
+@freezed
+abstract class FcmTokenData with _$FcmTokenData {
+  const factory FcmTokenData({
+    required String id,
+    required String deviceType,
+    required bool isValid,
+  }) = _FcmTokenData;
 
-  factory FcmTokenModel.fromJson(Map<String, dynamic> json) {
-    return FcmTokenModel(
-      id: json['id'] as String,
-      deviceType: json['deviceType'] as String,
-      deviceId: json['deviceId'] as String?,
-      isValid: json['isValid'] as bool,
-      lastUsedAt: json['lastUsedAt'] as String?,
-      createdAt: json['createdAt'] as String,
-    );
-  }
+  factory FcmTokenData.fromJson(Map<String, dynamic> json) =>
+      _$FcmTokenDataFromJson(json);
 }
 
-class FcmRegisterTokenResponse {
-  final bool success;
-  final String? message;
-  final FcmTokenModel data;
+/// Full token model returned inside getMyFcmTokens list
+@freezed
+abstract class FcmTokenModel with _$FcmTokenModel {
+  const factory FcmTokenModel({
+    required String id,
+    required String deviceType,
+    String? deviceId,
+    required bool isValid,
+    String? lastUsedAt,
+    String? createdAt,
+  }) = _FcmTokenModel;
 
-  FcmRegisterTokenResponse({
-    required this.success,
-    this.message,
-    required this.data,
-  });
-
-  factory FcmRegisterTokenResponse.fromJson(Map<String, dynamic> json) {
-    return FcmRegisterTokenResponse(
-      success: json['success'] as bool,
-      message: json['message'] as String?,
-      data: FcmTokenModel.fromJson(json['data'] as Map<String, dynamic>),
-    );
-  }
+  factory FcmTokenModel.fromJson(Map<String, dynamic> json) =>
+      _$FcmTokenModelFromJson(json);
 }
 
-class FcmTokensResponse {
-  final bool success;
-  final List<FcmTokenModel> tokens;
-  final int count;
+/// data field in getMyFcmTokens response: { tokens, count }
+@freezed
+abstract class FcmTokensData with _$FcmTokensData {
+  const factory FcmTokensData({
+    required List<FcmTokenModel> tokens,
+    required int count,
+  }) = _FcmTokensData;
 
-  FcmTokensResponse({
-    required this.success,
-    required this.tokens,
-    required this.count,
-  });
-
-  factory FcmTokensResponse.fromJson(Map<String, dynamic> json) {
-    final data = json['data'] as Map<String, dynamic>;
-    return FcmTokensResponse(
-      success: json['success'] as bool,
-      tokens: (data['tokens'] as List)
-          .map((e) => FcmTokenModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      count: data['count'] as int,
-    );
-  }
+  factory FcmTokensData.fromJson(Map<String, dynamic> json) =>
+      _$FcmTokensDataFromJson(json);
 }
 
-class FcmDeleteAllResponse {
-  final bool success;
-  final int? deletedCount;
+/// data field in deleteAllFcmTokens response: { deletedCount }
+@freezed
+abstract class FcmDeleteAllData with _$FcmDeleteAllData {
+  const factory FcmDeleteAllData({
+    int? deletedCount,
+  }) = _FcmDeleteAllData;
 
-  FcmDeleteAllResponse({required this.success, this.deletedCount});
+  factory FcmDeleteAllData.fromJson(Map<String, dynamic> json) =>
+      _$FcmDeleteAllDataFromJson(json);
+}
 
-  factory FcmDeleteAllResponse.fromJson(Map<String, dynamic> json) {
-    final data = json['data'] as Map<String, dynamic>?;
-    return FcmDeleteAllResponse(
-      success: json['success'] as bool,
-      deletedCount: data?['deletedCount'] as int?,
-    );
-  }
+// ========================== Responses ==========================
+
+/// POST /fcm/tokens  &  PUT /fcm/tokens
+@freezed
+abstract class FcmTokenResponse with _$FcmTokenResponse {
+  const factory FcmTokenResponse({
+    required bool success,
+    String? message,
+    required FcmTokenData data,
+  }) = _FcmTokenResponse;
+
+  factory FcmTokenResponse.fromJson(Map<String, dynamic> json) =>
+      _$FcmTokenResponseFromJson(json);
+}
+
+/// DELETE /fcm/tokens  (data is always {})
+@freezed
+abstract class FcmDeleteTokenResponse with _$FcmDeleteTokenResponse {
+  const factory FcmDeleteTokenResponse({
+    required bool success,
+    String? message,
+  }) = _FcmDeleteTokenResponse;
+
+  factory FcmDeleteTokenResponse.fromJson(Map<String, dynamic> json) =>
+      _$FcmDeleteTokenResponseFromJson(json);
+}
+
+/// DELETE /fcm/tokens/all
+@freezed
+abstract class FcmDeleteAllTokensResponse with _$FcmDeleteAllTokensResponse {
+  const factory FcmDeleteAllTokensResponse({
+    required bool success,
+    String? message,
+    required FcmDeleteAllData data,
+  }) = _FcmDeleteAllTokensResponse;
+
+  factory FcmDeleteAllTokensResponse.fromJson(Map<String, dynamic> json) =>
+      _$FcmDeleteAllTokensResponseFromJson(json);
+}
+
+/// GET /fcm/tokens
+@freezed
+abstract class FcmTokensResponse with _$FcmTokensResponse {
+  const factory FcmTokensResponse({
+    required bool success,
+    String? message,
+    required FcmTokensData data,
+  }) = _FcmTokensResponse;
+
+  factory FcmTokensResponse.fromJson(Map<String, dynamic> json) =>
+      _$FcmTokensResponseFromJson(json);
 }

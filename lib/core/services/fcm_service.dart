@@ -35,13 +35,11 @@ class FcmService {
   }
 
   Future<void> _requestPermissions() async {
-    if (Platform.isIOS) {
-      await FirebaseMessaging.instance.requestPermission(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-    }
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
   }
 
   Future<void> registerCurrentDevice() async {

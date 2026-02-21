@@ -368,20 +368,22 @@ abstract class ApiService {
   // ========================== FCM Tokens ==========================
 
   @POST(ApiConstants.fcmTokens)
-  Future<FcmRegisterTokenResponse> registerFcmToken(
+  Future<FcmTokenResponse> registerFcmToken(
     @Body() FcmRegisterTokenRequest request,
   );
 
   @PUT(ApiConstants.fcmTokens)
-  Future<FcmRegisterTokenResponse> updateFcmToken(
+  Future<FcmTokenResponse> updateFcmToken(
     @Body() FcmUpdateTokenRequest request,
   );
 
   @DELETE(ApiConstants.fcmTokens)
-  Future<void> deleteFcmToken(@Body() FcmDeleteTokenRequest request);
+  Future<FcmDeleteTokenResponse> deleteFcmToken(
+    @Body() FcmDeleteTokenRequest request,
+  );
 
   @DELETE(ApiConstants.fcmTokensAll)
-  Future<FcmDeleteAllResponse> deleteAllFcmTokens();
+  Future<FcmDeleteAllTokensResponse> deleteAllFcmTokens();
 
   @GET(ApiConstants.fcmTokens)
   Future<FcmTokensResponse> getMyFcmTokens();

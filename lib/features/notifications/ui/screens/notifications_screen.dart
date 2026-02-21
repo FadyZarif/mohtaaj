@@ -99,9 +99,19 @@ class _NotificationsScreenBodyState extends State<_NotificationsScreenBody> {
             icon: const Icon(Icons.more_vert, color: ColorsManager.textPrimary),
             onSelected: (value) {
               if (value == 'delete_read') _showDeleteAllReadDialog(context);
+              if (value == 'preferences') {
+                context.pushNamed(Routes.notificationPreferencesScreen);
+              }
             },
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: 'delete_read', child: Text('حذف المقروءة')),
+            itemBuilder: (context) => const [
+              PopupMenuItem(
+                value: 'preferences',
+                child: Text('إعدادات الإشعارات'),
+              ),
+              PopupMenuItem(
+                value: 'delete_read',
+                child: Text('حذف المقروءة'),
+              ),
             ],
           ),
         ],

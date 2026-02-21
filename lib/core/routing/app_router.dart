@@ -19,6 +19,8 @@ import '../../features/items/ui/screens/category_items_screen.dart';
 import '../../features/items/ui/screens/edit_item_screen.dart';
 import '../../features/items/ui/screens/item_details_screen.dart';
 import '../../features/main_layout/ui/screens/main_layout_screen.dart';
+import '../../features/notifications/logic/fcm_preferences_cubit/fcm_preferences_cubit.dart';
+import '../../features/notifications/ui/screens/notification_preferences_screen.dart';
 import '../../features/notifications/ui/screens/notifications_screen.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/profile/ui/screens/edit_profile_screen.dart';
@@ -162,6 +164,17 @@ class AppRouter {
             child: ChatRoomScreen(chatId: chatId),
           ),
         );
+
+      // Notification Preferences Screen
+      case Routes.notificationPreferencesScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) =>
+                getIt<FcmPreferencesCubit>()..loadPreferences(),
+            child: const NotificationPreferencesScreen(),
+          ),
+        );
+
       default:
         return null;
     }

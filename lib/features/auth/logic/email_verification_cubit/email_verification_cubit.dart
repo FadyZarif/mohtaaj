@@ -6,6 +6,7 @@ import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../../../core/services/auth_service.dart';
+import '../../../../core/services/fcm_service.dart';
 import '../../../chats/data/services/socket_service.dart';
 import '../../data/models/verify_email_request.dart';
 import '../../data/models/forgot_password_request.dart';
@@ -65,6 +66,9 @@ class EmailVerificationCubit extends Cubit<EmailVerificationState> {
           print('✅ Socket connected successfully');
         }
       }
+
+      // ✅ Register FCM token
+      await getIt<FcmService>().registerCurrentDevice();
 
       emit(EmailVerificationState.verified(
         message: response.message,

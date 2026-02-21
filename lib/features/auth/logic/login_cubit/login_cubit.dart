@@ -6,6 +6,7 @@ import 'package:mohtaaj/core/services/auth_service.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../../../core/networking/api_error_handler.dart';
+import '../../../../core/services/fcm_service.dart';
 import '../../../chats/data/services/socket_service.dart';
 import '../../data/models/login_request.dart';
 import 'login_state.dart';
@@ -66,6 +67,9 @@ class LoginCubit extends Cubit<LoginState> {
           print('🔌 Connecting socket after login...');
         }
         await _socketService.connect();
+
+        // Register FCM token
+        await getIt<FcmService>().registerCurrentDevice();
 
         await Future.delayed(const Duration(seconds: 1));
 

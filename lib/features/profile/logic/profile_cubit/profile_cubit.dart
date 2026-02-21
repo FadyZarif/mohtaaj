@@ -4,6 +4,7 @@ import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../../../core/networking/api_error_handler.dart';
 import '../../../../core/services/auth_service.dart';
+import '../../../../core/services/fcm_service.dart';
 import '../../../chats/data/services/socket_service.dart';
 import '../../data/models/update_profile_request.dart';
 import 'profile_state.dart';
@@ -70,6 +71,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(const ProfileState.loading());
 
     try {
+      // Delete FCM token before clearing auth
+      await getIt<FcmService>().deleteCurrentToken();
+
       // Call logout API (optional - some backends need it)
       await _apiService.logout({});
 

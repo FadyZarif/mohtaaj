@@ -22,7 +22,9 @@ import '../networking/dio_factory.dart';
 import '../../features/auth/logic/login_cubit/login_cubit.dart';
 import '../../features/auth/logic/register_cubit/register_cubit.dart';
 import '../services/auth_service.dart';
+import '../services/fcm_service.dart';
 import '../services/location_service.dart';
+import '../../features/notifications/logic/fcm_preferences_cubit/fcm_preferences_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -39,6 +41,10 @@ Future<void> setupGetIt() async {
   );
 
   getIt.registerLazySingleton<LocationService>(() => LocationService());
+
+  getIt.registerLazySingleton<FcmService>(
+    () => FcmService(getIt<ApiService>()),
+  );
 
   // ========================== Auth ==========================
 
@@ -138,6 +144,10 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<NotificationsCubit>(
     () => NotificationsCubit(getIt<ApiService>()),
+  );
+
+  getIt.registerFactory<FcmPreferencesCubit>(
+    () => FcmPreferencesCubit(getIt<ApiService>()),
   );
 
   // ========================== Socket Service ==========================

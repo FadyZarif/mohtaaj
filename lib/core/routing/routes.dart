@@ -65,4 +65,8 @@ class Routes {
 
   // Search Routes
   static const String searchScreen = '/searchScreen';
+
+  // Notification Preferences
+  static const String notificationPreferencesScreen =
+      '/notificationPreferences';
 }

@@ -69,6 +69,15 @@ class ApiConstants {
   static const String notificationsReadAll = '$notifications/read-all';
   static const String notificationsRead = '$notifications/read';
 
+  // FCM (Firebase Cloud Messaging)
+  static const String fcm = '$apiPath/v1/fcm';
+  static const String fcmTokens = '$fcm/tokens';
+  static const String fcmTokensAll = '$fcmTokens/all';
+  static const String fcmPreferences = '$fcm/preferences';
+  static const String fcmPreferencesEnableAll = '$fcmPreferences/enable-all';
+  static const String fcmPreferencesDisableAll = '$fcmPreferences/disable-all';
+  static const String fcmPreferencesReset = '$fcmPreferences/reset';
+
   // Health Check
   static const String health = '/health';
 }

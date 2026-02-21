@@ -28,6 +28,8 @@ import '../../features/items/data/models/items_response.dart';
 import '../../features/items/data/models/update_item_request.dart';
 import '../../features/items/data/models/upload_image_response.dart';
 import '../../features/notifications/data/models/delete_notification_response.dart';
+import '../../features/notifications/data/models/fcm_token_model.dart';
+import '../../features/notifications/data/models/fcm_preferences_model.dart';
 import '../../features/notifications/data/models/mark_notification_response.dart';
 import '../../features/notifications/data/models/notifications_response.dart';
 import '../../features/notifications/data/models/unread_count_response.dart';
@@ -362,4 +364,44 @@ abstract class ApiService {
 
   @DELETE(ApiConstants.notificationsRead)
   Future<DeleteAllReadNotificationsResponse> deleteAllReadNotifications();
+
+  // ========================== FCM Tokens ==========================
+
+  @POST(ApiConstants.fcmTokens)
+  Future<FcmRegisterTokenResponse> registerFcmToken(
+    @Body() FcmRegisterTokenRequest request,
+  );
+
+  @PUT(ApiConstants.fcmTokens)
+  Future<FcmRegisterTokenResponse> updateFcmToken(
+    @Body() FcmUpdateTokenRequest request,
+  );
+
+  @DELETE(ApiConstants.fcmTokens)
+  Future<void> deleteFcmToken(@Body() FcmDeleteTokenRequest request);
+
+  @DELETE(ApiConstants.fcmTokensAll)
+  Future<FcmDeleteAllResponse> deleteAllFcmTokens();
+
+  @GET(ApiConstants.fcmTokens)
+  Future<FcmTokensResponse> getMyFcmTokens();
+
+  // ========================== FCM Preferences ==========================
+
+  @GET(ApiConstants.fcmPreferences)
+  Future<FcmPreferencesResponse> getFcmPreferences();
+
+  @PUT(ApiConstants.fcmPreferences)
+  Future<FcmPreferencesResponse> updateFcmPreferences(
+    @Body() FcmUpdatePreferencesRequest request,
+  );
+
+  @POST(ApiConstants.fcmPreferencesEnableAll)
+  Future<FcmPreferencesResponse> enableAllNotifications();
+
+  @POST(ApiConstants.fcmPreferencesDisableAll)
+  Future<FcmPreferencesResponse> disableAllNotifications();
+
+  @POST(ApiConstants.fcmPreferencesReset)
+  Future<FcmPreferencesResponse> resetFcmPreferences();
 }

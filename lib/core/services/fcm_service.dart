@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '../networking/api_service.dart';
@@ -49,15 +50,15 @@ class FcmService {
         debugPrint('⚠️ FCM: No token available');
         return;
       }
-
-      final deviceType = Platform.isIOS ? 'ios' : 'android';
-
-      await _apiService.registerFcmToken(
-        FcmRegisterTokenRequest(token: token, deviceType: deviceType),
-      );
-
-      _currentToken = token;
-      debugPrint('✅ FCM token registered');
+      await _registerToken(token);
+    } on FirebaseException catch (e) {
+      if (e.code == 'apns-token-not-set') {
+        // iOS only — requires a paid Apple Developer account.
+        // Push notifications are unavailable without one.
+        debugPrint('⚠️ FCM: Push notifications not available on this iOS device');
+      } else {
+        debugPrint('❌ FCM error: ${e.code} — ${e.message}');
+      }
     } catch (e) {
       debugPrint('❌ FCM token registration failed: $e');
     }
@@ -65,9 +66,9 @@ class FcmService {
 
   Future<void> _onTokenRefresh(String newToken) async {
     try {
-      if (_currentToken != null && _currentToken != newToken) {
-        final deviceType = Platform.isIOS ? 'ios' : 'android';
+      final deviceType = Platform.isIOS ? 'ios' : 'android';
 
+      if (_currentToken != null && _currentToken != newToken) {
         await _apiService.updateFcmToken(
           FcmUpdateTokenRequest(
             oldToken: _currentToken!,
@@ -75,16 +76,28 @@ class FcmService {
             deviceType: deviceType,
           ),
         );
-
         debugPrint('✅ FCM token updated');
-      } else {
-        // No old token: register fresh
-        await registerCurrentDevice();
+      } else if (_currentToken == null) {
+        // First token after APNS became available (iOS deferred registration)
+        await _apiService.registerFcmToken(
+          FcmRegisterTokenRequest(token: newToken, deviceType: deviceType),
+        );
+        debugPrint('✅ FCM token registered via onTokenRefresh');
       }
+
       _currentToken = newToken;
     } catch (e) {
       debugPrint('❌ FCM token refresh failed: $e');
     }
+  }
+
+  Future<void> _registerToken(String token) async {
+    final deviceType = Platform.isIOS ? 'ios' : 'android';
+    await _apiService.registerFcmToken(
+      FcmRegisterTokenRequest(token: token, deviceType: deviceType),
+    );
+    _currentToken = token;
+    debugPrint('✅ FCM token registered');
   }
 
   Future<void> deleteCurrentToken() async {

@@ -45,7 +45,7 @@
 -keep interface okhttp3.** { *; }
 
 # Keep model classes (adjust package name as needed)
--keep class com.layra.mohtaaj.** { *; }
+-keep class com.layra.mohtaj.** { *; }
 
 # Firebase
 -keep class com.google.firebase.** { *; }

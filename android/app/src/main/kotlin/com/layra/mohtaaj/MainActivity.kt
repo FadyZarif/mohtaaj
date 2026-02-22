@@ -1,4 +1,4 @@
-package com.layra.mohtaaj
+package com.layra.mohtaj
 
 import io.flutter.embedding.android.FlutterActivity
 
